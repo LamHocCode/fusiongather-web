@@ -11,7 +11,7 @@
   white-space: normal;
 }
 
-@keyframes slideIn {
+@keyframes slideInX {
     0% {
     transform: translateX(-300%);
     opacity: 0;
@@ -22,6 +22,21 @@
   100% {
     transform: translateX(0);
   }
+}
+
+@keyframes slideInY {
+    0% {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-right-content{
+    animation: slideInY 0.5s forwards;
+    opacity: 1;
 }
 
 .animate-slide-in {
