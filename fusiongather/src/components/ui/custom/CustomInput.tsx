@@ -13,7 +13,7 @@ interface InputProps {
     width?: string;
 }
 
-const Input = ({ label,
+const CustomInput = ({ label,
     id,
     register,
     required,
@@ -41,4 +41,4 @@ const Input = ({ label,
     );
 }
 
-export default Input;
+export default CustomInput;

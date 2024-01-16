@@ -1,7 +1,7 @@
 'use client'
 
-import Button from "@/components/ui/Button"
-import Input from "@/components/ui/Input"
+import CustomButton from "@/components/ui/custom/CustomButton"
+import CustomInput from "@/components/ui/custom/CustomInput"
 import Link from "next/link"
 import { useState, useTransition } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
@@ -59,7 +59,7 @@ const SignupForm = () => {
                     <h3 className="text-3xl font-medium">Sign up</h3>
 
                     <div className="flex gap-3">
-                        <Input
+                        <CustomInput
                             id="firstName"
                             label="Fisrt Name"
                             disabled={isPending}
@@ -67,7 +67,7 @@ const SignupForm = () => {
                             errors={errors}
                             required
                         />
-                        <Input
+                        <CustomInput
                             id="lastName"
                             label="Last Name"
                             disabled={isPending}
@@ -77,7 +77,7 @@ const SignupForm = () => {
                         />
                     </div>
 
-                    <Input
+                    <CustomInput
                         id="email"
                         label="Email"
                         disabled={isPending}
@@ -85,7 +85,7 @@ const SignupForm = () => {
                         errors={errors}
                         required
                     />
-                    <Input
+                    <CustomInput
                         id="phoneNumber"
                         label="Phone Number"
                         disabled={isPending}
@@ -93,7 +93,7 @@ const SignupForm = () => {
                         errors={errors}
                         required
                     />
-                    <Input
+                    <CustomInput
                         id="dob"
                         label="Date Of Birth"
                         disabled={isPending}
@@ -101,7 +101,7 @@ const SignupForm = () => {
                         errors={errors}
                         required
                     />
-                    <Input
+                    <CustomInput
                         id="username"
                         label="Username"
                         disabled={isPending}
@@ -110,7 +110,7 @@ const SignupForm = () => {
                         required
                     />
 
-                    <Input
+                    <CustomInput
                         disabled={isPending}
                         register={register}
                         errors={errors}
@@ -121,9 +121,9 @@ const SignupForm = () => {
                     />
 
                     <div className="w-full">
-                        <Button disabled={isPending} fullWidth type="submit">
+                        <CustomButton disabled={isPending} fullWidth type="submit">
                             {isPending ? 'loading...' : 'Create Account'}
-                        </Button>
+                        </CustomButton>
                     </div>
                     <div className="flex flex-col items-center justify-center gap-5 text-secondary">
                         <div className="flex gap-1 items-center justify-center text-base px-2">

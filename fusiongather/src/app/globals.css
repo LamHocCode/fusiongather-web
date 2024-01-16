@@ -1,6 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.truncate-2-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Số dòng tối đa */
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+@keyframes slideIn {
+    0% {
+    transform: translateX(-300%);
+    opacity: 0;
+  }
+  50%{
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+    animation: slideIn 0.5s forwards;
+    opacity: 0.75;
+}
  
 @layer base {
   :root {

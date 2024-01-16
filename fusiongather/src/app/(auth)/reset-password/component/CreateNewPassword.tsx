@@ -1,7 +1,7 @@
 'use client'
 
-import Button from "@/components/ui/Button"
-import Input from "@/components/ui/Input"
+import CustomButton from "@/components/ui/custom/CustomButton"
+import CustomInput from "@/components/ui/custom/CustomInput"
 import { useTransition } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -48,7 +48,7 @@ const CreateNewPassword = ({ accountInfo }: Props) => {
                     Your new password must be unique from those previously used.
                 </span>
             </div>
-            <Input
+            <CustomInput
                 id="newPassword"
                 label="New Password"
                 type="password"
@@ -57,7 +57,7 @@ const CreateNewPassword = ({ accountInfo }: Props) => {
                 errors={errors}
                 required
             />
-            <Input
+            <CustomInput
                 id="confirmPassword"
                 label="Confirm Password"
                 type="password"
@@ -67,9 +67,9 @@ const CreateNewPassword = ({ accountInfo }: Props) => {
                 required
             />
             <div className="w-full">
-                <Button disabled={isPending} fullWidth type="submit">
+                <CustomButton disabled={isPending} fullWidth type="submit">
                     {isPending ? 'loading...' : 'Reset Password'}
-                </Button>
+                </CustomButton>
             </div>
         </form>
     );

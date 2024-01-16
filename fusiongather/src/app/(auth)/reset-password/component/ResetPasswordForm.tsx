@@ -1,7 +1,7 @@
 'use client'
 
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import CustomButton from "@/components/ui/custom/CustomButton";
+import CustomInput from "@/components/ui/custom/CustomInput";
 import { handleResetPasswordAction } from "@/lib/actions";
 import { ResetPasswordSchema } from "@/lib/validation/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,7 +50,7 @@ const ResetPasswordForm = ({ onSuccess, accountInfo }: Props) => {
                 </div>
 
 
-                <Input
+                <CustomInput
                     id="email"
                     label="Email"
                     disabled={isPending}
@@ -60,9 +60,9 @@ const ResetPasswordForm = ({ onSuccess, accountInfo }: Props) => {
                 />
 
                 <div className="w-full">
-                    <Button disabled={isPending} fullWidth type="submit">
+                    <CustomButton disabled={isPending} fullWidth type="submit">
                         {isPending ? 'loading...' : 'Send Code'}
-                    </Button>
+                    </CustomButton>
                 </div>
             </form>
         </>

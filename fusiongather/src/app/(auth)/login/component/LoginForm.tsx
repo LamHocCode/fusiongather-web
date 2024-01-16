@@ -1,7 +1,7 @@
 'use client'
 
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
+import CustomButton from "@/components/ui/custom/CustomButton";
+import CustomInput from "@/components/ui/custom/CustomInput";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { FcGoogle } from 'react-icons/fc'
@@ -68,7 +68,7 @@ const LoginForm = () => {
                     </div>
                 </div>
 
-                <Input
+                <CustomInput
                     id="username"
                     label="Username"
                     disabled={isPending}
@@ -76,7 +76,7 @@ const LoginForm = () => {
                     errors={errors}
                     required
                 />
-                <Input
+                <CustomInput
                     disabled={isPending}
                     register={register}
                     errors={errors}
@@ -87,9 +87,9 @@ const LoginForm = () => {
                 />
 
                 <div className="w-full">
-                    <Button disabled={isPending} fullWidth type="submit">
+                    <CustomButton disabled={isPending} fullWidth type="submit">
                         {isPending ? 'loading...' : 'Sign in'}
-                    </Button>
+                    </CustomButton>
                 </div>
 
                 <div className="flex flex-col items-center justify-center gap-5 text-secondary">

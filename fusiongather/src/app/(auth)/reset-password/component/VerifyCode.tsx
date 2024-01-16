@@ -1,7 +1,7 @@
 'use client'
 
 import CountDown from "@/components/main/CountDown";
-import Button from "@/components/ui/Button";
+import CustomButton from "@/components/ui/custom/CustomButton";
 import { handleCheckCodeAction, handleVerifyCodeAction } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useRef, useState } from "react";
@@ -120,9 +120,9 @@ const VerifyCode = ({ onSuccess, accountInfo, type }: Props) => {
             </div>
 
             <div className="w-full">
-                <Button disabled={isLoading} fullWidth type="submit">
+                <CustomButton disabled={isLoading} fullWidth type="submit">
                     {isLoading ? 'loading...' : 'Confirm'}
-                </Button>
+                </CustomButton>
             </div>
         </form>
     );
