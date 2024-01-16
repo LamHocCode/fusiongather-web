@@ -1,10 +1,17 @@
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
+"use client"
+import { LogOut } from "@/lib/actions/logout";
 
-export default function Home() {
-  return (
-    <main>
-      <Button variant="outline">click</Button>
-    </main>
-  )
+const homePage = async () => {
+    return (
+        <div className="h-full">
+            abc
+            <button onClick={() => {
+                LogOut()
+            }}>
+                log out
+            </button>
+        </div>
+    );
 }
+
+export default homePage;

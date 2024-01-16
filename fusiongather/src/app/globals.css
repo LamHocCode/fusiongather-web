@@ -68,9 +68,9 @@
  
 @layer base {
   * {
-    @apply _border-border;
+    @apply border-border;
   }
   body {
-    @apply _bg-background _text-foreground;
+    @apply bg-background text-foreground;
   }
 }
