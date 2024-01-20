@@ -27,6 +27,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import Image from "next/image";
+import DisplayMap from "./displayMap";
 
 export function EventForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -35,6 +36,8 @@ export function EventForm() {
     description: "",
     categoryId: "",
     location: "",
+    lng: 0,
+    lat: 0,
     imageUrl: "",
     startDateTime: new Date(),
     endDateTime: new Date(),
@@ -53,6 +56,16 @@ export function EventForm() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+  }
+
+  // 3. Handle search location
+  function setLocation(location: string, lng: number, lat: number) {
+    if (location !== "") {
+      form.setValue("location", location);
+    }   
+    form.setValue("lng", lng);
+    form.setValue("lat", lat);
+    console.log(form.getValues());
   }
   return (
     <Form {...form}>
@@ -127,6 +140,10 @@ export function EventForm() {
               </FormItem>
             )}
           />
+        </div>
+
+        <div className="flex flex-col gap-5 md:flex-col">
+              <DisplayMap setLocation = {setLocation}/>
         </div>
 
         <div className="flex flex-col gap-5 md:flex-col">

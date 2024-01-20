@@ -7,7 +7,7 @@ import mapboxgl from 'mapbox-gl';
 import ReactMapGL, { Marker, Map, Popup, NavigationControl, GeolocateControl, MapRef } from "react-map-gl";
 import Geocoder from './geocoder';
 
-export default function DisplayMap() {
+export default function DisplayMap(props: any) {
     mapboxgl.accessToken = 'pk.eyJ1IjoidGhhbmdnYTNxM3EzcSIsImEiOiJjbHI4bHlwZm8yZDkzMmp0YWhjZHE3bDR3In0.KfeyM_Nn0qYA7NxqC3PC5A';
   const [viewport, setViewport] = useState({
     latitude: 14.3154241771087,//0,
@@ -15,13 +15,15 @@ export default function DisplayMap() {
     zoom: 4
   });
 
-  function onSearchLocation(location: any) {
-    console.log(location)
+  function onSearchLocation(result: any) {
+    console.log(result.coords)
+    console.log(result.location)
     setViewport({
-      latitude: location[1],
-      longitude: location[0],
+      latitude: result.coords[1],
+      longitude: result.coords[0],
       zoom: viewport.zoom
     })
+    props.setLocation(result.location, result.coords[0], result.coords[1])
   }
 
   function onDragMarker(event: any) {
@@ -31,33 +33,10 @@ export default function DisplayMap() {
       zoom: viewport.zoom
     })
     console.log(viewport)
+    props.setLocation("", event.lngLat.lng, event.lngLat.lat)
   }
 
   const mapRef: Ref<MapRef> = useRef({} as MapRef);
-
-  useEffect(() => {
-    // if ((viewport.latitude = 0 ) && (viewport.latitude = 0)) {
-    //   fetch('https://api.ipify.org/?format=json')
-    //     .then((res) => {
-    //       return res.json()
-    //     })
-    //     .then((data) => {
-    //       fetch(`https://ipapi.co/${data.ip}/json/`)
-    //         .then((res) => {
-    //           return res.json()
-    //         })
-    //         .then((data) => {
-    //           mapRef.current.setCenter([data.longitude, data.latitude])
-    //           setViewport({
-    //             latitude: data.latitude,
-    //             longitude: data.longitude,
-    //             zoom: 16
-    //           })
-    //         })
-    //     })     
-    // }
-  }, []);  
-  
 
   return (
     <div className="flex justify-center items-center h-[50vh]">

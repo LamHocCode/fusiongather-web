@@ -17,9 +17,13 @@ export default function Geocoder (props: any) {
     
       useControl(() => ctrl)
       ctrl.on('result', function(e) {
-        console.log(e.result.place_name)
+        const location = e.result.place_name;
         const coords = e.result.geometry.coordinates;
-        props.onSearchLocation(coords);
+        const result = {
+          location: location,
+          coords: coords
+        }
+        props.onSearchLocation(result);
       });
       return (
         null
