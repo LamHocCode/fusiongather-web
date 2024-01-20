@@ -63,6 +63,7 @@ export default function DisplayMap(props: any) {
               latitude: event.coords.latitude,
               zoom: viewport.zoom
             });
+            props.setLocation("geolocate", event.coords.longitude, event.coords.latitude)
           }}
         />
         <Geocoder onSearchLocation={onSearchLocation} />

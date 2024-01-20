@@ -61,8 +61,13 @@ export function EventForm() {
   // 3. Handle search location
   function setLocation(location: string, lng: number, lat: number) {
     if (location !== "") {
-      form.setValue("location", location);
-    }   
+      if (location !== "geolocate"){
+        form.setValue("location", location);
+      }
+      else{
+        form.setValue("location", "");
+      }     
+    }  
     form.setValue("lng", lng);
     form.setValue("lat", lat);
     console.log(form.getValues());
