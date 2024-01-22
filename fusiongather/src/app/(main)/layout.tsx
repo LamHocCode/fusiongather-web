@@ -19,7 +19,9 @@ export default async function Layout({
         <div className="lex w-full flex-col justify-between">
           <Header />
           <Sider>
-            {children}
+            <div className="min-h-screen mt-20">
+              {children}
+            </div>
             <Footer />
           </Sider>
         </div>
