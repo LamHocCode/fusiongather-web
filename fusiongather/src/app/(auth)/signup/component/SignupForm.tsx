@@ -11,6 +11,7 @@ import { handleSignUpAction } from "@/lib/actions"
 import toast from "react-hot-toast"
 import VerifyCode from "../../reset-password/component/VerifyCode"
 import Logo from "@/components/main/Logo"
+import LoadingModal from "@/components/shared/LoadingModal"
 
 const SignupForm = () => {
     const [verifyCode, setVerifyCode] = useState<boolean>(false)
@@ -48,8 +49,9 @@ const SignupForm = () => {
 
     return (
         <>
+            {isPending && <LoadingModal />}
             {verifyCode ?
-                <VerifyCode accountInfo={accountInfo} type="verifyCode" />
+                <VerifyCode length={6} accountInfo={accountInfo} type="verifyCode" />
                 :
                 <form
                     onSubmit={handleSubmit(onSubmit)}
@@ -122,7 +124,7 @@ const SignupForm = () => {
 
                     <div className="w-full">
                         <CustomButton disabled={isPending} fullWidth type="submit">
-                            {isPending ? 'loading...' : 'Create Account'}
+                            Create Account
                         </CustomButton>
                     </div>
                     <div className="flex flex-col items-center justify-center gap-5 text-secondary">

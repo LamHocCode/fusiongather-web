@@ -21,10 +21,16 @@ const Reset = () => {
         setAccountInfo(data)
     }
 
+    const handleBack = () => {
+        if (resetStep === "verify") {
+            setResetStep("reset")
+        }
+    }
+
     return (
         <>
             {resetStep === 'reset' && <ResetPasswordForm onSuccess={handleSendMailSuccess} accountInfo={handleAccountInfo} />}
-            {resetStep === 'verify' && <VerifyCode type="reset" onSuccess={handleVerificationSuccess} accountInfo={accountInfo} />}
+            {resetStep === 'verify' && <VerifyCode handleBack={handleBack} length={6} type="reset" onSuccess={handleVerificationSuccess} accountInfo={accountInfo} />}
             {resetStep === 'createNew' && <CreateNewPassword accountInfo={accountInfo} />}
         </>
     );

@@ -1,11 +1,12 @@
 'use client'
 
+import LoadingModal from "@/components/shared/LoadingModal";
 import CustomButton from "@/components/ui/custom/CustomButton";
 import CustomInput from "@/components/ui/custom/CustomInput";
 import { handleResetPasswordAction } from "@/lib/actions";
 import { ResetPasswordSchema } from "@/lib/validation/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
@@ -17,7 +18,6 @@ interface Props {
 const ResetPasswordForm = ({ onSuccess, accountInfo }: Props) => {
     const [isPending, startTransition] = useTransition()
 
-
     const { register, handleSubmit, formState: { errors } } = useForm<FieldValues>({
         defaultValues: {
             email: '',
@@ -26,18 +26,22 @@ const ResetPasswordForm = ({ onSuccess, accountInfo }: Props) => {
     })
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        handleResetPasswordAction(data?.email).then((data) => {
-            if (data?.status) {
-                toast.error(data?.message)
-            } else {
-                accountInfo(data?.user?.email)
-                onSuccess()
-            }
-        }).catch(() => toast.error("Someting went wrong!"))
+        startTransition(() => {
+            handleResetPasswordAction(data?.email).then((data) => {
+                if (data?.status) {
+                    toast.error(data?.message)
+                } else {
+                    accountInfo(data?.user?.email)
+                    onSuccess()
+                }
+            }).catch(() => toast.error("Someting went wrong!"))
+        })
+
     }
 
     return (
         <>
+            {isPending && <LoadingModal />}
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-6 items-center"

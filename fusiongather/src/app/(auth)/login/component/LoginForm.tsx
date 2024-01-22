@@ -12,6 +12,7 @@ import { LoginAction } from "@/lib/actions/login";
 import toast from "react-hot-toast";
 import { useRouter, useSearchParams } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import LoadingModal from "@/components/shared/LoadingModal";
 
 const LoginForm = () => {
     const router = useRouter()
@@ -43,6 +44,7 @@ const LoginForm = () => {
     }
     return (
         <>
+            {isPending && <LoadingModal />}
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-6 items-center"
@@ -88,7 +90,7 @@ const LoginForm = () => {
 
                 <div className="w-full">
                     <CustomButton disabled={isPending} fullWidth type="submit">
-                        {isPending ? 'loading...' : 'Sign in'}
+                        Sign in
                     </CustomButton>
                 </div>
 

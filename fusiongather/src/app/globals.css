@@ -40,7 +40,7 @@
 }
 
 .animate-slide-in {
-  animation: slideIn 0.5s forwards;
+  animation: slideInX 0.5s forwards;
   opacity: 0.75;
 }
 
