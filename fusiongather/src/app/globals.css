@@ -148,3 +148,33 @@
 .ql-editor{
   height: 320px!important;
 }
+
+.setting-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 50%;
+  background-color: white;
+  opacity: 0;
+  animation-name: slideIn;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+  z-index: 20;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+90%{
+    transform: translateX(20px);
+
+  opacity: 0;
+}
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

@@ -23,23 +23,25 @@ import { eventFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
 import { FileUploader } from "./FileUploader";
-import { useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { createEvent } from "@/lib/actions/event";
+import toast from 'react-hot-toast'
+import LoadingModal from "./LoadingModal";
 
 export function EventForm() {
   const [files, setFiles] = useState<File[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const router = useRouter()
+  const [isPending, startTransition] = useTransition()
   const initialValues = {
     title: "",
     description: "",
-    categoryId: "",
     location: "",
     lng: 0,
     lat: 0,
@@ -48,9 +50,9 @@ export function EventForm() {
     endDateTime: undefined,
     price: "",
     isFree: false,
-    url: "",
+    // categoryId: "",
+    // url: "",
   };
-  // 1. Define your form.
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
@@ -58,10 +60,29 @@ export function EventForm() {
 
   const isFree = form.watch("isFree")
 
+  useEffect(() => {
+    if (isFree) {
+      form.setValue("price", "Free");
+    }
+  }, [isFree, form]);
+
   const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (data) => {
-    console.log(data);
+    startTransition(() => {
+      createEvent(data).then((res) => {
+        console.log(res);
+
+        if (res.statusCode) {
+          toast.error(res.message)
+        } else {
+          form.reset()
+          toast.success('Succeed!')
+          router.push('/event')
+        }
+      }).catch(() => toast.error("Someting went wrong!"))
+    })
 
   }
+
 
   // 3. Handle search location
   function setLocation(location: string, lng: number, lat: number) {
@@ -75,7 +96,6 @@ export function EventForm() {
     }
     form.setValue("lng", lng);
     form.setValue("lat", lat);
-    console.log(form.getValues());
   }
 
   const handleCancel = () => {
@@ -85,6 +105,7 @@ export function EventForm() {
 
   return (
     <>
+      {isPending && <LoadingModal />}
       <LocationModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

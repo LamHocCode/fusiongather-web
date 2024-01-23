@@ -1,7 +1,17 @@
+import MyEvents from "@/components/main/MyEvents";
 import { Button } from "@/components/ui/button";
+import { getAllEvent } from "@/lib/actions/event";
+import getSession from "@/lib/actions/getSession";
 import Link from "next/link";
 import { FiPlusCircle } from "react-icons/fi";
-const EventPage = () => {
+
+const EventPage = async () => {
+    const session = await getSession()
+    const init = {
+        userId: session?.user.id,
+    }
+    const events = await getAllEvent(init)
+
     return (
         <div>
             <div className="flex items-center justify-between">
@@ -16,7 +26,11 @@ const EventPage = () => {
                 </Link>
             </div>
             <div className="text-secondary mt-4">
-                <div className="w-full text-center text-xl">No data</div>
+                {events && events.length > 0 ?
+                    <MyEvents events={events} />
+                    :
+                    <div className="w-full text-center text-xl">No data</div>
+                }
             </div>
         </div>
     );

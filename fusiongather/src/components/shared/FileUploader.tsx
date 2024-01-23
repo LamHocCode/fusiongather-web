@@ -6,7 +6,6 @@ import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { BsUpload } from "react-icons/bs";
 
-import { Button } from "@/components/ui/button";
 import { convertFileToUrl } from "@/lib/utils";
 import Image from "next/image";
 
@@ -25,6 +24,7 @@ export function FileUploader({
     setFiles(acceptedFiles);
     onFieldChange(convertFileToUrl(acceptedFiles[0]));
   }, []);
+  console.log(imageUrl);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
