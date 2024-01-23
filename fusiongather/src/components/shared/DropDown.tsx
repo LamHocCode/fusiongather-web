@@ -14,8 +14,8 @@ function DropDown({ value, onChangeHandler }: DropDownProps) {
   //   const [category, setCategory] = useState([]);
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
-      <SelectTrigger className="select-field">
-        <SelectValue placeholder="Category" />
+      <SelectTrigger className="select-field h-14 text-[18px] text-secondary rounded-2xl">
+        <SelectValue placeholder="Choose..." />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="Charity">Charity </SelectItem>

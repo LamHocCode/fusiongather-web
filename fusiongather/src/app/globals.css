@@ -144,3 +144,7 @@
 .react-datepicker__time-list-item--selected {
   background-color: #624cf5 !important;
 }
+
+.ql-editor{
+  height: 320px!important;
+}

@@ -4,6 +4,7 @@ import { useCallback, Dispatch, SetStateAction } from "react";
 import type { FileWithPath } from "@uploadthing/react";
 import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
+import { BsUpload } from "react-icons/bs";
 
 import { Button } from "@/components/ui/button";
 import { convertFileToUrl } from "@/lib/utils";
@@ -33,7 +34,7 @@ export function FileUploader({
   return (
     <div
       {...getRootProps()}
-      className="flex-center bg-dark-3 flex h-72 cursor-pointer flex-col overflow-hidden rounded-xl bg-grey-50"
+      className="flex-center bg-gray-50 w-full flex h-64 cursor-pointer flex-col justify-center items-center overflow-hidden rounded-xl bg-grey-50"
     >
       <input {...getInputProps()} className="cursor-pointer" />
 
@@ -48,15 +49,10 @@ export function FileUploader({
           />
         </div>
       ) : (
-        <div className="flex-center flex-col py-5 text-grey-500">
-          <Image
-            src="/assets/icons/upload.svg"
-            width={200}
-            height={200}
-            alt="file upload"
-          />
+        <div className="flex gap-3 items-center border border-[#FF8E3C] px-4 py-2 rounded-full text-grey-500 bg-white text-primary">
+          <BsUpload />
           <h3 className="flex flex-auto justify-center items-center !important">
-            Drag photo here
+            Banner
           </h3>
         </div>
       )}

@@ -12,7 +12,7 @@ export const LeftSidebarLinks = {
     top: [
         {
             label: 'Create Events',
-            href: '/event/create',
+            href: '/event',
             icon: FiPlusCircle,
         },
         {
