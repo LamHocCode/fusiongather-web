@@ -57,10 +57,10 @@ export function EventForm() {
   });
 
   const isFree = form.watch("isFree")
-
+  
+  // 2. Submit Handler
   const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (data) => {
     console.log(data);
-
   }
 
   // 3. Handle search location
