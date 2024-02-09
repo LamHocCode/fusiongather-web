@@ -9,6 +9,7 @@ import { BsUpload } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { convertFileToUrl } from "@/lib/utils";
 import Image from "next/image";
+import { UploadButton } from "@/lib/uploadthing";
 
 type FileUploaderProps = {
   onFieldChange: (url: string) => void;
@@ -44,17 +45,29 @@ export function FileUploader({
             src={imageUrl}
             alt="image"
             width={250}
-            height={250}
+            height={500}
             className="w-full object-cover object-center"
           />
         </div>
       ) : (
-        <div className="flex gap-3 items-center border border-[#FF8E3C] px-4 py-2 rounded-full text-grey-500 bg-white text-primary">
-          <BsUpload />
-          <h3 className="flex flex-auto justify-center items-center !important">
-            Banner
-          </h3>
-        </div>
+        // <div className="flex gap-3 items-center border border-[#FF8E3C] px-4 py-2 rounded-full text-grey-500 bg-white text-primary">
+        //   <BsUpload />
+        //   <h3 className="flex flex-auto justify-center items-center !important">
+        //     Banner
+        //   </h3>
+        <UploadButton
+            endpoint="imageUploader"
+            onClientUploadComplete={(res) => {
+              // Do something with the response
+              console.log("Files: ", res);
+              alert("Upload Completed");
+            }}
+            onUploadError={(error: Error) => {
+              // Do something with the error.s
+              alert(`ERROR! ${error.message}`);
+            }}
+          />
+        // </div>
       )}
     </div>
   );

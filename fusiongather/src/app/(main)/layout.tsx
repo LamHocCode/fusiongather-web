@@ -4,6 +4,10 @@ import Header from "@/components/layout/Header";
 import LeftSidebar from "@/components/layout/LeftSidebar";
 import Sider from "@/components/layout/Sider";
 import { SessionProvider } from "next-auth/react";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+
+import { ourFileRouter } from "../api/upload/core";
 
 export default async function Layout({
   children,
@@ -20,6 +24,15 @@ export default async function Layout({
           <Header />
           <Sider>
             <div className="min-h-screen mt-20">
+              <NextSSRPlugin
+                /**
+                 * The `extractRouterConfig` will extract **only** the route configs
+                 * from the router to prevent additional information from being
+                 * leaked to the client. The data passed to the client is the same
+                 * as if you were to fetch `/api/uploadthing` directly.
+                 */
+                routerConfig={extractRouterConfig(ourFileRouter)}
+              />
               {children}
             </div>
             <Footer />
