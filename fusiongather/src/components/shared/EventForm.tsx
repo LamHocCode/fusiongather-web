@@ -35,6 +35,7 @@ import "react-datepicker/dist/react-datepicker.css";
 export function EventForm() {
   const [files, setFiles] = useState<File[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]) // [lng, lat]
   const router = useRouter()
   const initialValues = {
     title: "",
@@ -75,6 +76,7 @@ export function EventForm() {
     }
     form.setValue("lng", lng);
     form.setValue("lat", lat);
+    setCurrentCoords([lng, lat])
     console.log(form.getValues());
   }
 
@@ -89,6 +91,7 @@ export function EventForm() {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         setLocation={setLocation}
+        currentCoords={currentCoords}
       />
       <div className="flex items-center gap-10 pt-4 pb-6">
         <div onClick={() => handleCancel()}>
