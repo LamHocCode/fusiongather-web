@@ -6,7 +6,6 @@ import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
 import { BsUpload } from "react-icons/bs";
 
-import { Button } from "@/components/ui/button";
 import { convertFileToUrl } from "@/lib/utils";
 import Image from "next/image";
 import { UploadButton } from "@/lib/uploadthing";
@@ -56,17 +55,17 @@ export function FileUploader({
         //     Banner
         //   </h3>
         <UploadButton
-            endpoint="imageUploader"
-            onClientUploadComplete={(res) => {
-              // Do something with the response
-              console.log("Files: ", res);
-              alert("Upload Completed");
-            }}
-            onUploadError={(error: Error) => {
-              // Do something with the error.s
-              alert(`ERROR! ${error.message}`);
-            }}
-          />
+          endpoint="imageUploader"
+          onClientUploadComplete={(res) => {
+            // Do something with the response
+
+            alert("Upload Completed");
+          }}
+          onUploadError={(error: Error) => {
+            // Do something with the error.s
+            alert(`ERROR! ${error.message}`);
+          }}
+        />
         // </div>
       )}
     </div>

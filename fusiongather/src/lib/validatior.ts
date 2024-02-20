@@ -10,8 +10,13 @@ export const eventFormSchema = z.object({
   imageUrl: z.string(),
   startDateTime: z.date(),
   endDateTime: z.date(),
-  categoryId: z.string().min(1, "Category is required!"),
   price: z.string().min(1, "Price is required!"),
   isFree: z.boolean(),
-  url: z.string().url(),
+  categoryId: z.string().min(1, "Category is required!"),
+
+  // url: z.string().url(),
 });
+
+export const PublishFormSchema = z.object({
+  publish: z.boolean()
+})

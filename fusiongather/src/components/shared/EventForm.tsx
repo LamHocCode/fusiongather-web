@@ -6,7 +6,7 @@ import { CiImageOn } from "react-icons/ci";
 import { RiMapPin2Line } from "react-icons/ri";
 import { HiOutlineTicket } from "react-icons/hi";
 import { IoIosTimer } from "react-icons/io";
-import { Switch } from "@/components/ui/switch"
+import { Switch } from "@/components/ui/switch";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { IoIosArrowBack } from "react-icons/io";
@@ -23,23 +23,25 @@ import { eventFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
 import { FileUploader } from "./FileUploader";
-import { useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
-
+import { createEvent } from "@/lib/actions/event";
+import toast from "react-hot-toast";
+import LoadingModal from "./LoadingModal";
 
 export function EventForm() {
   const [files, setFiles] = useState<File[]>([]);
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const router = useRouter()
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
   const initialValues = {
     title: "",
     description: "",
-    categoryId: "",
     location: "",
     lng: 0,
     lat: 0,
@@ -48,43 +50,59 @@ export function EventForm() {
     endDateTime: undefined,
     price: "",
     isFree: false,
-    url: "",
+    // categoryId: "",
+    // url: "",
   };
-  // 1. Define your form.
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
   });
 
-  const isFree = form.watch("isFree")
-  
+  const isFree = form.watch("isFree");
+
   // 2. Submit Handler
-  const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (data) => {
-    console.log(data);
-  }
+  const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (
+    data
+  ) => {
+    startTransition(() => {
+      createEvent(data)
+        .then((res) => {
+          console.log(res);
+
+          if (res.statusCode) {
+            toast.error(res.message);
+          } else {
+            form.reset();
+            toast.success("Succeed!");
+            router.push("/event");
+          }
+        })
+        .catch(() => toast.error("Someting went wrong!"));
+    });
+  };
 
   // 3. Handle search location
   function setLocation(location: string, lng: number, lat: number) {
     if (location !== "") {
       if (location !== "geolocate") {
         form.setValue("location", location);
-      }
-      else {
+      } else {
         form.setValue("location", "");
       }
     }
     form.setValue("lng", lng);
     form.setValue("lat", lat);
-    console.log(form.getValues());
+    // console.log(form.getValues());
   }
 
   const handleCancel = () => {
-    form.reset()
-    router.push('/event')
-  }
+    form.reset();
+    router.push("/event");
+  };
 
   return (
     <>
+      {isPending && <LoadingModal />}
       <LocationModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
@@ -92,23 +110,20 @@ export function EventForm() {
       />
       <div className="flex items-center gap-10 pt-4 pb-6">
         <div onClick={() => handleCancel()}>
-          <IoIosArrowBack size={30} className="text-secondary cursor-pointer hover:text-primary" />
+          <IoIosArrowBack
+            size={30}
+            className="text-secondary cursor-pointer hover:text-primary"
+          />
         </div>
-        <h3 className="text-secondary">
-          Create Event
-        </h3>
+        <h3 className="text-secondary">Create Event</h3>
       </div>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="gap-8 grid lg:grid-cols-2 grid-cols-1">
             <div className="flex flex-col gap-5 p-8 bg-white rounded-2xl">
               <div className="flex gap-2 items-center text-secondary">
                 <TfiPencilAlt />
-                <span>
-                  Basic Information
-                </span>
+                <span>Basic Information</span>
               </div>
               <div className="flex flex-col gap-5 h-full ">
                 <FormField
@@ -134,7 +149,8 @@ export function EventForm() {
                     <FormItem className="w-full h-full">
                       <FormControl>
                         <QuillText
-                          value={field.value} onChange={field.onChange}
+                          value={field.value}
+                          onChange={field.onChange}
                         />
                       </FormControl>
                       <FormMessage />
@@ -142,15 +158,12 @@ export function EventForm() {
                   )}
                 />
               </div>
-
             </div>
             <div className="flex flex-col gap-5">
               <div className=" flex flex-col gap-5 p-8 bg-white rounded-2xl">
                 <div className="flex gap-2 items-center text-secondary">
                   <BiCategory size={22} />
-                  <span>
-                    Category
-                  </span>
+                  <span>Category</span>
                 </div>
                 <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
                   <FormField
@@ -162,7 +175,6 @@ export function EventForm() {
                           <DropDown
                             onChangeHandler={field.onChange}
                             value={field.value}
-
                           />
                         </FormControl>
                         <FormMessage />
@@ -174,9 +186,7 @@ export function EventForm() {
               <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
                 <div className="flex gap-2 items-center text-secondary">
                   <CiImageOn size={22} />
-                  <span>
-                    Media
-                  </span>
+                  <span>Media</span>
                 </div>
                 <div>
                   <FormField
@@ -203,9 +213,7 @@ export function EventForm() {
               <div className="flex gap-2 items-center text-secondary">
                 <RiMapPin2Line size={22} />
 
-                <span>
-                  Location
-                </span>
+                <span>Location</span>
               </div>
               <FormField
                 control={form.control}
@@ -221,18 +229,21 @@ export function EventForm() {
                       />
                     </FormControl>
                     <FormMessage />
-
                   </FormItem>
                 )}
               />
-              <Button type="button" onClick={() => setIsOpen(true)} className="w-full h-14 text-lg text-primary bg-white border border-[#FF8E3C] rounded-2xl hover:bg-primary/20">Choose</Button>
+              <Button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="w-full h-14 text-lg text-primary bg-white border border-[#FF8E3C] rounded-2xl hover:bg-primary/20"
+              >
+                Choose
+              </Button>
             </div>
             <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
               <div className="flex gap-2 items-center text-secondary">
                 <HiOutlineTicket size={22} />
-                <span>
-                  Ticket
-                </span>
+                <span>Ticket</span>
               </div>
               <div className="border-b pb-5">
                 <FormField
@@ -259,9 +270,11 @@ export function EventForm() {
                   )}
                 />
               </div>
-              {isFree ?
-                <span className="text-center w-full text-xl text-secondary/50 pt-4">Tickets are issued free of charge</span>
-                :
+              {isFree ? (
+                <span className="text-center w-full text-xl text-secondary/50 pt-4">
+                  Tickets are issued free of charge
+                </span>
+              ) : (
                 <div>
                   <FormField
                     control={form.control}
@@ -281,25 +294,26 @@ export function EventForm() {
                     )}
                   />
                 </div>
-              }
+              )}
             </div>
 
             <div className=" flex flex-col gap-5 p-8 bg-white rounded-2xl">
               <div className="flex gap-2 items-center text-secondary">
                 <IoIosTimer size={22} />
-                <span>
-                  Time
-                </span>
+                <span>Time</span>
               </div>
               <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
                 <FormField
                   control={form.control}
                   name="startDateTime"
                   render={({ field }) => (
-                    <FormItem >
+                    <FormItem>
                       <FormControl>
                         <div className="flex items-center w-full h-full p-2 rounded-xl border border-gray-200">
-                          <FaRegCalendarAlt size={24} className="text-primary" />
+                          <FaRegCalendarAlt
+                            size={24}
+                            className="text-primary"
+                          />
                           <DatePicker
                             selected={field.value}
                             onChange={(date: Date) => field.onChange(date)}
@@ -324,7 +338,10 @@ export function EventForm() {
                     <FormItem className="">
                       <FormControl>
                         <div className="flex items-center w-full h-full p-2 rounded-xl border border-gray-200">
-                          <FaRegCalendarAlt size={24} className="text-primary" />
+                          <FaRegCalendarAlt
+                            size={24}
+                            className="text-primary"
+                          />
                           <DatePicker
                             selected={field.value}
                             onChange={(date: Date) => field.onChange(date)}
@@ -358,7 +375,7 @@ export function EventForm() {
               type="submit"
               size="sm"
               disabled={form.formState.isSubmitting}
-              className="rounded-full border border-black min-w-20 h-10 bg-secondary  text-secondary hover:bg-secondary"
+              className="rounded-full w-20 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
             >
               Next
             </Button>
