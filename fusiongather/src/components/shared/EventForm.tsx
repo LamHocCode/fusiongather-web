@@ -23,7 +23,7 @@ import { eventFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
 import { FileUploader } from "./FileUploader";
-import { useEffect, useState, useTransition } from "react";
+import { useState } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
 import { useRouter } from "next/navigation";
@@ -31,31 +31,29 @@ import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createEvent } from "@/lib/actions/event";
-import toast from "react-hot-toast";
-import LoadingModal from "./LoadingModal";
 
 export function EventForm() {
   const [files, setFiles] = useState<File[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const initialValues = {
-    title: "",
-    description: "",
-    location: "",
-    lng: 0,
-    lat: 0,
-    imageUrl: "",
-    startDateTime: undefined,
-    endDateTime: undefined,
-    price: "",
-    isFree: false,
-    // categoryId: "",
-    // url: "",
-  };
+  // const initialValues = {
+  //   title: "",
+  //   description: "",
+  //   category: "",
+  //   location: "",
+  //   lng: 0,
+  //   lat: 0,
+  //   imageUrl: "",
+  //   startDateTime: undefined,
+  //   endDateTime: undefined,
+  //   price: "",
+  //   isFree: false,
+  //   url: "",
+  // };
+  // 1. Define your form.
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
-    defaultValues: initialValues,
   });
 
   const isFree = form.watch("isFree");
@@ -64,23 +62,13 @@ export function EventForm() {
   const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (
     data
   ) => {
-    startTransition(() => {
-      createEvent(data)
-        .then((res) => {
-          console.log(res);
-
-          if (res.statusCode) {
-            toast.error(res.message);
-          } else {
-            form.reset();
-            toast.success("Succeed!");
-            router.push("/event");
-          }
-        })
-        .catch(() => toast.error("Someting went wrong!"));
-    });
+    try {
+      await createEvent(data); // Call createEvent function with form data
+      // Handle success or navigation to next step
+    } catch (error) {
+      // Handle error
+    }
   };
-
   // 3. Handle search location
   function setLocation(location: string, lng: number, lat: number) {
     if (location !== "") {
@@ -92,7 +80,8 @@ export function EventForm() {
     }
     form.setValue("lng", lng);
     form.setValue("lat", lat);
-    // console.log(form.getValues());
+    setCurrentCoords([lng, lat]);
+    console.log(form.getValues());
   }
 
   const handleCancel = () => {
@@ -102,11 +91,11 @@ export function EventForm() {
 
   return (
     <>
-      {isPending && <LoadingModal />}
       <LocationModal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         setLocation={setLocation}
+        currentCoords={currentCoords}
       />
       <div className="flex items-center gap-10 pt-4 pb-6">
         <div onClick={() => handleCancel()}>
@@ -160,29 +149,30 @@ export function EventForm() {
               </div>
             </div>
             <div className="flex flex-col gap-5">
-              <div className=" flex flex-col gap-5 p-8 bg-white rounded-2xl">
-                <div className="flex gap-2 items-center text-secondary">
-                  <BiCategory size={22} />
-                  <span>Category</span>
-                </div>
-                <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
-                  <FormField
-                    control={form.control}
-                    name="categoryId"
-                    render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormControl>
-                          <DropDown
-                            onChangeHandler={field.onChange}
-                            value={field.value}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
+            <div className="flex flex-col gap-5 p-8 bg-white rounded-2xl">
+  <div className="flex gap-2 items-center text-secondary">
+    <BiCategory size={22} />
+    <span>Category</span>
+  </div>
+  <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
+    <FormField
+      control={form.control}
+      name="category"
+      render={({ field }) => (
+        <FormItem className="w-full">
+          <FormControl>
+            <DropDown
+              onChangeHandler={field.onChange}
+              value={field.value}
+            />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  </div>
+</div>
+
               <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
                 <div className="flex gap-2 items-center text-secondary">
                   <CiImageOn size={22} />
@@ -319,10 +309,10 @@ export function EventForm() {
                             onChange={(date: Date) => field.onChange(date)}
                             showTimeSelect
                             timeInputLabel="Time:"
-                            dateFormat="MM/dd/yyyy h:mm aa"
-                            wrapperClassName="datePicker"
+                            dateFormat="yyyy-MM-dd'T'HH:mm:ss'Z'" // Định dạng đúng cho backend
                             isClearable={true}
                             placeholderText="Start Date"
+                            wrapperClassName="datePicker"
                           />
                         </div>
                       </FormControl>
@@ -347,7 +337,7 @@ export function EventForm() {
                             onChange={(date: Date) => field.onChange(date)}
                             showTimeSelect
                             timeInputLabel="Time:"
-                            dateFormat="MM/dd/yyyy h:mm aa"
+                            dateFormat="yyyy-MM-dd'T'HH:mm:ss'Z'" // Định dạng đúng cho backend
                             isClearable={true}
                             placeholderText="End Date"
                             wrapperClassName="datePicker"
@@ -374,7 +364,6 @@ export function EventForm() {
             <Button
               type="submit"
               size="sm"
-              disabled={form.formState.isSubmitting}
               className="rounded-full w-20 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
             >
               Next

@@ -9,10 +9,11 @@ import Geocoder from './geocoder';
 
 export default function DisplayMap(props: any) {
     mapboxgl.accessToken = 'pk.eyJ1IjoidGhhbmdnYTNxM3EzcSIsImEiOiJjbHI4bHlwZm8yZDkzMmp0YWhjZHE3bDR3In0.KfeyM_Nn0qYA7NxqC3PC5A';
+    console.log(props.currentCoords)
   const [viewport, setViewport] = useState({
-    latitude: 14.3154241771087,//0,
-    longitude: 108.339537475899, //0,
-    zoom: 4
+    latitude: props.currentCoords[1] == 0 ? 14.3154241771087 : props.currentCoords[1],
+    longitude: props.currentCoords[0] == 0 ? 108.339537475899 : props.currentCoords[0],
+    zoom: props.currentCoords[0] == 0 ? 4 : 16
   });
 
   function onSearchLocation(result: any) {
@@ -49,12 +50,15 @@ export default function DisplayMap(props: any) {
       >
         <Marker longitude={viewport.longitude} 
                 latitude={viewport.latitude}
-                draggable={true}
+                draggable={
+                  props.status == "INFO" ? false : true
+                }
                 onDragEnd={onDragMarker}
                 >         
         </Marker>
         <NavigationControl position='bottom-right' />
-        <GeolocateControl 
+        {
+          props.status == "INFO" ? null : <GeolocateControl 
           position='top-left'
           trackUserLocation={true}
           onGeolocate={(event) => {
@@ -65,8 +69,11 @@ export default function DisplayMap(props: any) {
             });
             props.setLocation("geolocate", event.coords.longitude, event.coords.latitude)
           }}
-        />
-        <Geocoder onSearchLocation={onSearchLocation} />
+          />
+        }
+        {
+          props.status == "INFO" ? null : <Geocoder onSearchLocation={onSearchLocation} />
+        }       
       </Map>
     </div>
   );

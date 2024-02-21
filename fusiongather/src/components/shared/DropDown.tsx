@@ -6,24 +6,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getAllCategory } from "@/lib/actions/event"; // Thay đường dẫn đến hàm getAllCategory ở đây
+
 type DropDownProps = {
   value?: string;
-  onChangeHandler?: () => void;
+  onChangeHandler?: () => void; // Thêm prop onChangeHandler vào type DropDownProps
 };
-function DropDown({ value, onChangeHandler }: DropDownProps) {
-  //   const [category, setCategory] = useState([]);
+
+const onChangeHandler = async () => {
+  
+};
+
+function DropDown({ value }: DropDownProps) {
+    const categories = await getAllCategory()
+
+
+
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
       <SelectTrigger className="select-field h-14 text-[18px] text-secondary rounded-2xl">
         <SelectValue placeholder="Choose..." />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="Charity">Charity </SelectItem>
-        <SelectItem value="Businees">Businees</SelectItem>
-        <SelectItem value="Food & Drink">Food & Drink</SelectItem>
+        {categories.map((category, index) => (
+          <SelectItem key={index} value={category}>
+            {category}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
-}
+        
+        }
 
 export default DropDown;

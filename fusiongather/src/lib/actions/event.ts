@@ -49,3 +49,31 @@ export const getAllEvent = async (data: GetAllEventType) => {
         return null
     }
 }
+
+export const getAllCategory = async () => {
+    try {
+        const session = await getSession();
+        const accessToken = session?.tokens?.accessToken;
+
+        const res = await fetch(`${process.env.BASE_URL}/category`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();
+        }
+
+        return await res.json();
+    } catch (error: any) {
+        console.log(error);
+        return null;
+    }
+}
+
+
+
