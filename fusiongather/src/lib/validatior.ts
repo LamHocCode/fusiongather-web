@@ -12,7 +12,7 @@ export const eventFormSchema = z.object({
   endDateTime: z.date(),
   price: z.string().min(1, "Price is required!"),
   isFree: z.boolean(),
-  categoryId: z.string().min(1, "Category is required!"),
+  category: z.string().min(1, "Category is required!"),
 
   // url: z.string().url(),
 });

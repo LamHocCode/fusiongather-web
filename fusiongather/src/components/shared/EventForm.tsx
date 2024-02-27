@@ -31,6 +31,7 @@ import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createEvent } from "@/lib/actions/event";
+import { UploadButton } from "@/lib/uploadthing";
 
 export function EventForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -149,51 +150,49 @@ export function EventForm() {
               </div>
             </div>
             <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-5 p-8 bg-white rounded-2xl">
-  <div className="flex gap-2 items-center text-secondary">
-    <BiCategory size={22} />
-    <span>Category</span>
-  </div>
-  <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
-    <FormField
-      control={form.control}
-      name="category"
-      render={({ field }) => (
-        <FormItem className="w-full">
-          <FormControl>
-            <DropDown
-              onChangeHandler={field.onChange}
-              value={field.value}
-            />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  </div>
-</div>
+              <div className="flex flex-col gap-5 p-8 bg-white rounded-2xl">
+                <div className="flex gap-2 items-center text-secondary">
+                  <BiCategory size={22} />
+                  <span>Category</span>
+                </div>
+                <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
+                  <FormField
+                    control={form.control}
+                    name="category" // Đặt tên trường là "category"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormControl>
+                          <DropDown
+                            onChangeHandler={(selectedCategory) =>
+                              field.onChange(selectedCategory)
+                            }
+                            value={field.value}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
 
               <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
                 <div className="flex gap-2 items-center text-secondary">
                   <CiImageOn size={22} />
                   <span>Media</span>
                 </div>
-                <div>
-                  <FormField
-                    control={form.control}
-                    name="imageUrl"
-                    render={({ field }) => (
-                      <FormItem className="w-full flex flex-auto justify-center items-center cursor-pointer rounded-2xl border border-gray-200">
-                        <FormControl className="h-full">
-                          <FileUploader
-                            onFieldChange={field.onChange}
-                            imageUrl={field.value}
-                            setFiles={setFiles}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                <div className="sm:col-span-2">
+                  <UploadButton
+                    endpoint="imageUploader"
+                    onClientUploadComplete={(res) => {
+                      // Do something with the response
+                      console.log("Files: ", res);
+                      alert("Upload Completed");
+                    }}
+                    onUploadError={(error: Error) => {
+                      // Do something with the error.
+                      alert(`ERROR! ${error.message}`);
+                    }}
                   />
                 </div>
               </div>
