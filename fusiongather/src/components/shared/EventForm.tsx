@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { eventFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
-import { FileUploader } from "./FileUploader";
+
 import { useState } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
@@ -32,6 +32,7 @@ import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createEvent } from "@/lib/actions/event";
 import { UploadButton } from "@/lib/uploadthing";
+// import { FileUploader } from "./FileUploader";
 
 export function EventForm() {
   const [files, setFiles] = useState<File[]>([]);
@@ -181,20 +182,29 @@ export function EventForm() {
                   <CiImageOn size={22} />
                   <span>Media</span>
                 </div>
-                <div className="sm:col-span-2">
-                  <UploadButton
-                    endpoint="imageUploader"
-                    onClientUploadComplete={(res) => {
-                      // Do something with the response
-                      console.log("Files: ", res);
-                      alert("Upload Completed");
-                    }}
-                    onUploadError={(error: Error) => {
-                      // Do something with the error.
-                      alert(`ERROR! ${error.message}`);
-                    }}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem className="w-full flex flex-auto justify-center items-center cursor-pointer rounded-2xl border border-gray-200">
+                      <FormControl className="h-full">
+                        <UploadButton
+                          endpoint="imageUploader"
+                          onClientUploadComplete={(res) => {
+                            // Do something with the response
+                            console.log("Files: ", res);
+                            alert("Upload Completed");
+                          }}
+                          onUploadError={(error: Error) => {
+                            // Do something with the error.
+                            alert(`ERROR! ${error.message}`);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
 
