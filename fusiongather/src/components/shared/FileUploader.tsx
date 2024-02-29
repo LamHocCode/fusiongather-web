@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback, Dispatch, SetStateAction } from "react";
+import { File } from '@uploadthing/react';
+import { useDropzone } from "@uploadthing/react/hooks";
+import { generateClientDropzoneAccept } from "uploadthing/client";
 
-
-
+import { convertFileToUrl } from "@/lib/utils";
 import Image from "next/image";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
 
 type FileUploaderProps = {
   onFieldChange: (url: string) => void;
@@ -18,15 +20,22 @@ export function FileUploader({
   onFieldChange,
   setFiles,
 }: FileUploaderProps) {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setFiles(acceptedFiles);
+    onFieldChange(convertFileToUrl(acceptedFiles[0]));
+  }, []);
 
-
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: "image/*" ? generateClientDropzoneAccept(["image/*"]) : undefined,
+  });
 
   return (
     <div
-
+      {...getRootProps()}
       className="flex-center bg-gray-50 w-full flex h-64 cursor-pointer flex-col justify-center items-center overflow-hidden rounded-xl bg-grey-50"
     >
-      <input  className="cursor-pointer" />
+      <input {...getInputProps()} className="cursor-pointer" />
 
       {imageUrl ? (
         <div className="flex h-full w-full flex-1 justify-center">
@@ -39,7 +48,7 @@ export function FileUploader({
           />
         </div>
       ) : (
-        <UploadButton
+        <UploadDropzone
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             // Do something with the response
@@ -55,3 +64,13 @@ export function FileUploader({
     </div>
   );
 }
+
+// import React from 'react'
+
+// function FileUploader() {
+//   return (
+//     <div>FileUploader</div>
+//   )
+// }
+
+// export default FileUploader
