@@ -75,5 +75,25 @@ export const getAllCategory = async () => {
     }
 }
 
+export const getPendingEvents = async () => {
+    try {
+
+        const res = await fetch(`${process.env.BASE_URL}/event/pending`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    } catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
 
 

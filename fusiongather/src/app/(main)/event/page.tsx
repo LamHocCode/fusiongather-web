@@ -9,8 +9,10 @@ const EventPage = async () => {
     const session = await getSession()
     const init = {
         userId: session?.user.id,
+        // isAdmin: session?.user.isAdmin,
     }
-    const events = await getAllEvent(init)
+    // isAdmin = true ?      const events = await getAllEvent() :
+   const events = await getAllEvent(init)
 
     return (
         <div>
