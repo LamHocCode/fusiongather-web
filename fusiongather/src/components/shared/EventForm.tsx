@@ -31,47 +31,47 @@ import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createEvent } from "@/lib/actions/event";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton } from "@/utils/uploadthing";
 // import { FileUploader } from "./FileUploader";
 
 export function EventForm() {
-  const [files, setFiles] = useState<File[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
+  // const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
   const router = useRouter();
-  // const initialValues = {
-  //   title: "",
-  //   description: "",
-  //   category: "",
-  //   location: "",
-  //   lng: 0,
-  //   lat: 0,
-  //   imageUrl: "",
-  //   startDateTime: undefined,
-  //   endDateTime: undefined,
-  //   price: "",
-  //   isFree: false,
-  //   url: "",
-  // };
-  // 1. Define your form.
+  const initialValues = {
+    title: "",
+    description: "",
+    category: "",
+    location: "",
+    lng: 0,
+    lat: 0,
+    imageUrl: "",
+    startDateTime: undefined,
+    endDateTime: undefined,
+    price: "",
+    isFree: false,
+    url: "",
+  };
   const form = useForm<z.infer<typeof eventFormSchema>>({
-    resolver: zodResolver(eventFormSchema),
+   defaultValues:initialValues,
   });
 
   const isFree = form.watch("isFree");
 
-  // 2. Submit Handler
+  const currentCoords=[form.getValues('lng'),form.getValues('lat')]
+  
   const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (
     data
   ) => {
     try {
-      await createEvent(data); // Call createEvent function with form data
-      // Handle success or navigation to next step
+      console.log(data);
+      
+      // await createEvent(data); 
     } catch (error) {
-      // Handle error
+      throw new Error('Something went wrong!')
     }
   };
-  // 3. Handle search location
+
   function setLocation(location: string, lng: number, lat: number) {
     if (location !== "") {
       if (location !== "geolocate") {
@@ -82,8 +82,6 @@ export function EventForm() {
     }
     form.setValue("lng", lng);
     form.setValue("lat", lat);
-    setCurrentCoords([lng, lat]);
-    console.log(form.getValues());
   }
 
   const handleCancel = () => {
