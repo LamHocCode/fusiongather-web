@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -6,24 +6,53 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getAllCategory } from "@/lib/actions/event"; // Thay đường dẫn đến hàm getAllCategory ở đây
+
 type DropDownProps = {
   value?: string;
-  onChangeHandler?: () => void;
+  onChangeHandler?: (selectedValue: string) => void; 
 };
-function DropDown({ value, onChangeHandler }: DropDownProps) {
-  //   const [category, setCategory] = useState([]);
+
+
+function DropDown({ value }: DropDownProps) {
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getAllCategory();
+        setCategories(data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const onChangeHandler = (selectedValue: string) => {
+    setSelectedCategory(selectedValue);
+  };
+
+
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
       <SelectTrigger className="select-field h-14 text-[18px] text-secondary rounded-2xl">
-        <SelectValue placeholder="Choose..." />
+        <SelectValue placeholder="Choose..." selected={selectedCategory} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="Charity">Charity </SelectItem>
-        <SelectItem value="Businees">Businees</SelectItem>
-        <SelectItem value="Food & Drink">Food & Drink</SelectItem>
+        {categories.map((category) => (
+          <SelectItem key={category.id} value={category.categoryName}>
+            {category.categoryName}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
 }
 
 export default DropDown;
+
+
+

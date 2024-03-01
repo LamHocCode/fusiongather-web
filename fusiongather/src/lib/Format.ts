@@ -16,3 +16,29 @@ export function formatToWeek(createdAt: string) {
     const date = new Date(createdAt);
     return date.toLocaleString('en-US', { weekday: 'long' });
 }
+
+export function formatTime(time: string) {
+    const date = new Date(time);
+    const monthsAbbreviated = [
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+
+    const day = date.getDate();
+    const monthIndex = date.getMonth();
+    const year = date.getFullYear();
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    let ampm = "AM";
+    if (hours >= 12) {
+        ampm = "PM";
+        hours -= 12;
+    }
+    if (hours === 0) {
+        hours = 12;
+    }
+    const monthAbbreviated = monthsAbbreviated[monthIndex];
+    const formattedHours = String(hours).padStart(2, '0');
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    return `${day} ${monthAbbreviated} ${year}, ${formattedHours}:${formattedMinutes} ${ampm}`
+}
