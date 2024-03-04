@@ -1,14 +1,13 @@
 "use client";
 
 import { useCallback, Dispatch, SetStateAction } from "react";
-import type { FileWithPath } from "@uploadthing/react";
+import { File } from '@uploadthing/react';
 import { useDropzone } from "@uploadthing/react/hooks";
 import { generateClientDropzoneAccept } from "uploadthing/client";
-import { BsUpload } from "react-icons/bs";
 
 import { convertFileToUrl } from "@/lib/utils";
 import Image from "next/image";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton, UploadDropzone } from "@/lib/uploadthing";
 
 type FileUploaderProps = {
   onFieldChange: (url: string) => void;
@@ -21,7 +20,7 @@ export function FileUploader({
   onFieldChange,
   setFiles,
 }: FileUploaderProps) {
-  const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles(acceptedFiles);
     onFieldChange(convertFileToUrl(acceptedFiles[0]));
   }, []);
@@ -49,13 +48,7 @@ export function FileUploader({
           />
         </div>
       ) : (
-        // <div className="flex gap-3 items-center border border-[#FF8E3C] px-4 py-2 rounded-full text-grey-500 bg-white text-primary">
-        //   <BsUpload />
-        //   <h3 className="flex flex-auto justify-center items-center !important">
-        //     Banner
-        //   </h3>
-
-        <UploadButton
+        <UploadDropzone
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
             // Do something with the response
@@ -71,3 +64,13 @@ export function FileUploader({
     </div>
   );
 }
+
+// import React from 'react'
+
+// function FileUploader() {
+//   return (
+//     <div>FileUploader</div>
+//   )
+// }
+
+// export default FileUploader

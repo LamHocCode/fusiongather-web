@@ -6,8 +6,8 @@ import Sider from "@/components/layout/Sider";
 import { SessionProvider } from "next-auth/react";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "../api/uploadthing/core";
 
-import { ourFileRouter } from "../api/upload/core";
 
 
 export default async function Layout({

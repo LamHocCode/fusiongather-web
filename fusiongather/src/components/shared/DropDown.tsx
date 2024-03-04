@@ -14,9 +14,9 @@ type DropDownProps = {
 };
 
 
-function DropDown({ value }: DropDownProps) {
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+function DropDown({ value,onChangeHandler }: DropDownProps) {
+  const [categories, setCategories] = useState<any>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,18 +31,24 @@ function DropDown({ value }: DropDownProps) {
     fetchData();
   }, []);
 
-  const onChangeHandler = (selectedValue: string) => {
+   const onValueChangeHandler = (selectedValue: string) => {
     setSelectedCategory(selectedValue);
+    if (onChangeHandler) {
+      onChangeHandler(selectedValue);
+    }
   };
+  // const onChangeHandler = (selectedValue: string) => {
+  //   setSelectedCategory(selectedValue);
+  // };
 
 
   return (
-    <Select onValueChange={onChangeHandler} defaultValue={value}>
+    <Select onValueChange={onValueChangeHandler} defaultValue={value}>
       <SelectTrigger className="select-field h-14 text-[18px] text-secondary rounded-2xl">
         <SelectValue placeholder="Choose..." selected={selectedCategory} />
       </SelectTrigger>
       <SelectContent>
-        {categories.map((category) => (
+        {categories.map((category:any) => (
           <SelectItem key={category.id} value={category.categoryName}>
             {category.categoryName}
           </SelectItem>
