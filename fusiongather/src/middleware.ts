@@ -10,7 +10,7 @@ import {
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth((req) => { // Change req to res
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
 
@@ -29,7 +29,7 @@ export default auth((req) => {
         return null;
     }
 
-    if (!isLoggedIn && !isPublicRoute) {
+    if (!isLoggedIn && !isPublicRoute && !nextUrl.pathname.startsWith('/api/uploadthing')) { // Exclude /api/uploadthing route
         let callbackUrl = nextUrl.pathname;
         if (nextUrl.search) {
             callbackUrl += nextUrl.search;
