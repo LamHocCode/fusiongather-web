@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getAllCategory } from "@/lib/actions/event"; // Thay đường dẫn đến hàm getAllCategory ở đây
+import { getAllCategory } from "@/lib/actions/event"; 
 import { NextAuthMiddleware } from "next-auth/lib";
 
 type DropDownProps = {
@@ -40,10 +40,6 @@ function DropDown({ value,onChangeHandler }: DropDownProps) {
       onChangeHandler(selectedValue);
     }
   };
-  // const onChangeHandler = (selectedValue: string) => {
-  //   setSelectedCategory(selectedValue);
-  // };
-
 
   return (
     <Select onValueChange={onValueChangeHandler} defaultValue={value}>
