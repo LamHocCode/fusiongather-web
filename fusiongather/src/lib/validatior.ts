@@ -17,6 +17,15 @@ export const eventFormSchema = z.object({
   // url: z.string().url(),
 });
 
+export const boothFormSchema = z.object({
+  name: z.string().min(1, "Name is required!"),
+  description: z.string().min(1, "Description is required!"),
+  latitude: z.number(),
+  longitude: z.number(),
+  eventId: z.number(),
+  vendorId: z.number(),
+});
+
 export const PublishFormSchema = z.object({
   publish: z.boolean()
 })

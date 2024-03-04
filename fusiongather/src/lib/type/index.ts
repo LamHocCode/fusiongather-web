@@ -18,3 +18,12 @@ export interface EventType {
     lat: number,
     isFree: boolean
 }
+
+export interface BoothType {
+    id: number,
+    name: string,
+    description: string,
+    latitude: number,
+    longitude: number,
+    vendorId: object,
+}
