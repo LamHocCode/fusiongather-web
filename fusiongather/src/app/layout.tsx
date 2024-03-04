@@ -1,3 +1,5 @@
+
+
 import type { Metadata } from 'next'
 import { Roboto } from 'next/font/google'
 import './globals.css'
@@ -5,6 +7,10 @@ import { Toaster } from 'react-hot-toast'
 import { SessionProvider } from 'next-auth/react'
 import { auth } from '@/auth'
 import ContextProvider from '@/context/ContextProvider'
+import TableNextUIProvider from '@/context/TableNextUIProvider'
+import { Table } from '@nextui-org/react'
+
+
 
 const roboto = Roboto({
   weight: ['400', '700'],
@@ -43,9 +49,11 @@ export default async function RootLayout({
               }
             }}
           />
+          <TableNextUIProvider>
           <ContextProvider>
             {children}
-          </ContextProvider>
+          </ContextProvider> 
+          </TableNextUIProvider>                  
         </body>
       </html>
     </SessionProvider>
