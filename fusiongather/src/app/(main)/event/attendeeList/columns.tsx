@@ -2,7 +2,6 @@ import { Chip, ChipProps, Tooltip, User } from "@nextui-org/react";
 import React from "react";
 import { DeleteIcon, EditIcon, EyeIcon } from "./icons";
 import { Ticket } from "lucide-react";
-import { deleteAttendee } from "@/lib/actions/attendee";
 
 export type Ticket = {
   id: number;
@@ -14,6 +13,7 @@ export type Ticket = {
     email: string;
     phoneNumber: string;
   };
+  onDataChanged: () => void;
 };
 
 export const columns = [
@@ -35,6 +35,7 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
   Yes: "success",
   No: "danger",
 };
+
 
 
 export const renderCell = (item: Ticket, columnKey: React.Key) => {
@@ -67,29 +68,7 @@ export const renderCell = (item: Ticket, columnKey: React.Key) => {
         </Chip>
       );
     case "actions":
-      return (
-        <div className="relative flex items-center gap-2">
-          <Tooltip content="Details">
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <EyeIcon />
-            </span>
-          </Tooltip>
-          <Tooltip content="Edit Attendee">
-            <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-              <EditIcon />
-            </span>
-          </Tooltip>
-          <Tooltip color="danger" content="Delete Attendee">
-            <span className="text-lg text-danger cursor-pointer active:opacity-50">
-              <DeleteIcon onClick={
-                async () => {
-                  await deleteAttendee(item.id);
-                }
-              }/>
-            </span>
-          </Tooltip>
-        </div>
-      );
+      return null;
     default:
       return String(cellValue);
   }

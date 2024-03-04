@@ -40,16 +40,9 @@ export const deleteAttendee = async (attendeeId: number) => {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-
-        if (!res.ok) {
-            console.error(`Request failed with status: ${res.status}`);
-            return await res.json();
-        }
-
-        return await res.json();
     } catch (error: any) {
         console.log(error);
-        return null;
+        throw new Error("Failed to delete attendee");
     }
 }
 
