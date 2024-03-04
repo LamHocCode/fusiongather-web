@@ -31,7 +31,7 @@ import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createEvent } from "@/lib/actions/event";
-import { UploadButton } from "@/utils/uploadthing";
+import { UploadButton, UploadDropzone } from "@/utils/uploadthing";
 // import { FileUploader } from "./FileUploader";
 
 export function EventForm() {
@@ -50,25 +50,28 @@ export function EventForm() {
     endDateTime: undefined,
     price: "",
     isFree: false,
-    url: "",
+    // url: "",
   };
   const form = useForm<z.infer<typeof eventFormSchema>>({
-   defaultValues:initialValues,
+    defaultValues: initialValues,
   });
 
   const isFree = form.watch("isFree");
 
-  const currentCoords=[form.getValues('lng'),form.getValues('lat')]
-  
+  const currentCoords = [form.getValues("lng"), form.getValues("lat")];
+
+  const [imageUrl, setImageUrl] = useState<string>("");
+
   const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (
     data
   ) => {
     try {
+      // data.imageUrl = imageUrl;
       console.log(data);
-      
-      // await createEvent(data); 
+
+      await createEvent(data);
     } catch (error) {
-      throw new Error('Something went wrong!')
+      throw new Error("Something went wrong!");
     }
   };
 
@@ -184,22 +187,29 @@ export function EventForm() {
                   control={form.control}
                   name="imageUrl"
                   render={({ field }) => (
-                    <FormItem className="w-full flex flex-auto justify-center items-center cursor-pointer rounded-2xl border border-gray-200">
-                      <FormControl className="h-full">
-                        <UploadButton
-                          endpoint="imageUploader"
-                          onClientUploadComplete={(res) => {
-                            // Do something with the response
-                            console.log("Files: ", res);
-                            alert("Upload Completed");
-                          }}
-                          onUploadError={(error: Error) => {
-                            // Do something with the error.
-                            alert(`ERROR! ${error.message}`);
-                          }}
-                        />
+                    <FormItem>
+                      <FormControl>
+                        {!field.value && ( // Only render UploadDropzone if no value is present
+                          <UploadDropzone
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                              // Do something with the response
+                              console.log("Files: ", res[0].url);
+                              alert("Upload Completed");
+                              field.onChange(res[0].url); // Set imageUrl
+                              setImageUrl(res[0].url)
+                            }}
+                            onUploadError={(error: Error) => {
+                              // Do something with the error.
+                              alert(`ERROR! ${error.message}`);
+                            }}
+                          />
+                        )}
                       </FormControl>
                       <FormMessage />
+                      {field.value && ( // Render image only if value is present
+                        <img src={field.value} alt="Uploaded Image" />
+                      )}
                     </FormItem>
                   )}
                 />
@@ -209,7 +219,6 @@ export function EventForm() {
             <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
               <div className="flex gap-2 items-center text-secondary">
                 <RiMapPin2Line size={22} />
-
                 <span>Location</span>
               </div>
               <FormField
