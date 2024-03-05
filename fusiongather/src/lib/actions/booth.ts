@@ -1,16 +1,14 @@
-"use server"
-
 import { z } from "zod";
-import { eventFormSchema } from "../validatior";
+import { boothFormSchema } from "../validatior";
 import getSession from "./getSession";
-import { GetAllEventType } from "../type";
+import {  } from "../type"
 
-export const createEvent = async (data: z.infer<typeof eventFormSchema>) => {
+export const createBooth = async (data: z.infer<typeof boothFormSchema>) => {
     try {
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
 
-        const res = await fetch(`${process.env.BASE_URL}/event/create`, {
+        const res = await fetch(`${process.env.BASE_URL}/booth`, {
             method: "POST",
             body: JSON.stringify(data),
             headers: {
@@ -29,59 +27,40 @@ export const createEvent = async (data: z.infer<typeof eventFormSchema>) => {
     }
 }
 
-export const getAllEvent = async (data: GetAllEventType) => {
-    try {
-        const { searchString, userId, pageNumber, pageSize } = data
-
-        const res = await fetch(`${process.env.BASE_URL}/event?searchString=${searchString ? searchString : ''}&userId=${userId ? userId : ''}&pageNumber=${pageNumber ? pageNumber : ''}&pageSize=${pageSize ? pageSize : ''}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        if (!res.ok) {
-            console.error(`Request failed with status: ${res.status}`);
-            return await res.json();;
-        }
-        return res.json()
-    } catch (error: any) {
-        console.log(error);
-        return null
-    }
-}
-
-export const getAllCategory = async () => {
+export const getAllBooth = async () => {
     try {
         const session = await getSession();
         const accessToken = session?.tokens?.accessToken;
 
-        const res = await fetch(`${process.env.BASE_URL}/category`, {
+        const res = await fetch(`${process.env.BASE_URL}/booth`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
-        });
-
+        })
         if (!res.ok) {
             console.error(`Request failed with status: ${res.status}`);
-            return await res.json();
+            return await res.json();;
         }
-
-        return await res.json();
-    } catch (error: any) {
+        return res.json()
+    }
+    catch (error: any) {
         console.log(error);
-        return null;
+        return null
     }
 }
 
-export const getPendingEvents = async () => {
+export const getBoothByEventId = async (eventId: number) => {
     try {
+        const session = await getSession();
+        const accessToken = session?.tokens?.accessToken;
 
-        const res = await fetch(`${process.env.BASE_URL}/event/pending`, {
+        const res = await fetch(`${process.env.BASE_URL}/booth/event/${eventId}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
             }
         })
         if (!res.ok) {
@@ -89,11 +68,33 @@ export const getPendingEvents = async () => {
             return await res.json();;
         }
         return res.json()
-    } catch (error: any) {
+    }
+    catch (error: any) {
         console.log(error);
         return null
     }
 }
 
+export const getBoothById = async (boothId: number) => {
+    try {
+        const session = await getSession();
+        const accessToken = session?.tokens?.accessToken;
 
-
+        const res = await fetch(`${process.env.BASE_URL}/booth/${boothId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    }
+    catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
