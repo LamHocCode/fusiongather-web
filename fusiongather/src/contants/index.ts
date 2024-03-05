@@ -6,6 +6,7 @@ import { LuUser2 } from "react-icons/lu";
 import { LogOut } from "@/lib/actions/logout";
 import { TbBuildingWarehouse } from "react-icons/tb";
 import { FiPlusCircle } from "react-icons/fi";
+import { MdOutlinePendingActions } from "react-icons/md";
 
 
 export const LeftSidebarLinks = {
@@ -19,6 +20,11 @@ export const LeftSidebarLinks = {
             label: 'Home',
             href: '/',
             icon: GoHome,
+        },
+        {
+            label: 'Pending Events',
+            href: 'event/pending',
+            icon: MdOutlinePendingActions,
         },
         {
             label: 'My Ticket',
