@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.6",
     "@headlessui/react": "^1.7.18",
     "@hookform/resolvers": "^3.3.4",
     "@mapbox/mapbox-gl-geocoder": "^5.0.2",
@@ -22,6 +23,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
+    "@types/google.maps": "^3.55.4",
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.7",
     "@uploadthing/react": "^6.1.0",
     "antd": "^5.13.1",
