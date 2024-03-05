@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { eventFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
-import { FileUploader } from "./FileUploader";
+
 import { useState } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
@@ -31,46 +31,50 @@ import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createEvent } from "@/lib/actions/event";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton, UploadDropzone } from "@/utils/uploadthing";
+// import { FileUploader } from "./FileUploader";
 
 export function EventForm() {
-  const [files, setFiles] = useState<File[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
+  // const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
   const router = useRouter();
-  // const initialValues = {
-  //   title: "",
-  //   description: "",
-  //   category: "",
-  //   location: "",
-  //   lng: 0,
-  //   lat: 0,
-  //   imageUrl: "",
-  //   startDateTime: undefined,
-  //   endDateTime: undefined,
-  //   price: "",
-  //   isFree: false,
-  //   url: "",
-  // };
-  // 1. Define your form.
+  const initialValues = {
+    title: "",
+    description: "",
+    category: "",
+    location: "",
+    lng: 0,
+    lat: 0,
+    imageUrl: "",
+    startDateTime: undefined,
+    endDateTime: undefined,
+    price: "",
+    isFree: false,
+    // url: "",
+  };
   const form = useForm<z.infer<typeof eventFormSchema>>({
-    resolver: zodResolver(eventFormSchema),
+    defaultValues: initialValues,
   });
 
   const isFree = form.watch("isFree");
 
-  // 2. Submit Handler
+  const currentCoords = [form.getValues("lng"), form.getValues("lat")];
+
+  const [imageUrl, setImageUrl] = useState<string>("");
+
   const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (
     data
   ) => {
     try {
-      await createEvent(data); // Call createEvent function with form data
-      // Handle success or navigation to next step
+      // data.imageUrl = imageUrl;
+      console.log(data);
+
+      await createEvent(data);
     } catch (error) {
-      // Handle error
+      throw new Error("Something went wrong!");
     }
   };
-  // 3. Handle search location
+
   function setLocation(location: string, lng: number, lat: number) {
     if (location !== "") {
       if (location !== "geolocate") {
@@ -81,8 +85,6 @@ export function EventForm() {
     }
     form.setValue("lng", lng);
     form.setValue("lat", lat);
-    setCurrentCoords([lng, lat]);
-    console.log(form.getValues());
   }
 
   const handleCancel = () => {
@@ -181,27 +183,42 @@ export function EventForm() {
                   <CiImageOn size={22} />
                   <span>Media</span>
                 </div>
-                <div className="sm:col-span-2">
-                  <UploadButton
-                    endpoint="imageUploader"
-                    onClientUploadComplete={(res) => {
-                      // Do something with the response
-                      console.log("Files: ", res);
-                      alert("Upload Completed");
-                    }}
-                    onUploadError={(error: Error) => {
-                      // Do something with the error.
-                      alert(`ERROR! ${error.message}`);
-                    }}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        {!field.value && ( // Only render UploadDropzone if no value is present
+                          <UploadDropzone
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                              // Do something with the response
+                              console.log("Files: ", res[0].url);
+                              alert("Upload Completed");
+                              field.onChange(res[0].url); // Set imageUrl
+                              setImageUrl(res[0].url)
+                            }}
+                            onUploadError={(error: Error) => {
+                              // Do something with the error.
+                              alert(`ERROR! ${error.message}`);
+                            }}
+                          />
+                        )}
+                      </FormControl>
+                      <FormMessage />
+                      {field.value && ( // Render image only if value is present
+                        <img src={field.value} alt="Uploaded Image" />
+                      )}
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
 
             <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
               <div className="flex gap-2 items-center text-secondary">
                 <RiMapPin2Line size={22} />
-
                 <span>Location</span>
               </div>
               <FormField

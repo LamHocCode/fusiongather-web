@@ -6,8 +6,9 @@ import Sider from "@/components/layout/Sider";
 import { SessionProvider } from "next-auth/react";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "../api/uploadthing/core";
 
-import { ourFileRouter } from "../api/upload/core";
+
 
 export default async function Layout({
   children,
@@ -17,7 +18,8 @@ export default async function Layout({
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
+
+      <SessionProvider session={session}>
       <div className="h-screen  flex">
         <NextSSRPlugin
           /**
@@ -38,5 +40,6 @@ export default async function Layout({
         </div>
       </div>
     </SessionProvider>
+    
   );
 }
