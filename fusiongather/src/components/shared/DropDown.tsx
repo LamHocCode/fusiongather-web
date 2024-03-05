@@ -11,7 +11,7 @@ import { NextAuthMiddleware } from "next-auth/lib";
 
 type DropDownProps = {
   value?: string;
-  onChangeHandler?: (selectedValue: string) => void; 
+onChangeHandler?: (selectedValue: string) => void; 
 };
 
 
@@ -42,13 +42,13 @@ function DropDown({ value,onChangeHandler }: DropDownProps) {
   };
 
   return (
-    <Select onValueChange={onValueChangeHandler} defaultValue={value}>
+    <Select onValueChange={onValueChangeHandler}>
       <SelectTrigger className="select-field h-14 text-[18px] text-secondary rounded-2xl">
-        <SelectValue placeholder="Choose..." selected={selectedCategory} />
+        <SelectValue placeholder="Choose..." />
       </SelectTrigger>
       <SelectContent>
         {categories.map((category:any) => (
-          <SelectItem key={category.id} value={category.id}>
+          <SelectItem key={category.id} value={category.id+ ""} >
             {category.categoryName}
           </SelectItem>
         ))}
