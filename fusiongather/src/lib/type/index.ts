@@ -25,5 +25,4 @@ export interface BoothType {
     description: string,
     latitude: number,
     longitude: number,
-    vendorId: object,
 }

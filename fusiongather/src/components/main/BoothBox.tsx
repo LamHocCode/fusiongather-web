@@ -40,6 +40,7 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PublishFormSchema } from "@/lib/validatior";
 import { Label } from "../ui/label";
+import Link from "next/link";
 
 const BoothBox = ({ data }: { data: BoothType }) => {
     const form = useForm<z.infer<typeof PublishFormSchema>>({
@@ -70,7 +71,9 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                         <div className="w-[58%] pl-6 border-l ">
                             <div className="flex flex-col gap-5 border-b pb-5">
                                 <div className="font-bold truncate-2-line">
-                                    {data.name}
+                                <Link href={`/event/booth/${data.id}`}>
+                                        {data.name}
+                                    </Link>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <span><FaRegCalendarAlt size={20} /></span>
