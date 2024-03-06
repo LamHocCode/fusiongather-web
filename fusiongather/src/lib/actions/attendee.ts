@@ -8,7 +8,6 @@ export const getAttendeeByEventId = async (eventId: number) => {
     try {
         const session = await getSession();
         const accessToken = session?.tokens?.accessToken;
-  
         const res = await fetch(`${process.env.BASE_URL}/ticket/event/${eventId}/${session?.user.id}`, {
             method: "GET",
             headers: {
