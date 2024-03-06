@@ -98,7 +98,6 @@ export default function DisplayMap(props: any) {
             console.log(position.lat(), position.lng());
           });
         });
-
         // Create a marker for current location
         if (props.currentCoords[0] !== 0 && props.currentCoords[1] !== 0) {
           const currentLocation = new google.maps.LatLng(
@@ -113,6 +112,17 @@ export default function DisplayMap(props: any) {
             onDragMarker(position);
             console.log(position.lat(), position.lng());
           });
+        }
+      }
+      else {
+        if (props.currentCoords[0] !== 0 && props.currentCoords[1] !== 0) {
+          const currentLocation = new google.maps.LatLng(
+            props.currentCoords[1],
+            props.currentCoords[0]
+          );
+          const currentMarker = createMarker(map, currentLocation);
+          currentMarker.setDraggable(false);
+          markerArray.current.push(currentMarker);
         }
       }
     };
