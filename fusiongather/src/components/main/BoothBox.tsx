@@ -5,7 +5,8 @@ import { BoothType, EventType } from "@/lib/type";
 import Image from "next/image";
 import { GoLocation } from "react-icons/go";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import { LuPenLine } from "react-icons/lu";
+import { IoIosPerson } from "react-icons/io";
+import { LuPartyPopper, LuPenLine } from "react-icons/lu";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import {
@@ -76,37 +77,19 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                                     </Link>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <span><FaRegCalendarAlt size={20} /></span>
+                                    <span><LuPartyPopper size={20} /></span>
                                     <span className="text-xs">
-                                        {data.latitude} - {data.longitude}
+                                        {data.eventId.title} 
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <span>
-                                        <GoLocation size={20} />
+                                        <IoIosPerson size={20} />
                                     </span>
                                     <span className="text-xs">
-                                        {data.description}
+                                        {data.vendorId.firstName} {data.vendorId.lastName}
                                     </span>
                                 </div>
-                            </div>
-                            <div className="flex items-center justify-between gap-4 pt-5 px-4 text-black">
-                                <HoverCard>
-                                    <HoverCardTrigger asChild>
-                                        <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-                                            <LuPenLine size={24} />
-                                        </div>
-                                    </HoverCardTrigger>
-                                    <HoverCardContent className="w-24">
-                                        <div className="text-center">
-                                            Edit
-                                        </div>
-                                    </HoverCardContent>
-                                </HoverCard>
-                                <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-                                    <IoShareSocialOutline size={24} />
-                                </div>
-
                             </div>
                         </div>
                     </div>

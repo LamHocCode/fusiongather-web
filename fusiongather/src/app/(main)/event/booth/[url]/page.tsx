@@ -11,8 +11,6 @@ interface Props {
 
 export async function generateMetadata({ params: { url } }: Props): Promise<Metadata> {
     try {
-        // const parts = slug.split('.');
-        // const eventId = parts[1]
         let booth = url
         if (!booth) {
             return {
@@ -36,6 +34,7 @@ export default async function BoothDetail({ params: { url } }: Props) {
     const booth = await getBoothById(url)
     return (
         <main className="mt-[90px] min-h-screen">
+            <BackgroupImage src="/test-booth.jpg" page="detail" />
             <BoothDetailPage booth={booth}/>
         </main>
     )

@@ -31,13 +31,13 @@ import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createBooth } from "@/lib/actions/booth";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton, UploadDropzone } from "@/utils/uploadthing";
 import { getSession } from "next-auth/react";
 
 export function BoothForm() {
   const [files, setFiles] = useState<File[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
+  // const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
   const router = useRouter();
   // const initialValues = {
   //   title: "",
@@ -59,6 +59,10 @@ export function BoothForm() {
     resolver: zodResolver(boothFormSchema),
   });
 
+  const [imageUrl, setImageUrl] = useState<string>("");
+
+  const currentCoords = [form.getValues("longitude"), form.getValues("latitude")]
+
   // 2. Submit Handler
   const onSubmit: SubmitHandler<z.infer<typeof boothFormSchema>> = async (
     data
@@ -78,7 +82,7 @@ export function BoothForm() {
 
     form.setValue("longitude", longitude);
     form.setValue("latitude", latitude);
-    setCurrentCoords([longitude, latitude]);
+
     // console.log(form.getValues());   
   }
 
@@ -170,6 +174,7 @@ export function BoothForm() {
                   </FormItem>
                 )}
               /> */}
+                           
               <Button
                 type="button"
                 onClick={() => setIsOpen(true)}
@@ -178,6 +183,42 @@ export function BoothForm() {
                 Choose
               </Button>
             </div>
+            {/* <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
+                <div className="flex gap-2 items-center text-secondary">
+                  <CiImageOn size={22} />
+                  <span>Media</span>
+                </div>
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        {!field.value && ( // Only render UploadDropzone if no value is present
+                          <UploadDropzone
+                            endpoint="imageUploader"
+                            onClientUploadComplete={(res) => {
+                              // Do something with the response
+                              console.log("Files: ", res[0].url);
+                              alert("Upload Completed");
+                              field.onChange(res[0].url); // Set imageUrl
+                              setImageUrl(res[0].url)
+                            }}
+                            onUploadError={(error: Error) => {
+                              // Do something with the error.
+                              alert(`ERROR! ${error.message}`);
+                            }}
+                          />
+                        )}
+                      </FormControl>
+                      <FormMessage />
+                      {field.value && ( // Render image only if value is present
+                        <img src={field.value} alt="Uploaded Image" />
+                      )}
+                    </FormItem>
+                  )}
+                />
+              </div> */}
 
           </div>
           <div className="flex items-center justify-end gap-5 mt-5">
