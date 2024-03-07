@@ -36,7 +36,7 @@ export default async function EventDetail({ params: { url } }: Props) {
     return (
         <main className="mt-[90px] min-h-screen">
             <BackgroupImage src="/banner-1.png" page="detail" />
-            <Content />
+            <Content params={{url}}/>
         </main>
     )
 }

@@ -1,17 +1,23 @@
 "use client";
 
 import LocationModal from "@/components/shared/LocationModal";
+import { EventType } from "@/lib/type";
 import Link from "next/link";
 import { useState } from "react";
 import { FaRegUserCircle } from "react-icons/fa";
 import { LiaCalendarWeekSolid } from "react-icons/lia";
 import { RiMapPin2Line } from "react-icons/ri";
 
-const EventInfo = () => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentCoords, setCurrentCoords] = useState<number[]>([106.737, 10.779]); // [lng, lat]
-  const status = "INFO";
 
+const EventInfo = (data : any) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false); 
+  const [currentCoords, setCurrentCoords] = useState<number[]>([Number(data.event.lng), Number(data.event.lat)]); // [lng, lat]
+  const status = "INFO";
+  
+  const convertToDateTime = (date: string) => {
+    const dateTime = new Date(date);
+    return dateTime.toLocaleString();
+  }
   return (
     <>
       <LocationModal
@@ -26,15 +32,15 @@ const EventInfo = () => {
           <FaRegUserCircle size="24" />
           <Link href={"/"}>
             <span className="text-lg truncate">
-              British Chamber Of Commerce Vietnam
+              {data.event.author.firstName} {data.event.author.lastName}
             </span>
           </Link>
         </div>
         <div className="flex items-center gap-6 ">
           <LiaCalendarWeekSolid size="24" />
           <div className="text-gray-600 text-sm leading-6">
-            <div>05:30, Chủ Nhật, 17 Th03, 2024</div>
-            <div>10:00, Chủ Nhật, 17 Th03, 2024</div>
+            <div>{convertToDateTime(data.event.startDateTime)}</div>
+            <div>{convertToDateTime(data.event.endDateTime)}</div>
           </div>
         </div>
         <div
@@ -43,7 +49,7 @@ const EventInfo = () => {
         >
           <RiMapPin2Line size="24" />
           <span className="text-secondary text-sm truncate-2-line hover:text-orange-500 cursor-pointer">
-            SALA City, Thu Thiem New Urban Area – Ho Chi Minh City
+            {data.event.location}
           </span>
         </div>
       </div>

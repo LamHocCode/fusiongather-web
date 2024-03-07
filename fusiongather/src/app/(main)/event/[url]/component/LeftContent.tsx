@@ -3,17 +3,20 @@ import { FaRegHeart } from "react-icons/fa6";
 import { IoShareSocialOutline } from "react-icons/io5";
 import BoxTicket from "./BoxTicket";
 import EventInfo from "./EventInfo";
+import { getEventById } from "@/lib/actions/event";
+import { EventType } from "@/lib/type";
 
-const LeftContent = () => {
+
+const LeftContent = async (data: EventType) => {
     return (
         <>
             <div className="w-full flex items-start gap-8">
-                <Calendar />
+                <Calendar event={data}/>
                 <div className="flex-1">
                     <h3 className="text-3xl uppercase text-gray-600 leading-normal mb-6">
-                        UAN X YEAR END PARTY - MARKETING TRENDS 2024 & BEYOND
+                        {data.title}
                     </h3>
-                    <EventInfo />
+                    <EventInfo event={data}/>
                 </div>
             </div>
             <div className="w-full border rounded-full flex my-8 h-[64px] cursor-pointer">
@@ -31,31 +34,7 @@ const LeftContent = () => {
                 </div>
             </div>
             <div>
-                Để khởi động một năm mới đầy hứa hẹn với nhiều nguồn cảm hứng và tràn đầy năng lượng, Vietnam Airlines x SpaceSpeakers Group phối hợp cùng Vietcetera tổ chức sự kiện âm nhạc đón bình minh chưa từng có ở Việt Nam.
-
-
-
-                Đúng như tên gọi của sự kiện, 5AM sẽ là nơi quy tụ của "hội chim sớm", sẵn sàng thức dậy để cùng nhau để tận hưởng sự kỳ diệu của những khoảnh khắc đầu ngày, thông qua các hoạt động thể thao và âm nhạc kết nối người tham dự như:
-
-
-
-                🏃‍♂️ Fun Run
-
-                🧘‍♀️ Rise and Shine Yoga
-
-                🎶 Live Performance
-
-
-
-                *Lưu ý: Đối với hoạt động thể thao Fun Run hoặc Yoga, số lượng người tham dự giới hạn dành cho 100 khách mua vé đăng ký sớm nhất. (Cập nhật: số lượng đăng ký cho mỗi hoạt động đã đủ số lượng.)
-
-
-
-                Tham gia ngay sự kiện 5AM để thưởng thức những màn trình diễn đến từ các nghệ sĩ hàng đầu Việt Nam với những ca khúc hot hit.
-
-
-
-                Hãy trở thành một phần của #5AMCLUB, cùng dậy sớm đón bình minh và chào ngày mới!
+            <span dangerouslySetInnerHTML={{ __html: data.description }} suppressHydrationWarning></span>
             </div>
             <BoxTicket />
         </>
