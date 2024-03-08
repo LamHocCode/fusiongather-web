@@ -10,13 +10,13 @@ const BoothDetailPage = ({ booth }: { booth: BoothType }) => {
     const [data, setData] = useState<BoothType>(booth)
     return (
         <div>
-                    <section className="flex gap-8 py-10">
-            <div className="w-[100%]">
-                <Content booth={data}/>
-            </div>
-        </section>
+            <section className="flex gap-8 py-10">
+                <div className="w-[100%]">
+                    <Content booth={data} />
+                </div>
+            </section>
         </div>
-        
+
     );
 }
 

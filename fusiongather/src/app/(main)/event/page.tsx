@@ -11,7 +11,7 @@ const EventPage = async () => {
         userId: session?.user.id,
         // isAdmin: session?.user.isAdmin,
     }
-    // isAdmin = true ?      const events = await getAllEvent() :
+    // isAdmin === true ?      const events = await getAllEvent() :
    const events = await getAllEvent(init)
 
     return (

@@ -16,7 +16,8 @@ export interface EventType {
     price: string,
     lng: number,
     lat: number,
-    isFree: boolean
+    isFree: boolean,
+    isPublished: boolean
 }
 
 export type BoothType = {

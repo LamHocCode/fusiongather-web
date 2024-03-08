@@ -23,7 +23,7 @@ export const LeftSidebarLinks = {
         },
         {
             label: 'Pending Events',
-            href: 'event/pending',
+            href: '/event/pending',
             icon: MdOutlinePendingActions,
         },
         {
