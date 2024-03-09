@@ -45,7 +45,7 @@ const MyEventBox = ({ data }: { data: EventType }) => {
     const form = useForm<z.infer<typeof PublishFormSchema>>({
         resolver: zodResolver(PublishFormSchema),
         defaultValues: {
-            publish: false,
+            publish: data.isPublished,
         },
     })
     const onSubmit = async (data: z.infer<typeof PublishFormSchema>) => {
