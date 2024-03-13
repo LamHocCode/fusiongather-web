@@ -13,7 +13,6 @@ const EventInfo = (data : any) => {
   const [isOpen, setIsOpen] = useState<boolean>(false); 
   const [currentCoords, setCurrentCoords] = useState<number[]>([Number(data.event.lng), Number(data.event.lat)]); // [lng, lat]
   const status = "INFO";
-  
   const convertToDateTime = (date: string) => {
     const dateTime = new Date(date);
     return dateTime.toLocaleString();
