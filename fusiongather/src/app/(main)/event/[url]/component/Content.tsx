@@ -6,14 +6,10 @@ import { getEventById } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
 
 interface Props {
-    params: {
-        url: string
-    }
+    event: EventType
 }
 
-const Content = async ({ params: { url } }: Props) => {
-    const eventId = url;
-    const event: EventType = await getEventById(eventId);
+const Content = async (event: Props) => {
     return (
         <section className="flex gap-8 py-10">
             <div className="w-[61%]">

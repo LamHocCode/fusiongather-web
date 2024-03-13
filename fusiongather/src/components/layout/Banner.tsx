@@ -4,8 +4,13 @@ import { Carousel } from 'antd';
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { MutableRefObject, useRef } from "react";
 import BackgroupImage from "./BackgroupImage";
+import { EventType } from '@/lib/type';
 
-const Banner = () => {
+interface Props {
+    events: EventType[]
+}
+
+const Banner = (data: Props) => {
     const ref: MutableRefObject<any | null> = useRef(null)
     return (
         <div className="mb-8 max-lg:mt-[100px] max-md:mt-[110px] relative">
@@ -16,10 +21,9 @@ const Banner = () => {
                 draggable
                 ref={ref}
             >
-
-                <BackgroupImage src="/banner-1.png" page="home" />
-                <BackgroupImage src="/test-event.png" page="home" />
-
+                {data.events.map((event, index) => (
+                    <BackgroupImage key={index} src={event.imageUrl} page='home'/>
+                ))}
             </Carousel>
             <button
                 onClick={() => {

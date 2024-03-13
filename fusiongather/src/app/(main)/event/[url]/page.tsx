@@ -1,6 +1,8 @@
 import BackgroupImage from "@/components/layout/BackgroupImage";
 import { Metadata } from "next";
 import Content from "./component/Content";
+import { getEventById } from "@/lib/actions/event";
+import { EventType } from "@/lib/type";
 
 interface Props {
     params: {
@@ -32,11 +34,11 @@ export async function generateMetadata({ params: { url } }: Props): Promise<Meta
 }
 
 export default async function EventDetail({ params: { url } }: Props) {
-
+    const event: EventType = await getEventById(url);
     return (
         <main className="mt-[90px] min-h-screen">
-            <BackgroupImage src="/banner-1.png" page="detail" />
-            <Content params={{url}}/>
+            <BackgroupImage src={event.imageUrl} page="detail" />
+            <Content event={event} />
         </main>
     )
 }

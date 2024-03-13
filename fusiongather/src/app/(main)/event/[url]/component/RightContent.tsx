@@ -7,9 +7,12 @@ import EventInfo from "./EventInfo";
 import { getEventById } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
 
+interface Props {
+    event: EventType
+}
 
 
-const RightContent = (data: EventType) => {
+const RightContent = (data: Props) => {
     const [isShow, setIsShow] = useState<boolean>(false)
     const [isHidden, setIsHidden] = useState<boolean>(false)
     useEffect(() => {
@@ -31,13 +34,13 @@ const RightContent = (data: EventType) => {
             {isShow ?
                 <div className={`${isShow && "fixed top-[90px] bg-white w-[calc(39%-70px)] right-10 animate-right-content"} border p-4 rounded-md`}>
                     <div className="w-full flex items-start gap-2 mb-8">
-                        <Calendar event={data}/>
+                        <Calendar event={data.event}/>
                         <h3 className="text-lg text-gray-600 leading-normal mb-6">
-                            {data.title}
+                            {data.event.title}
                         </h3>
                     </div>
                     <div className="pb-4">
-                        <EventInfo event={data} />
+                        <EventInfo event={data.event} />
                     </div>
                     {!isHidden &&
                         <hr className="mb-4" />

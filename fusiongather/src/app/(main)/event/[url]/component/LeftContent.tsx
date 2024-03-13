@@ -6,17 +6,20 @@ import EventInfo from "./EventInfo";
 import { getEventById } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
 
+interface Props {
+    event: EventType
+}
 
-const LeftContent = async (data: EventType) => {
+const LeftContent = async (data: Props) => {
     return (
         <>
             <div className="w-full flex items-start gap-8">
-                <Calendar event={data}/>
+                <Calendar event={data.event}/>
                 <div className="flex-1">
                     <h3 className="text-3xl uppercase text-gray-600 leading-normal mb-6">
-                        {data.title}
+                        {data.event.title}
                     </h3>
-                    <EventInfo event={data}/>
+                    <EventInfo event={data.event}/>
                 </div>
             </div>
             <div className="w-full border rounded-full flex my-8 h-[64px] cursor-pointer">
@@ -34,7 +37,7 @@ const LeftContent = async (data: EventType) => {
                 </div>
             </div>
             <div>
-            <span dangerouslySetInnerHTML={{ __html: data.description }} suppressHydrationWarning></span>
+            <span dangerouslySetInnerHTML={{ __html: data.event.description }} suppressHydrationWarning></span>
             </div>
             <BoxTicket />
         </>

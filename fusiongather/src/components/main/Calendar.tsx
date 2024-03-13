@@ -1,9 +1,12 @@
 import { format, formatToDay, formatToWeek } from "@/lib/Format";
 import { EventType } from "@/lib/type";
 
+interface Props {
+    event: EventType
+}
 
 
-const Calendar = (data: any) => {
+const Calendar = (data: Props) => {
     return (
         <div className="border text-center shadow-xl min-w-[127px]">
             <div className="py-1 text-sm bg-primary text-white">{format(data.event.startDateTime)}</div>

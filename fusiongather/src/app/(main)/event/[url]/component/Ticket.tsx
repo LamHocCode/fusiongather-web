@@ -1,17 +1,21 @@
 import { EventType } from "@/lib/type";
 import { IoIosArrowForward } from "react-icons/io";
 
-const Ticket = ({ isHidden, data }: { isHidden: boolean; data: EventType }) => {
+interface Props {
+  event: EventType;
+}
+
+const Ticket = ({ isHidden, data }: { isHidden: boolean; data: Props }) => {
   return (
     <>
       {!isHidden && (
         <div className="flex flex-col gap-2 mb-8">
           <div className="flex items-start justify-between">
-            {!data.isFree ? (
+            {!data.event.isFree ? (
               <>
                 <span className="text-secondary text-sm">Early Bird | Kid</span>
                 <div className="flex items-center gap-8">
-                  <span className="text-sm font-semibold">{data.price}</span>
+                  <span className="text-sm font-semibold">{data.event.price}</span>
                   <IoIosArrowForward />
                 </div>
               </>
