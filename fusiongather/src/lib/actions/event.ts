@@ -120,7 +120,7 @@ export const getLatestEvent = async () => {
     }
 }
 
-export const getEventById = async (id: string) => {
+export const getEventById = async (id: number) => {
     try {
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
