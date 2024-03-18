@@ -21,9 +21,12 @@ const Banner = (data: Props) => {
                 draggable
                 ref={ref}
             >
-                {data.events.map((event, index) => (
+                {data.events && data.events.length !== 0 ? data.events.map((event, index) => (
                     <BackgroupImage key={index} src={event.imageUrl} page='home'/>
-                ))}
+                ))
+                    :
+                    <BackgroupImage src="https://www.vizagchamber.com/uploads/9548c64d38fa1958bb77e4ae5a5bd118.jpg" page='home'/>
+                }
             </Carousel>
             <button
                 onClick={() => {
