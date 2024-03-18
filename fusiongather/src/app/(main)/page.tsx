@@ -5,9 +5,7 @@ import { getLatestEvent } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
 
 export default async function Home() {
-  var events: EventType[] = [];
-  // get latest events
-  events = await getLatestEvent();
+  var events:EventType[] = await getLatestEvent();
   return (
     <main className="flex-1 mt-24">
       <Banner events={events}/>

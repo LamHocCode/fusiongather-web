@@ -113,14 +113,14 @@ export const getLatestEvent = async () => {
             console.error(`Request failed with status: ${res.status}`);
             return await res.json();
         }
-        return res.json()
+        return await res.json()
     } catch (error: any) {
         console.log(error);
         return null
     }
 }
 
-export const getEventById = async (id: string) => {
+export const getEventById = async (id: number) => {
     try {
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
