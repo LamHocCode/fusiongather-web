@@ -19,10 +19,10 @@ export default function DisplayMap(props: any) {
       const loader = new Loader({
         apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY as string,
         version: "quarterly",
+        id: "NEXTJS_MAP_ID",
+        libraries: ["places"],
       });
       const { Map } = await loader.importLibrary("maps");
-      const { Marker } = (await loader.importLibrary("marker")) as google.maps.MarkerLibrary;
-      const { Place } = (await loader.importLibrary("places")) as google.maps.PlacesLibrary;
       // Create Map options
       const options: google.maps.MapOptions = {
         center: { lat: viewport.lat, lng: viewport.lng },
