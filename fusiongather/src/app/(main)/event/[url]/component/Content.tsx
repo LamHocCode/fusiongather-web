@@ -1,12 +1,10 @@
-
 import { get } from "http";
 import LeftContent from "./LeftContent";
 import RightContent from "./RightContent";
 import { getEventById } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
-
 interface Props {
-    event: EventType
+    event: EventType,
 }
 
 const Content = async (event: Props) => {

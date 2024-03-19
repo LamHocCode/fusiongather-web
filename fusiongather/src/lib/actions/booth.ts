@@ -149,10 +149,9 @@ export const deleteBooth = async (boothId: number) => {
             }
         })
         if (!res.ok) {
-            console.error(`Delete failed with status: ${res.status}`);
-            return await res.json();
+            console.error(`Delete failed with status: ${res.status}`);   
         }
-        return await res.json()
+
     } catch (error: any) {
         console.log(error);
         return null
