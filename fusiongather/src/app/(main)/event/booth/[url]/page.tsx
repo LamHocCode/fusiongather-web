@@ -34,7 +34,7 @@ export default async function BoothDetail({ params: { url } }: Props) {
     const booth = await getBoothById(url)
     return (
         <main className="mt-[90px] min-h-screen">
-            <BackgroupImage src="/test-booth.jpg" page="detail" />
+            <BackgroupImage src="/test-booth.jpeg" page="detail" />
             <BoothDetailPage booth={booth}/>
         </main>
     )

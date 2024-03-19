@@ -3,7 +3,7 @@ import BoothBox from "./BoothBox";
 import { useEffect, useState } from "react";
 import { getBoothByEventId } from "@/lib/actions/booth";
 
-const BoothOfEvent = () => {
+const BoothOfEvent = ({eventId} : {eventId: number}) => {
 
     const [booths, setBooths] = useState([]);
     const [isDelete, setIsDelete] = useState(0);
@@ -14,7 +14,7 @@ const BoothOfEvent = () => {
 
     const fetchData = async () => {
         try {
-            const boothData = await getBoothByEventId(1); 
+            const boothData = await getBoothByEventId(eventId); 
             setBooths(boothData);
         } catch (error) {
             console.error("Error fetching booth data:", error);
