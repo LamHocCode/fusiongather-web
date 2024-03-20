@@ -31,9 +31,9 @@ export const createEvent = async (data: z.infer<typeof eventFormSchema>) => {
 
 export const getAllEvent = async (data: GetAllEventType) => {
     try {
-        const { searchString, userId, pageNumber, pageSize } = data
+        const { searchString, category, userId, pageNumber, pageSize } = data
 
-        const res = await fetch(`${process.env.BASE_URL}/event?searchString=${searchString ? searchString : ''}&userId=${userId ? userId : ''}&pageNumber=${pageNumber ? pageNumber : ''}&pageSize=${pageSize ? pageSize : ''}`, {
+        const res = await fetch(`${process.env.BASE_URL}/event?searchString=${searchString ? searchString : ''}&category=${category ? category : ''}&userId=${userId ? userId : ''}&pageNumber=${pageNumber ? pageNumber : ''}&pageSize=${pageSize ? pageSize : ''}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',

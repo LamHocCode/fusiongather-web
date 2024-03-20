@@ -64,18 +64,22 @@ export const getBoothByEventId = async (eventId: number) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
-        })
+        });
+
+        const responseData = await res.json();
+
         if (!res.ok) {
             console.error(`Request failed with status: ${res.status}`);
-            return await res.json();;
+            throw new Error(responseData.message || "Failed to fetch data");
         }
-        return res.json()
+
+        return { status: res.status, data: responseData };
+    } catch (error: any) {
+        console.error("Error fetching booth data:", error);
+        return { status: 500, error: error.message || "An error occurred while fetching booth data" };
     }
-    catch (error: any) {
-        console.log(error);
-        return null
-    }
-}
+};
+
 
 export const getBoothById = async (boothId: number) => {
     try {
