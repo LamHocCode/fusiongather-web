@@ -141,3 +141,93 @@ export const getEventById = async (id: number) => {
         return null
     }
 }
+
+export const countFollower = async (eventId: number) => {
+    try {
+        const res = await fetch(`${process.env.BASE_URL}/followevent/count/${eventId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    } catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
+export const followEvent = async (eventId: number) => {
+    try {
+        const session = await getSession()
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/followevent`, {
+            method: "POST",
+            body: JSON.stringify({ eventId }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    } catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
+export const checkIsFollowed = async (eventId: number) => {
+    try {
+        const session = await getSession()
+        const userId = session?.user?.id
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/followevent/${userId}/${eventId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    } catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
+export const unFollowEvent = async (eventId: number) => {
+    try {
+        const session = await getSession()
+        const userId = session?.user?.id
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/followevent/${userId}/${eventId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    } catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
+

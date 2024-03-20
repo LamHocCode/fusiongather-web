@@ -3,6 +3,9 @@ import { Metadata } from "next";
 import Content from "./component/Content";
 import { getEventById } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
+import Link from "next/link";
+import BoothPage from "../booth/page";
+
 
 interface Props {
     params: {
@@ -40,6 +43,8 @@ export default async function EventDetail({ params: { url } }: Props) {
         <main className="mt-[90px] min-h-screen">
             <BackgroupImage src={event.imageUrl} page="detail" />
             <Content event={event} />
+            <BoothPage eventId={id} />
         </main>
+        
     )
 }

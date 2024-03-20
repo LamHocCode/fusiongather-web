@@ -35,68 +35,113 @@ import {
     FormField,
     FormItem,
 } from "@/components/ui/form"
-import { Switch } from "@/components/ui/switch"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod";
-import { PublishFormSchema } from "@/lib/validatior";
-import { Label } from "../ui/label";
 import Link from "next/link";
+import { FaTrashAlt } from "react-icons/fa";
+import { useState } from "react";
+import { deleteBooth } from "@/lib/actions/booth";
+import { Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
+import { on } from "events";
+import { set } from "zod";
 
-const BoothBox = ({ data }: { data: BoothType }) => {
-    const form = useForm<z.infer<typeof PublishFormSchema>>({
-        resolver: zodResolver(PublishFormSchema),
-        defaultValues: {
-            publish: false,
-        },
-    })
-    const onSubmit = async (data: z.infer<typeof PublishFormSchema>) => {
+const BoothBox = ({ data  }: { data: BoothType}) => {
+    const [showModal, setShowModal] = useState(false);
+    const [isDelete, setIsDelete] = useState(0);
+    const [deleteItemId, setDeleteItemId] = useState<number | null>(null);
 
-    }
+    const handleDelete = (id: number) => {
+        setDeleteItemId(id);
+        setShowModal(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (deleteItemId !== null) {
+            await deleteBooth(deleteItemId)
+                    setShowModal(false);
+                    setIsDelete(isDelete + 1)
+                    window.location.reload();
+                };
+    };
+
     return (
         <>
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="xl:w-full w-full md:w-[600px] max-xl:mx-auto space-y-6">
-                    <div className="flex w-full p-4 border rounded-xl">
-                        <div className="w-[42%] pr-6">
-                            <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
-                                <Image
-                                    src={'/test-booth.jpg'}
-                                    alt={`booth-image`}
-                                    fill
-                                    className="w-full h-full object-fill z-20"
-                                />
-                            </div>
-
-                        </div>
-                        <div className="w-[58%] pl-6 border-l ">
-                            <div className="flex flex-col gap-5 border-b pb-5">
-                                <div className="font-bold truncate-2-line">
-                                <Link href={`/event/booth/${data.id}`}>
-                                        {data.name}
-                                    </Link>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <span><LuPartyPopper size={20} /></span>
-                                    <span className="text-xs">
-                                        {data.eventId.title} 
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-4">
-                                    <span>
-                                        <IoIosPerson size={20} />
-                                    </span>
-                                    <span className="text-xs">
-                                        {data.vendorId.firstName} {data.vendorId.lastName}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+            <Modal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                title="Confirm Delete"
+            >
+                <ModalContent>
+                    <ModalBody>Are you sure you want to delete this booth?</ModalBody>
+                    <ModalFooter>
+                        <Button onClick={() => setShowModal(false)} color="primary">
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleConfirmDelete}
+                            color="danger"
+                            variant={"ghost"}
+                        >
+                            Delete
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+            <div className="flex w-full p-4 border rounded-xl">
+                <div className="w-[42%] pr-6">
+                    <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
+                        <Image
+                            src={'/test-booth.jpeg'}
+                            alt={`booth-image`}
+                            fill
+                            className="w-full h-full object-fill z-20"
+                        />
                     </div>
 
-                </form >
-            </Form >
+                </div>
+                <div className="w-[58%] pl-6 border-l ">
+                    <div className="flex flex-col gap-5 border-b pb-5">
+                        <div className="font-bold truncate-2-line">
+                            <Link href={`/event/booth/${data.id}`}>
+                                {data.name}
+                            </Link>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <span><LuPartyPopper size={20} /></span>
+                            <span className="text-xs">
+                                {data.eventId.title}
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <span>
+                                <IoIosPerson size={20} />
+                            </span>
+                            <span className="text-xs">
+                                {data.vendorId.firstName} {data.vendorId.lastName}
+                            </span>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-4 pt-5 px-4 text-black">
+                        <HoverCard>
+                            <HoverCardTrigger asChild>
+                                <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
+                                    <LuPenLine size={24} />
+                                </div>
+                            </HoverCardTrigger>
+                            <HoverCardContent className="w-24">
+                                <div className="text-center">
+                                    Edit
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard>
+                        <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
+                            <FaTrashAlt size={24} onClick={() => handleDelete(data.id)} />
+                        </div>
+                        <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
 
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </>
     );
 }
