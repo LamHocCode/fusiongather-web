@@ -3,7 +3,7 @@
 import LoadingModal from "@/components/shared/LoadingModal";
 import CustomButton from "@/components/ui/custom/CustomButton";
 import CustomInput from "@/components/ui/custom/CustomInput";
-import { handleResetPasswordAction } from "@/lib/actions";
+import { handleResetPasswordAction } from "@/lib/actions/authen";
 import { ResetPasswordSchema } from "@/lib/validation/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useRef, useState, useTransition } from "react";
@@ -36,7 +36,6 @@ const ResetPasswordForm = ({ onSuccess, accountInfo }: Props) => {
                 }
             }).catch(() => toast.error("Someting went wrong!"))
         })
-
     }
 
     return (
