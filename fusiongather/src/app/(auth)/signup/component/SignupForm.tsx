@@ -7,7 +7,7 @@ import { useState, useTransition } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { SignupSchema } from "@/lib/validation/auth"
-import { handleSignUpAction } from "@/lib/actions"
+import { handleSignUpAction } from "@/lib/actions/authen"
 import toast from "react-hot-toast"
 import VerifyCode from "../../reset-password/component/VerifyCode"
 import Logo from "@/components/main/Logo"

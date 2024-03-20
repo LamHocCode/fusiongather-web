@@ -6,7 +6,7 @@ import { useTransition } from "react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateNewPasswordSchema } from "@/lib/validation/auth"
-import { handleNewPasswordAction } from "@/lib/actions"
+import { handleNewPasswordAction } from "@/lib/actions/authen"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 interface Props {

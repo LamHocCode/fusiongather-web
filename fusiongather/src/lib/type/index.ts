@@ -18,17 +18,14 @@ export interface EventType {
     lng: number,
     lat: number,
     isFree: boolean,
+    author: {
+        firstName: string,
+        lastName: string,
+        email: string,
+        dob: string,
+        phoneNumber: string
+    }
     isPublished: boolean
-    author: [
-        {
-            id: number,
-            firstName: string,
-            lastName: string,
-            email: string,
-            dob: string,
-            phoneNumber: string
-        }
-    ]
 }
 
 export type BoothType = {
