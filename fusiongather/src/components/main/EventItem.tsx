@@ -10,7 +10,7 @@ const EventItem = ({ event }: any) => {
                 <div className="w-full">
                     <div className="overflow-hidden rounded-xl relative aspect-[2/1]">
                         <Image
-                            src={image}
+                            src={event.src ? event.src : image}
                             alt={`event-image`}
                             fill
                             className="w-full h-full object-fill z-20"

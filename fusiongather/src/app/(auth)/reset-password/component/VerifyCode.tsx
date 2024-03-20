@@ -3,7 +3,7 @@
 import CountDown from "@/components/main/CountDown";
 import Loading from "@/components/shared/Loading";
 import LoadingModal from "@/components/shared/LoadingModal";
-import { handleCheckCodeAction, handleVerifyCodeAction } from "@/lib/actions";
+import { handleCheckCodeAction, handleVerifyCodeAction } from "@/lib/actions/authen";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
