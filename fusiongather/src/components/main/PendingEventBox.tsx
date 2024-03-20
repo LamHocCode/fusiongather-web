@@ -1,7 +1,7 @@
 "use client"
 
 import { formatTime } from "@/lib/Format";
-import { EventType } from "@/lib/type";
+import { EventType, ImageType } from "@/lib/type";
 import Image from "next/image";
 import { GoLocation } from "react-icons/go";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -40,8 +40,26 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PublishFormSchema } from "@/lib/validatior";
 import { Label } from "../ui/label";
+import { useEffect, useState } from "react";
+import { getImagesByEventId } from "@/lib/actions/image";
 
 const PendingEventBox = ({ data }: { data: EventType }) => {
+    const [eventImage, setEventImage] = useState<string>("");
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const image = await getImagesByEventId(data.id);
+                setEventImage(image[0]?.url);
+            } catch (error) {
+                console.error("Error fetching follower count:", error);
+            }
+        };
+
+        fetchData();
+    }
+        , [data.id]);
+        
     const form = useForm<z.infer<typeof PublishFormSchema>>({
         resolver: zodResolver(PublishFormSchema),
         defaultValues: {
@@ -59,7 +77,7 @@ const PendingEventBox = ({ data }: { data: EventType }) => {
                         <div className="w-[42%] pr-6">
                             <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
                                 <Image
-                                    src={'/test-event.png'}
+                                    src={eventImage}
                                     alt={`event-image`}
                                     fill
                                     className="w-full h-full object-fill z-20"

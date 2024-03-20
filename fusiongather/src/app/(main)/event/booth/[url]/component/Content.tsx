@@ -179,11 +179,11 @@ const Content = ({ booth }: { booth: BoothType }) => {
                     <div className="w-[1px] h-10 bg-secondary"></div>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400">
+                <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={onOpen}>
                     <FaPencilAlt />
-                    <Link onPress={onOpen}>
-                        <span className="text-secondary text-sm">Edit </span>
-                    </Link>
+
+                    <span className="text-secondary text-sm">Edit </span>
+
                 </div>
 
             </div>

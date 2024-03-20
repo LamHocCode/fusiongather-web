@@ -2,6 +2,7 @@ export interface GetAllEventType {
     searchString?: string,
     pageNumber?: number,
     pageSize?: number,
+    category?: number,
     userId?: number,
 }
 
@@ -18,6 +19,16 @@ export interface EventType {
     lat: number,
     isFree: boolean,
     isPublished: boolean
+    author: [
+        {
+            id: number,
+            firstName: string,
+            lastName: string,
+            email: string,
+            dob: string,
+            phoneNumber: string
+        }
+    ]
 }
 
 export type BoothType = {
@@ -47,4 +58,11 @@ export type BoothType = {
         phoneNumber: string
     },
 
+}
+
+export interface ImageType {
+    id: number,
+    url: string[],
+    eventId?: number,
+    boothId?: number,
 }

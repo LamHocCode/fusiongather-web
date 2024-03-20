@@ -1,7 +1,7 @@
 "use client"
 
 import { formatTime } from "@/lib/Format";
-import { BoothType, EventType } from "@/lib/type";
+import { BoothType, EventType, ImageType } from "@/lib/type";
 import Image from "next/image";
 import { GoLocation } from "react-icons/go";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -37,17 +37,19 @@ import {
 } from "@/components/ui/form"
 import Link from "next/link";
 import { FaTrashAlt } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { deleteBooth } from "@/lib/actions/booth";
 import { Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
 import { on } from "events";
 import { set } from "zod";
+import { getImagesByBoothId } from "@/lib/actions/image";
 
 const BoothBox = ({ data  }: { data: BoothType}) => {
     const [showModal, setShowModal] = useState(false);
     const [isDelete, setIsDelete] = useState(0);
     const [deleteItemId, setDeleteItemId] = useState<number | null>(null);
-
+    const [boothImage, setBoothImage] = useState<string>("");
+    
     const handleDelete = (id: number) => {
         setDeleteItemId(id);
         setShowModal(true);
@@ -61,6 +63,19 @@ const BoothBox = ({ data  }: { data: BoothType}) => {
                     window.location.reload();
                 };
     };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const image = await getImagesByBoothId(data.id);
+                setBoothImage(image[0]?.url);
+            } catch (error) {
+                console.error("Error fetching follower count:", error);
+            }
+        };
+
+        fetchData();
+    }
+        , [data.id]);
 
     return (
         <>
@@ -89,7 +104,7 @@ const BoothBox = ({ data  }: { data: BoothType}) => {
                 <div className="w-[42%] pr-6">
                     <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
                         <Image
-                            src={'/test-booth.jpeg'}
+                            src={boothImage}
                             alt={`booth-image`}
                             fill
                             className="w-full h-full object-fill z-20"

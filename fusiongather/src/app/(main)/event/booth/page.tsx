@@ -8,10 +8,40 @@ import getSession from "@/lib/actions/getSession";
 import Link from "next/link";
 import { FiPlusCircle } from "react-icons/fi";
 import { BoothType } from "@/lib/type";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 
-const BoothPage = ({eventId}: {eventId: number}) => {
+
+const BoothPage = ({ eventId }: { eventId: number }) => {
+    const [booths, setBooths] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await getBoothByEventId(eventId);
+      
+            if (response.status === 200) {
+              setBooths(response.data);
+              setLoading(false);
+            } else if (response.status === 404) {
+              setBooths([]); 
+              setLoading(false);
+            } else {
+              setError(response.error || "An error occurred while fetching booth data.");
+              setLoading(false);
+            }
+          } catch (error) {
+            console.error("Error fetching booth data:", error);
+            setLoading(false);
+          }
+        };
+      
+        fetchData();
+      
+
+      }, [eventId]); 
+      
 
     return (
         <div>
@@ -27,7 +57,17 @@ const BoothPage = ({eventId}: {eventId: number}) => {
                 </Link> */}
             </div>
             <div className="text-secondary mt-4">
-                <BoothOfEvent eventId={eventId} />
+                {loading ? (
+                    <div>Loading...</div>
+                ) : (
+                    <>
+                        {booths.length === 0 ? (
+                            <div>This event does not have any booths.</div>
+                        ) : (
+                            <BoothOfEvent booths={booths} />
+                        )}
+                    </>
+                )}
             </div>
         </div>
     );

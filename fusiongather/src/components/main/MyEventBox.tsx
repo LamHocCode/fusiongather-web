@@ -1,7 +1,7 @@
 "use client"
 
 import { formatTime } from "@/lib/Format";
-import { EventType } from "@/lib/type";
+import { EventType, ImageType } from "@/lib/type";
 import Image from "next/image";
 import { GoLocation } from "react-icons/go";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -40,8 +40,13 @@ import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PublishFormSchema } from "@/lib/validatior";
 import { Label } from "../ui/label";
+import { useEffect, useState } from "react";
+import { getImagesByEventId } from "@/lib/actions/image";
+import Link from "next/link";
 
 const MyEventBox = ({ data }: { data: EventType }) => {
+    const [eventImage, setEventImage] = useState<string>("");
+
     const form = useForm<z.infer<typeof PublishFormSchema>>({
         resolver: zodResolver(PublishFormSchema),
         defaultValues: {
@@ -51,6 +56,21 @@ const MyEventBox = ({ data }: { data: EventType }) => {
     const onSubmit = async (data: z.infer<typeof PublishFormSchema>) => {
 
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const image = await getImagesByEventId(data.id);
+                setEventImage(image[0]?.url);
+            } catch (error) {
+                console.error("Error fetching follower count:", error);
+            }
+        };
+
+        fetchData();
+    }
+        , [data.id]);
+
     return (
         <>
             <Form {...form}>
@@ -59,7 +79,7 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                         <div className="w-[42%] pr-6">
                             <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
                                 <Image
-                                    src={'/test-event.png'}
+                                    src={eventImage}
                                     alt={`event-image`}
                                     fill
                                     className="w-full h-full object-fill z-20"
@@ -85,9 +105,11 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                         </div>
                         <div className="w-[58%] pl-6 border-l ">
                             <div className="flex flex-col gap-5 border-b pb-5">
+                                <Link href={`/event/${data.id}`}>
                                 <div className="font-bold truncate-2-line">
                                     {data.title}
                                 </div>
+                                </Link>
                                 <div className="flex items-center gap-4">
                                     <span><FaRegCalendarAlt size={20} /></span>
                                     <span className="text-xs">
