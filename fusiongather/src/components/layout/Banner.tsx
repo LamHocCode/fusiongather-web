@@ -7,10 +7,11 @@ import BackgroupImage from "./BackgroupImage";
 import { EventType } from "@/lib/type";
 import { getImagesByEventId } from "@/lib/actions/image";
 import { get } from "http";
+import Link from "next/link";
 
 interface Props {
-  events: EventType[],
-  imageSrc: any
+  events: EventType[];
+  imageSrc: any;
 }
 
 const Banner = (data: Props) => {
@@ -25,13 +26,19 @@ const Banner = (data: Props) => {
         ref={ref}
       >
         {data.imageSrc && data.imageSrc.length !== 0 ? (
-          data.imageSrc.map((image: { url: string; }[], index: Key | null | undefined) => (
-            <BackgroupImage
-              key={index}
-              src={image[0].url}
-              page="home"
-            />
-          ))
+          data.imageSrc.map(
+            (
+              image: {
+                eventId: any;
+                url: string;
+              }[],
+              index: Key | null | undefined
+            ) => (
+              <Link href={`/event/${image[0].eventId.id}`} key={index}>
+                <BackgroupImage key={index} src={image[0].url} page="home" />
+              </Link>
+            )
+          )
         ) : (
           <BackgroupImage
             src="https://www.vizagchamber.com/uploads/9548c64d38fa1958bb77e4ae5a5bd118.jpg"
