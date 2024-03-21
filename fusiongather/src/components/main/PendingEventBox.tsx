@@ -42,6 +42,7 @@ import { PublishFormSchema } from "@/lib/validatior";
 import { Label } from "../ui/label";
 import { useEffect, useState } from "react";
 import { getImagesByEventId } from "@/lib/actions/image";
+import Link from "next/link";
 
 const PendingEventBox = ({ data }: { data: EventType }) => {
     const [eventImage, setEventImage] = useState<string>("");
@@ -59,7 +60,7 @@ const PendingEventBox = ({ data }: { data: EventType }) => {
         fetchData();
     }
         , [data.id]);
-        
+
     const form = useForm<z.infer<typeof PublishFormSchema>>({
         resolver: zodResolver(PublishFormSchema),
         defaultValues: {
@@ -86,9 +87,11 @@ const PendingEventBox = ({ data }: { data: EventType }) => {
                         </div>
                         <div className="w-[58%] pl-6 border-l ">
                             <div className="flex flex-col gap-5 border-b pb-5">
-                                <div className="font-bold truncate-2-line">
-                                    {data.title}
-                                </div>
+                                <Link href={`/event/${data.id}`}>
+                                    <div className="font-bold truncate-2-line">
+                                        {data.title}
+                                    </div>
+                                </Link>
                                 <div className="flex items-center gap-4">
                                     <span><FaRegCalendarAlt size={20} /></span>
                                     <span className="text-xs">

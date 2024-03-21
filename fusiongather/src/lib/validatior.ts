@@ -26,6 +26,12 @@ export const boothFormSchema = z.object({
   vendorId: z.number(),
 });
 
+export const registerFormSchema = z.object({
+  userId: z.number(),
+  boothId: z.number(),
+  reason: z.string().min(1, "Reason is required!"),
+});
+
 export const PublishFormSchema = z.object({
   publish: z.boolean()
 })

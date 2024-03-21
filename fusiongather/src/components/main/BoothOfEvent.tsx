@@ -1,6 +1,6 @@
 import { BoothType } from "@/lib/type";
-import BoothBox from "./BoothBox";
 import { useEffect, useState } from "react";
+import BoothBox from "./BoothBox";
 
 const BoothOfEvent = ({ booths }: { booths: BoothType[] }) => {
 
