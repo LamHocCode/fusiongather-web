@@ -161,3 +161,53 @@ export const deleteBooth = async (boothId: number) => {
         return null
     }
 }
+
+export const checkIsRequested = async (boothId: number) => {
+    try {
+        const session = await getSession()
+        const userId = session?.user?.id
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/registerbooth/${userId}/${boothId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    }
+    catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
+export const registerBooth = async (boothId: number) => {
+    try {
+        const session = await getSession()
+        const userId = session?.user?.id
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/registerbooth/${userId}/${boothId}`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    }
+    catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
+

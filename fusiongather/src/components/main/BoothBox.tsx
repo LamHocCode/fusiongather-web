@@ -43,13 +43,15 @@ import { Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
 import { on } from "events";
 import { set } from "zod";
 import { getImagesByBoothId } from "@/lib/actions/image";
+import { checkIsRequested } from "@/lib/actions/booth";
 
-const BoothBox = ({ data  }: { data: BoothType}) => {
+const BoothBox = ({ data }: { data: BoothType }) => {
     const [showModal, setShowModal] = useState(false);
     const [isDelete, setIsDelete] = useState(0);
     const [deleteItemId, setDeleteItemId] = useState<number | null>(null);
     const [boothImage, setBoothImage] = useState<string>("");
-    
+    const [isRequested, setIsRequested] = useState<boolean>(false);
+
     const handleDelete = (id: number) => {
         setDeleteItemId(id);
         setShowModal(true);
@@ -58,16 +60,19 @@ const BoothBox = ({ data  }: { data: BoothType}) => {
     const handleConfirmDelete = async () => {
         if (deleteItemId !== null) {
             await deleteBooth(deleteItemId)
-                    setShowModal(false);
-                    setIsDelete(isDelete + 1)
-                    window.location.reload();
-                };
+            setShowModal(false);
+            setIsDelete(isDelete + 1)
+            window.location.reload();
+        };
     };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const image = await getImagesByBoothId(data.id);
                 setBoothImage(image[0]?.url);
+                const isRequest = await checkIsRequested(data.id);
+                setIsRequested(isRequest);
             } catch (error) {
                 console.error("Error fetching follower count:", error);
             }
@@ -76,7 +81,7 @@ const BoothBox = ({ data  }: { data: BoothType}) => {
         fetchData();
     }
         , [data.id]);
-
+        
     return (
         <>
             <Modal
@@ -135,21 +140,31 @@ const BoothBox = ({ data  }: { data: BoothType}) => {
                         </div>
                     </div>
                     <div className="flex items-center justify-between gap-4 pt-5 px-4 text-black">
-                        <HoverCard>
+                        { !isRequested ? <HoverCard>
                             <HoverCardTrigger asChild>
-                                <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
+                                <div className="cursor-pointer hover:bg-secondary p-2 rounded-full" >
                                     <LuPenLine size={24} />
                                 </div>
                             </HoverCardTrigger>
                             <HoverCardContent className="w-24">
                                 <div className="text-center">
-                                    Edit
+                                    Register
+                                </div>
+                            </HoverCardContent>
+                        </HoverCard> : <div className="cursor-pointer hover:bg-secondary p-2 rounded-full" > You already registed this booth </div>}
+                        <HoverCard>
+                            <HoverCardTrigger asChild>
+                                <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
+                                    <FaTrashAlt size={24} onClick={() => handleDelete(data.id)} />
+                                </div>
+                            </HoverCardTrigger>
+                            <HoverCardContent className="w-24">
+                                <div className="text-center">
+                                    Delete
                                 </div>
                             </HoverCardContent>
                         </HoverCard>
-                        <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-                            <FaTrashAlt size={24} onClick={() => handleDelete(data.id)} />
-                        </div>
+
                         <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
 
                         </div>
