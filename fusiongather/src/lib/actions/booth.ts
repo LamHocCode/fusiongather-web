@@ -1,7 +1,7 @@
 "use server"
 
 import { z } from "zod";
-import { boothFormSchema } from "../validatior";
+import { boothFormSchema, registerFormSchema } from "../validatior";
 import getSession from "./getSession";
 import {  } from "../type"
 
@@ -186,13 +186,13 @@ export const checkIsRequested = async (boothId: number) => {
     }
 }
 
-export const registerBooth = async (boothId: number) => {
+export const registerBooth = async (data: z.infer<typeof registerFormSchema>) => {
     try {
         const session = await getSession()
-        const userId = session?.user?.id
         const accessToken = session?.tokens?.accessToken
-        const res = await fetch(`${process.env.BASE_URL}/registerbooth/${userId}/${boothId}`, {
+        const res = await fetch(`${process.env.BASE_URL}/registerbooth`, {
             method: "POST",
+            body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
