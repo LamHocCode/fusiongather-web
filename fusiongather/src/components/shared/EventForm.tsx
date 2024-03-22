@@ -1,6 +1,6 @@
 "use client";
+import React, { useEffect } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiImageOn } from "react-icons/ci";
 import { RiMapPin2Line } from "react-icons/ri";
@@ -22,7 +22,6 @@ import { Input } from "@/components/ui/input";
 import { eventFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
-
 import { useState } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
@@ -30,48 +29,86 @@ import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
-import { createEvent } from "@/lib/actions/event";
-import { UploadButton, UploadDropzone } from "@/utils/uploadthing";
-// import { FileUploader } from "./FileUploader";
+import { createEvent, updateEventById } from "@/lib/actions/event";
+import { EventType } from "@/lib/type";
+import { eventDefaultValues } from "@/contants";
+import FileUploader from "./FileUploader";
+import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
+import { getImagesByEventId } from "@/lib/actions/image";
 
-export function EventForm() {
+type EventFormProps = {
+  type: "Create" | "Update";
+  event: EventType;
+  eventId: number;
+};
+
+export function EventForm({ type, event, eventId }: EventFormProps) {
+  // const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
   const router = useRouter();
-  const initialValues = {
-    title: "",
-    description: "",
-    category: "",
-    location: "",
-    lng: 0,
-    lat: 0,
-    imageUrl: "",
-    startDateTime: undefined,
-    endDateTime: undefined,
-    price: "",
-    isFree: false,
-    // url: "",
+
+  const handleUpload = (imageUrl: string[]) => {
+    if (event && imageUrl.length > 0) {
+      form.setValue("imageUrl", imageUrl);
+    } else {
+      form.setValue("imageUrl", []);
+    }
+    return Promise.resolve();
   };
+
+  const setEventImageUrl = (imageUrl: string[]) => {
+    setImageUrl(imageUrl);
+    form.setValue("imageUrl", imageUrl);
+    console.log("data imageUrl", imageUrl);
+  };
+
+  console.log("event for updating", event);
+  const initialValues =
+    event && type === "Update"
+      ? {
+          ...event,
+          lng: Number(event.lng),
+          lat: Number(event.lat),
+          startDateTime: new Date(event.startDateTime),
+          endDateTime: new Date(event.endDateTime),
+        }
+      : eventDefaultValues;
+
   const form = useForm<z.infer<typeof eventFormSchema>>({
     defaultValues: initialValues,
   });
-
   const isFree = form.watch("isFree");
 
   const currentCoords = [form.getValues("lng"), form.getValues("lat")];
 
-  const [imageUrl, setImageUrl] = useState<string>("");
-
   const onSubmit: SubmitHandler<z.infer<typeof eventFormSchema>> = async (
     data
   ) => {
-    try {
-      // data.imageUrl = imageUrl;
-      console.log(data);
+    if (type === "Create") {
+      try {
+        await createEvent(data);
+        router.push("/event");
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-      await createEvent(data);
-    } catch (error) {
-      throw new Error("Something went wrong!");
+    if (type === "Update") {
+      if (!eventId) {
+        router.back();
+        return;
+      }
+      try {
+        const updatedEvent = await updateEventById(eventId, data);
+        if (updatedEvent) {
+          form.reset();
+          router.push("/event");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -160,7 +197,7 @@ export function EventForm() {
                 <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
                   <FormField
                     control={form.control}
-                    name="category" // Đặt tên trường là "category"
+                    name="category"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormControl>
@@ -189,27 +226,13 @@ export function EventForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        {!field.value && ( // Only render UploadDropzone if no value is present
-                          <UploadDropzone
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              // Do something with the response
-                              console.log("Files: ", res[0].url);
-                              alert("Upload Completed");
-                              field.onChange(res[0].url); // Set imageUrl
-                              setImageUrl(res[0].url)
-                            }}
-                            onUploadError={(error: Error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
-                        )}
+                        <FileUploader
+                          onUpload={handleUpload}
+                          endpoint="imageUploader"
+                          setImageUrl={setEventImageUrl}
+                          event={event}
+                        />
                       </FormControl>
-                      <FormMessage />
-                      {field.value && ( // Render image only if value is present
-                        <img src={field.value} alt="Uploaded Image" />
-                      )}
                     </FormItem>
                   )}
                 />
@@ -325,8 +348,7 @@ export function EventForm() {
                             onChange={(date: Date) => field.onChange(date)}
                             showTimeSelect
                             timeInputLabel="Time:"
-                            dateFormat="yyyy-MM-dd'T'HH:mm:ss'Z'" // Định dạng đúng cho backend
-                            isClearable={true}
+                            dateFormat="yyyy-MM-dd HH:mm:ss" // Định dạng đúng cho backend
                             placeholderText="Start Date"
                             wrapperClassName="datePicker"
                           />
@@ -353,8 +375,7 @@ export function EventForm() {
                             onChange={(date: Date) => field.onChange(date)}
                             showTimeSelect
                             timeInputLabel="Time:"
-                            dateFormat="yyyy-MM-dd'T'HH:mm:ss'Z'" // Định dạng đúng cho backend
-                            isClearable={true}
+                            dateFormat="yyyy-MM-dd HH:mm:ss" // Định dạng đúng cho backend
                             placeholderText="End Date"
                             wrapperClassName="datePicker"
                           />
@@ -382,7 +403,7 @@ export function EventForm() {
               size="sm"
               className="rounded-full w-20 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
             >
-              Next
+              {form.formState.isSubmitting ? "Submitting..." : `${type} Event `}
             </Button>
           </div>
         </form>
