@@ -48,10 +48,9 @@ import { checkIsRequested } from "@/lib/actions/booth";
 import { Label } from "@radix-ui/react-dropdown-menu";
 import { boothFormSchema, registerFormSchema } from "@/lib/validatior";
 import { useForm } from "react-hook-form";
-import { TbFileDescription } from "react-icons/tb";
 import { TfiPencilAlt } from "react-icons/tfi";
-import QuillText from "../shared/QuillText";
-import TextArea from "antd/es/input/TextArea";
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const BoothBox = ({ data }: { data: BoothType }) => {
     const [showModal, setShowModal] = useState(false);
@@ -62,6 +61,7 @@ const BoothBox = ({ data }: { data: BoothType }) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [registerSuccess, setRegisterSuccess] = useState(false);
     const [reason, setReason] = useState("");
+    const [reasonIsEmpty, setReasonIsEmpty] = useState(false);
 
     const form = useForm<z.infer<typeof registerFormSchema>>({
         defaultValues: {
@@ -70,6 +70,24 @@ const BoothBox = ({ data }: { data: BoothType }) => {
             reason: "",
         },
     });
+
+    const showToastMessage = (type: number) => {
+        if (type === 1) {
+            toast('Register booth successfully!', {
+                position: "top-right",
+                closeOnClick: true,
+                draggable: false,
+                type: "success",
+                toastId: 13                      
+            })
+ } else toast('Delete booth successfully!', {
+                position: "top-right",
+                closeOnClick: true,
+                draggable: false,
+                type: "success",
+                toastId: 13                      
+            })
+    };
 
     const handleDelete = (id: number) => {
         setDeleteItemId(id);
@@ -87,15 +105,18 @@ const BoothBox = ({ data }: { data: BoothType }) => {
             setRegisterSuccess(true);
             setShowConfirmModal(false);
             setShowRegisterModal(false);
+
         } catch (error) {
             console.error("Error registering booth:", error);
         }
+        showToastMessage(1);
     };
 
     const handleConfirmDelete = async () => {
         if (deleteItemId !== null) {
             await deleteBooth(deleteItemId)
             setShowModal(false);
+            showToastMessage(2);
             window.location.reload();
         };
     };
@@ -107,22 +128,30 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                 setBoothImage(image[0]?.url);
                 const isRequest = await checkIsRequested(data.id);
                 setIsRequested(isRequest);
+
             } catch (error) {
                 console.error("Error fetching follower count:", error);
+                
             }
         };
-            fetchData();
-        
+        fetchData();
+
     }
         , [data.id, registerSuccess]);
 
     const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
         setReason(data.reason);
-        console.log(reason);
+        if (data.reason === "") {
+            setReasonIsEmpty(true);
+            return;
+        } else
+        setShowConfirmModal(true)
+        
     };
 
     return (
         <>
+            
             <Modal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
@@ -166,6 +195,9 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                                                     <TfiPencilAlt />
                                                     <span>Reason</span>
                                                 </div>
+                                                {reasonIsEmpty && <div className="text-red-500">Reason is required</div>
+
+                                                }
                                                 <div className="flex flex-col gap-5 h-full ">
                                                     <FormField
                                                         control={form.control}
@@ -192,7 +224,7 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                                         <Button color="danger" onClick={onClose}>
                                             Cancel
                                         </Button>
-                                        <Button type="submit" color="primary" onClick={() => setShowConfirmModal(true)}>
+                                        <Button type="submit" color="primary">
                                             Register
                                         </Button>
                                     </ModalFooter>
@@ -214,7 +246,7 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                         Are you sure you want to register this booth?
                     </ModalBody>
                     <ModalFooter>
-                        
+
                         <Button color="danger" variant={"ghost"} onClick={() => setShowConfirmModal(false)}>
                             Cancel
                         </Button>
@@ -228,6 +260,7 @@ const BoothBox = ({ data }: { data: BoothType }) => {
 
 
             <div className="flex w-full p-4 border rounded-xl">
+            <ToastContainer />
                 <div className="w-[42%] pr-6">
                     <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
                         <Image
@@ -288,9 +321,7 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                         </HoverCard>
 
                         <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-
                         </div>
-
                     </div>
                 </div>
             </div>
