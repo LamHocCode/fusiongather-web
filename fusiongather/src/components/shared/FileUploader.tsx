@@ -1,76 +1,126 @@
-"use client";
-
-import { useCallback, Dispatch, SetStateAction } from "react";
-import  File  from '@uploadthing/react';
-import { useDropzone } from "@uploadthing/react/hooks";
-import { generateClientDropzoneAccept } from "uploadthing/client";
-
-import { convertFileToUrl } from "@/lib/utils";
+import React, { useEffect, useState } from "react";
+import { UploadDropzone } from "@/utils/uploadthing";
+import { OurFileRouter } from "@/app/api/uploadthing/core";
 import Image from "next/image";
-import { UploadButton, UploadDropzone } from "@/utils/uploadthing";
+import { Pencil } from "lucide-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { EventType } from "@/lib/type";
+import { getImagesByEventId } from "@/lib/actions/image";
+
+type OnUploadFunction = (metadata: any, files: any[]) => Promise<any>;
 
 type FileUploaderProps = {
-  onFieldChange: (url: string) => void;
-  imageUrl: string;
-  setFiles: Dispatch<SetStateAction<File[]>>;
+  onUpload: OnUploadFunction;
+  endpoint: keyof OurFileRouter;
+  setImageUrl: (imageUrl: string[]) => void;
+  event: EventType;
 };
 
-export function FileUploader({
-  imageUrl,
-  onFieldChange,
-  setFiles,
-}: FileUploaderProps) {
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles(acceptedFiles);
-    onFieldChange(convertFileToUrl(acceptedFiles[0]));
-  }, []);
+const FileUploader = ({
+  onUpload,
+  endpoint,
+  setImageUrl,
+  event,
+}: FileUploaderProps) => {
+  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const uploadedFiles = await getImagesByEventId(event.id);
+            const urls = uploadedFiles.map(image => image.url);
+            if (uploadedFiles && uploadedFiles.length > 0) {
+              setUploadedFiles(urls);
+              console.log("votoiday",uploadedFiles );
+            }
+        } catch (error) {
+            console.error("Error fetching image:", error);
+        }
+    };
+    fetchData();
+}, [event?.id]);
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: "image/*" ? generateClientDropzoneAccept(["image/*"]) : undefined,
-  });
+  const handleUploadComplete = (res: any) => {
+    const uploadedImageUrls = res.map((uploadedFile: any) => uploadedFile.url);
+    if (uploadedImageUrls.length > 0) {
+      setUploadedFiles((prevUploadedFiles) => [
+        ...prevUploadedFiles,
+        ...uploadedImageUrls,       
+      ]);
+      onUpload([], uploadedImageUrls)
+        .then(() => {
+          setImageUrl([...uploadedImageUrls]);
+          toast.success("Files uploaded successfully!");
+        })
+        .catch((error) => {
+          toast.error(`Error uploading files: ${error.message}`);
+        });
+    } else {
+      console.warn("No images uploaded.");
+    }
 
+  };
+
+  const handleUploadError = (error: any) => {
+    toast.error(`ERROR! ${error.message}`);
+  };
+
+  const hasUploadedData = uploadedFiles.length > 0;
+
+  const removeFile = (index: number) => {
+    const newUploadedFiles = [...uploadedFiles];
+    newUploadedFiles.splice(index, 1);
+    setUploadedFiles(newUploadedFiles);
+    onUpload([], newUploadedFiles);
+  };
+
+  const clearUploadedFiles = () => {
+    setUploadedFiles([]);
+    onUpload([], []);
+  };
   return (
-    <div
-      {...getRootProps()}
-      className="flex-center bg-gray-50 w-full flex h-64 cursor-pointer flex-col justify-center items-center overflow-hidden rounded-xl bg-grey-50"
-    >
-      <input {...getInputProps()} className="cursor-pointer" />
-
-      {imageUrl ? (
-        <div className="flex h-full w-full flex-1 justify-center">
-          <Image
-            src={imageUrl}
-            alt="image"
-            width={250}
-            height={500}
-            className="w-full object-cover object-center"
+    <>
+      <ToastContainer />
+      <div>
+        {!hasUploadedData && (
+          <UploadDropzone
+            endpoint={endpoint}
+            onClientUploadComplete={handleUploadComplete}
+            onUploadError={handleUploadError}
           />
+        )}
+
+        <div className="grid grid-cols-2 gap-2">
+          {uploadedFiles.map((imageUrl, index) => (
+            <div key={index} className="relative w-full h-full">
+              <div className="relative rounded-lg overflow-hidden">
+                <Image
+                  src={imageUrl}
+                  alt={`Uploaded Image ${index}`}
+                  width={240}
+                  height={240}
+                />
+                <button
+                  onClick={() => removeFile(index)}
+                  className="absolute top-1 right-1 text-red-600 hover:text-red-800"
+                >
+                  X
+                </button>
+              </div>
+              <button
+                onClick={clearUploadedFiles}
+                type="button"
+                className="absolute right-2 flex space-x-2 items-center bg-slate-900 rounded-md shadow text-slate-50 py-2 px-4"
+              >
+                <Pencil className="w-5 h-5" />
+                <span>Change Image</span>
+              </button>
+            </div>
+          ))}
         </div>
-      ) : (
-        <UploadDropzone
-          endpoint="imageUploader"
-          onClientUploadComplete={(res) => {
-            // Do something with the response
-            console.log("Files: ", res);
-            alert("Upload Completed");
-          }}
-          onUploadError={(error: Error) => {
-            // Do something with the error.
-            alert(`ERROR! ${error.message}`);
-          }}
-        />
-      )}
-    </div>
+      </div>
+    </>
   );
-}
+};
 
-// import React from 'react'
-
-// function FileUploader() {
-//   return (
-//     <div>FileUploader</div>
-//   )
-// }
-
-// export default FileUploader
+export default FileUploader;

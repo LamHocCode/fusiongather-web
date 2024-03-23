@@ -7,7 +7,7 @@ export const eventFormSchema = z.object({
   location: z.string().min(1, "Location is required!"),
   lng: z.number(),
   lat: z.number(),
-  imageUrl: z.string(),
+  imageUrl: z.string().array(),
   startDateTime: z.date(),
   endDateTime: z.date(),
   price: z.string().min(1, "Price is required!"),

@@ -111,3 +111,18 @@ export const ListEvent = [{
 }]
 
 
+export const eventDefaultValues = {
+    title: "",
+    description: "",
+    location: "",
+    lng: 0,
+    lat: 0,
+    imageUrl: [""],
+    startDateTime: new Date(),
+    endDateTime: new Date(),
+    categoryId: "",
+    price: "",
+    isFree: false,
+    url: "",
+  };
+  
