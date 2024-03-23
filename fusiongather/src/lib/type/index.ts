@@ -63,3 +63,24 @@ export interface ImageType {
     eventId?: number,
     boothId?: number,
 }
+
+export interface RequestType {
+    userId: number,
+    boothId: number,
+    reason: string,
+    user: {
+        id: number,
+        firstName: string,
+        lastName: string,
+        email: string,
+        dob: string,
+        isAdmin: boolean,
+        phoneNumber: string
+    },
+    booth: {
+        id: number,
+        name: string,
+        description: string,
+    }
+
+}

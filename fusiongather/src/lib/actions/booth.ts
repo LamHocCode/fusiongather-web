@@ -210,4 +210,71 @@ export const registerBooth = async (data: z.infer<typeof registerFormSchema>) =>
     }
 }
 
+export const getRequestByEventId = async (eventId: number) => {
+    try {
+        const session = await getSession()
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/registerbooth/${eventId}`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    }
+    catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
 
+export const deleteRequest = async (userId: number, boothId: number) => {
+    try {
+        const session = await getSession()
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/registerbooth/${userId}/${boothId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Delete request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    }
+    catch (error: any) {
+        console.log(error);
+        throw new Error("Failed to delete request");
+    }
+}
+
+export const assignBooth = async (boothId: number, userId: number) => {
+    try {
+        const session = await getSession()
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/booth/assign/${userId}/${boothId}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Assign booth failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    }
+    catch (error: any) {
+        console.log(error);
+        throw new Error("Failed to assign booth");
+    }
+}
