@@ -7,7 +7,7 @@ export const eventFormSchema = z.object({
   location: z.string().min(1, "Location is required!"),
   lng: z.number(),
   lat: z.number(),
-  imageUrl: z.string(),
+  imageUrl: z.string().array(),
   startDateTime: z.date(),
   endDateTime: z.date(),
   price: z.string().min(1, "Price is required!"),
@@ -24,6 +24,12 @@ export const boothFormSchema = z.object({
   longitude: z.number(),
   eventId: z.number(),
   vendorId: z.number(),
+});
+
+export const registerFormSchema = z.object({
+  userId: z.number(),
+  boothId: z.number(),
+  reason: z.string().min(1, "Reason is required!"),
 });
 
 export const PublishFormSchema = z.object({

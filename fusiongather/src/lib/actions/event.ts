@@ -231,3 +231,47 @@ export const unFollowEvent = async (eventId: number) => {
 }
 
 
+export const updateEventById = async (id: number, updatedEventData: any) => {
+    try {
+        const session = await getSession()
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/event/${id}`, {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: JSON.stringify(updatedEventData) // Gửi dữ liệu cập nhật dưới dạng JSON
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();;
+        }
+        return res.json()
+    } catch (error: any) {
+        console.log(error);
+        return null
+    }
+}
+
+
+export const deleteEvent = async (id:number) => {
+    try {
+        const session = await getSession()
+        const accessToken = session?.tokens?.accessToken
+        const res = await fetch(`${process.env.BASE_URL}/event/${id}`, {
+            method: "DELETE",
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        })
+        if (!res.ok) {
+            console.error(`Request failed with status: ${res.status}`);
+            return await res.json();
+        }
+    } catch (error: any) {
+        console.log(error);
+        return null
+    }
+  
+}
