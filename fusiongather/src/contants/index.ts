@@ -125,4 +125,13 @@ export const eventDefaultValues = {
     isFree: false,
     url: "",
   };
-  
+
+export const boothDefaultValues = {
+    name: "",
+    description: "",
+    imageUrl: [""],
+    latitude: 0,
+    longitude: 0,
+    eventId: 0,
+    vendorId: 0,
+  };

@@ -1,6 +1,6 @@
 "use client";
+import React, { useEffect } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiImageOn } from "react-icons/ci";
 import { RiMapPin2Line } from "react-icons/ri";
@@ -22,7 +22,6 @@ import { Input } from "@/components/ui/input";
 import { boothFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
-import { FileUploader } from "./FileUploader";
 import { useState } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
@@ -30,60 +29,119 @@ import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
-import { createBooth } from "@/lib/actions/booth";
-import { UploadButton, UploadDropzone } from "@/utils/uploadthing";
-import { getSession } from "next-auth/react";
+import { createBooth, updateBooth } from "@/lib/actions/booth";
+import { BoothType } from "@/lib/type";
+import { boothDefaultValues } from "@/contants";
+import BoothFileUploader from "./BoothFileUploader";
+import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
-export function BoothForm() {
-  const [files, setFiles] = useState<File[]>([]);
+type BoothFormProps = {
+  type: "Create" | "Update";
+  booth?: BoothType;
+  boothId?: number;
+  eventId?: number;
+};
+
+export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
+  // const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const [currentCoords, setCurrentCoords] = useState<number[]>([0, 0]); // [lng, lat]
   const router = useRouter();
-  // const initialValues = {
-  //   title: "",
-  //   description: "",
-  //   category: "",
-  //   location: "",
-  //   lng: 0,
-  //   lat: 0,
-  //   imageUrl: "",
-  //   startDateTime: undefined,
-  //   endDateTime: undefined,
-  //   price: "",
-  //   isFree: false,
-  //   url: "",
-  // };
-  // 1. Define your form.
+  const [boothEmpty, setBoothEmpty] = useState<BoothType>({
+    id: 0,
+    name: "",
+    description: "",
+    longitude: 0,
+    latitude: 0,
+    imageUrl: [],
+      eventId: {
+        id: 0,
+        title: "",
+        description: "",
+        location: "",
+        imageUrl: [],
+        startDateTime: new Date().toISOString(),
+        endDateTime: new Date().toISOString(),
+        price: "0",
+        lng: 0,
+        lat: 0,
+        isFree: false,
+    },
+    vendorId: {
+      id: 0,
+      firstName: "", 
+      lastName: "", 
+      email: "", 
+      phoneNumber: "", 
+    }, 
+    
+  });
+  const handleUpload = (imageUrl: string[]) => {
+    if (booth && imageUrl.length > 0) {
+      form.setValue("imageUrl", imageUrl);
+    } else {
+      form.setValue("imageUrl", []);
+    }
+    return Promise.resolve();
+  };
+
+  const setEventImageUrl = (imageUrl: string[]) => {
+    setImageUrl(imageUrl);
+    form.setValue("imageUrl", imageUrl);
+  };
+
+  const initialValues =
+    booth && type === "Update"
+      ? {
+        ...booth,
+        longitude: Number(booth.longitude),
+        latitude: Number(booth.latitude),
+        name: booth.name,
+        description: booth.description,
+        eventId: booth.eventId.id,
+        vendorId: booth.vendorId.id,
+      }
+      : boothDefaultValues;
 
   const form = useForm<z.infer<typeof boothFormSchema>>({
-    resolver: zodResolver(boothFormSchema),
+    defaultValues: initialValues,
   });
 
-  const [imageUrl, setImageUrl] = useState<string>("");
+  const currentCoords = [form.getValues("longitude"), form.getValues("latitude")];
 
-  const currentCoords = [form.getValues("longitude"), form.getValues("latitude")]
-
-  // 2. Submit Handler
   const onSubmit: SubmitHandler<z.infer<typeof boothFormSchema>> = async (
     data
   ) => {
-    try {
-    const session = await getSession();
-    const vendorId = session?.user?.id;
-    console.log(data);
-      await createBooth(data); // Call createEvent function with form data
-      // Handle success or navigation to next step
-    } catch (error) {
-      // Handle error
+    if (type === "Create") {
+      try {
+        await createBooth(eventId ?? 0, data);
+        router.push(`/event/${eventId}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (type === "Update") {
+      if (!boothId) {
+        router.back();
+        return;
+      }
+      try {
+        const updatedEvent = await updateBooth(boothId, data);
+        if (updatedEvent) {
+          form.reset();
+          router.push(`/event/${booth?.eventId.id}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
-  // 3. Handle search location
-  function setLocation(location: string,  longitude: number, latitude: number) {
 
-    form.setValue("longitude", longitude);
-    form.setValue("latitude", latitude);
-
-    // console.log(form.getValues());   
+  function setLocation(location: string, lng: number, lat: number) {
+    form.setValue("longitude", lng);
+    form.setValue("latitude", lat);
   }
 
   const handleCancel = () => {
@@ -106,7 +164,7 @@ export function BoothForm() {
             className="text-secondary cursor-pointer hover:text-primary"
           />
         </div>
-        <h3 className="text-secondary">Create Booth</h3>
+        <h3 className="text-secondary">Create Event</h3>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -150,40 +208,8 @@ export function BoothForm() {
                 />
               </div>
             </div>
-
-            <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
-              <div className="flex gap-2 items-center text-secondary">
-                <RiMapPin2Line size={22} />
-
-                <span>Location</span>
-              </div>
-              {/* <FormField
-                control={form.control}
-                name="location"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        placeholder="Location..."
-                        disabled
-                        value={field.value}
-                        className="h-14 text-[18px] rounded-2xl"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-                           
-              <Button
-                type="button"
-                onClick={() => setIsOpen(true)}
-                className="w-full h-14 text-lg text-primary bg-white border border-[#FF8E3C] rounded-2xl hover:bg-primary/20"
-              >
-                Choose
-              </Button>
-            </div>
-            {/* <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
+            <div className="flex flex-col gap-5">
+              <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
                 <div className="flex gap-2 items-center text-secondary">
                   <CiImageOn size={22} />
                   <span>Media</span>
@@ -194,31 +220,32 @@ export function BoothForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        {!field.value && ( // Only render UploadDropzone if no value is present
-                          <UploadDropzone
-                            endpoint="imageUploader"
-                            onClientUploadComplete={(res) => {
-                              // Do something with the response
-                              console.log("Files: ", res[0].url);
-                              alert("Upload Completed");
-                              field.onChange(res[0].url); // Set imageUrl
-                              setImageUrl(res[0].url)
-                            }}
-                            onUploadError={(error: Error) => {
-                              // Do something with the error.
-                              alert(`ERROR! ${error.message}`);
-                            }}
-                          />
-                        )}
+                        <BoothFileUploader
+                          onUpload={handleUpload}
+                          endpoint="imageUploader"
+                          setImageUrl={setEventImageUrl}
+                          booth={booth? booth: boothEmpty}
+                        />
                       </FormControl>
-                      <FormMessage />
-                      {field.value && ( // Render image only if value is present
-                        <img src={field.value} alt="Uploaded Image" />
-                      )}
                     </FormItem>
                   )}
                 />
-              </div> */}
+              </div>
+            </div>
+
+            <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
+              <div className="flex gap-2 items-center text-secondary">
+                <RiMapPin2Line size={22} />
+                <span>Location</span>
+              </div>
+              <Button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className="w-full h-14 text-lg text-primary bg-white border border-[#FF8E3C] rounded-2xl hover:bg-primary/20"
+              >
+                Choose
+              </Button>
+            </div>
 
           </div>
           <div className="flex items-center justify-end gap-5 mt-5">
@@ -236,7 +263,7 @@ export function BoothForm() {
               size="sm"
               className="rounded-full w-20 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
             >
-              Next
+              {form.formState.isSubmitting ? "Submitting..." : `${type} Booth `}
             </Button>
           </div>
         </form>

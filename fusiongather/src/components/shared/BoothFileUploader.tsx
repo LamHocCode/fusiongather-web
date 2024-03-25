@@ -5,8 +5,8 @@ import Image from "next/image";
 import { Pencil } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { EventType } from "@/lib/type";
-import { getImagesByEventId } from "@/lib/actions/image";
+import { BoothType } from "@/lib/type";
+import { getImagesByBoothId } from "@/lib/actions/image";
 
 type OnUploadFunction = (metadata: any, files: any[]) => Promise<any>;
 
@@ -14,20 +14,20 @@ type FileUploaderProps = {
   onUpload: OnUploadFunction;
   endpoint: keyof OurFileRouter;
   setImageUrl: (imageUrl: string[]) => void;
-  event: EventType;
+  booth: BoothType;
 };
 
-const FileUploader = ({
+const BoothFileUploader = ({
   onUpload,
   endpoint,
   setImageUrl,
-  event,
+  booth,
 }: FileUploaderProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const uploadedFiles = await getImagesByEventId(event.id);
+            const uploadedFiles = await getImagesByBoothId(booth.id);
             const urls = uploadedFiles.map((image: { url: any; }) => image.url);
             if (uploadedFiles && uploadedFiles.length > 0) {
               setUploadedFiles(urls);
@@ -38,7 +38,7 @@ const FileUploader = ({
         }
     };
     fetchData();
-}, [event?.id]);
+}, [booth?.id]);
 
   const handleUploadComplete = (res: any) => {
     const uploadedImageUrls = res.map((uploadedFile: any) => uploadedFile.url);
@@ -123,4 +123,4 @@ const FileUploader = ({
   );
 };
 
-export default FileUploader;
+export default BoothFileUploader;
