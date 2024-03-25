@@ -71,7 +71,8 @@ export default function UsersTable({tickets}: {tickets: Ticket[]}) {
 
   // filter items out based on search value
   const filterItems = useMemo(() => {
-    let filteredTickets = [...ticket];
+    if(ticket.length > 0){
+      let filteredTickets = [...ticket];
     // if search value is empty, return all items
     if(hasSearchFilter){
       filteredTickets = filteredTickets.filter(ticket => 
@@ -81,6 +82,10 @@ export default function UsersTable({tickets}: {tickets: Ticket[]}) {
       );
     }
     return filteredTickets;
+    } else{
+      return [];
+    }
+
   }, [ticket, filterValue, hasSearchFilter]);
 
   // calculate the number of pages
