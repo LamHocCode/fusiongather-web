@@ -4,11 +4,11 @@ import { getAttendeeByEventId } from "@/lib/actions/attendee";
 import UsersTable from "@/components/main/attendee/UsersTable";
 
 async function AttendeeList() {
-  const ticket = await getAttendeeByEventId(1);
+  const tickets = await getAttendeeByEventId(10);
   return (
     <>
       <section className="flex items-center justify-between">
-        <UsersTable/>
+        <UsersTable tickets={tickets}/>
       </section>   
     </>
   );

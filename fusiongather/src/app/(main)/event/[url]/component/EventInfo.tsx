@@ -1,6 +1,7 @@
 "use client";
 
 import LocationModal from "@/components/shared/LocationModal";
+import { formatTime } from "@/lib/Format";
 import { EventType } from "@/lib/type";
 import Link from "next/link";
 import { useState } from "react";
@@ -8,15 +9,13 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { LiaCalendarWeekSolid } from "react-icons/lia";
 import { RiMapPin2Line } from "react-icons/ri";
 
-
-const EventInfo = (data : any) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false); 
-  const [currentCoords, setCurrentCoords] = useState<number[]>([Number(data.event.lng), Number(data.event.lat)]); // [lng, lat]
+const EventInfo = (data: any) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [currentCoords, setCurrentCoords] = useState<number[]>([
+    Number(data.event.lng),
+    Number(data.event.lat),
+  ]); // [lng, lat]
   const status = "INFO";
-  const convertToDateTime = (date: string) => {
-    const dateTime = new Date(date);
-    return dateTime.toLocaleString();
-  }
   return (
     <>
       <LocationModal
@@ -38,8 +37,8 @@ const EventInfo = (data : any) => {
         <div className="flex items-center gap-6 ">
           <LiaCalendarWeekSolid size="24" />
           <div className="text-gray-600 text-sm leading-6">
-            <div>{convertToDateTime(data.event.startDateTime)}</div>
-            <div>{convertToDateTime(data.event.endDateTime)}</div>
+            <div>{formatTime(data.event.startDateTime)}</div>
+            <div>{formatTime(data.event.endDateTime)}</div>
           </div>
         </div>
         <div
