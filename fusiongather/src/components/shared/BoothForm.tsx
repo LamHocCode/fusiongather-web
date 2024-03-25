@@ -22,7 +22,6 @@ import { Input } from "@/components/ui/input";
 import { boothFormSchema } from "@/lib/validatior";
 import { z } from "zod";
 import DropDown from "./DropDown";
-import { FileUploader } from "./FileUploader";
 import { useState } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
