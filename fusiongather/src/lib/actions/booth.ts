@@ -5,10 +5,12 @@ import { boothFormSchema, registerFormSchema } from "../validatior";
 import getSession from "./getSession";
 import {  } from "../type"
 
-export const createBooth = async (data: z.infer<typeof boothFormSchema>) => {
+export const createBooth = async (eventId: number, data: z.infer<typeof boothFormSchema>) => {
     try {
         const session = await getSession()
-        const accessToken = session?.tokens?.accessToken
+        const accessToken = session?.tokens?.accessToken;
+        data.vendorId = session?.user?.id as number;
+        data.eventId = eventId;
 
         const res = await fetch(`${process.env.BASE_URL}/booth`, {
             method: "POST",
@@ -17,7 +19,7 @@ export const createBooth = async (data: z.infer<typeof boothFormSchema>) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
-        })
+        });
         if (!res.ok) {
             console.error(`Request failed with status: ${res.status}`);
             return await res.json();
@@ -110,6 +112,7 @@ export const updateBooth = async (boothId: number, data: z.infer<typeof boothFor
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
         const userId = session?.user?.id
+        console.log("data", data);
 
         const res = await fetch(`${process.env.BASE_URL}/booth/${userId}/${boothId}`, {
             method: "PATCH",

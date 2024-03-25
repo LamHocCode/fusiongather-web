@@ -49,12 +49,12 @@ const BoothPage = ({ eventId }: { eventId: number }) => {
                 <div>
                     Booth in event
                 </div>
-                {/* <Link href={'/event/booth/create'}>
+                <Link href={`/event/booth/create/${eventId}`}>
                     <Button type="button" className="min-w-[200px] h-14 text-lg text-primary bg-white border border-[#FF8E3C] rounded-full hover:bg-primary/20">
                         <FiPlusCircle className="mr-4" />
                         Create Booth
                     </Button>
-                </Link> */}
+                </Link>
             </div>
             <div className="text-secondary mt-4">
                 {loading ? (
