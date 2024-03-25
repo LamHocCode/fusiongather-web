@@ -36,10 +36,12 @@ import Router from "next/router";
 import { TbFileDescription } from "react-icons/tb";
 import { error } from "console";
 import { off } from "process";
+import { useRouter } from "next/navigation";
 
 const Content = ({ booth }: { booth: BoothType }) => {
     const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
     const [isMapOpen, setIsOpen] = useState<boolean>(false);
+    const router = useRouter();
     const initialValues = {
         name: booth.name,
         description: booth.description,
@@ -50,6 +52,10 @@ const Content = ({ booth }: { booth: BoothType }) => {
     const form = useForm<z.infer<typeof boothFormSchema>>({
         defaultValues: initialValues,
     });
+
+    const handleUpdateNavigate = () => {
+        router.push(`/event/booth/update/${booth.id}`);
+    }
 
     const currentCoords = [form.getValues("longitude"), form.getValues("latitude")];
 
@@ -179,7 +185,7 @@ const Content = ({ booth }: { booth: BoothType }) => {
                     <div className="w-[1px] h-10 bg-secondary"></div>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={onOpen}>
+                <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={handleUpdateNavigate}>
                     <FaPencilAlt />
 
                     <span className="text-secondary text-sm">Edit </span>

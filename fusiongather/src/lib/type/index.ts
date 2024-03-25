@@ -33,6 +33,7 @@ export type BoothType = {
     id: number,
     name: string,
     description: string,
+    imageUrl: string[],
     latitude: number,
     longitude: number,
     eventId: {
@@ -40,7 +41,7 @@ export type BoothType = {
         title: string,
         description: string,
         location: string,
-        imageUrl: string,
+        imageUrl: string[],
         startDateTime: string,
         endDateTime: string,
         price: string,
