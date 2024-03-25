@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
@@ -36,9 +35,13 @@ import { getImagesByEventId } from "@/lib/actions/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { DeleteConfirmation } from "../shared/DeleteConfirmation";
+import { publishEvent } from "@/lib/actions/event";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
 
 const MyEventBox = ({ data }: { data: EventType }) => {
   const [eventImage, setEventImage] = useState<string>("");
+  const [showModal, setShowModal] = useState(false);
+  const [eventId, setEventId] = useState<number>(0);
   const router = useRouter();
   const form = useForm<z.infer<typeof PublishFormSchema>>({
     resolver: zodResolver(PublishFormSchema),
@@ -47,6 +50,23 @@ const MyEventBox = ({ data }: { data: EventType }) => {
     },
   });
   const onSubmit = async (data: z.infer<typeof PublishFormSchema>) => {};
+
+  // handle publish event confirmation
+  async function handleConfirmPublishEvent() {
+    if (eventId) {
+      await publishEvent(eventId);
+    }
+    setShowModal(false);
+    setEventId(0);
+    // re-fetch data status
+    location.reload();
+  }
+
+  // handle open publish event modal
+   function handlePublishEvent(eventId: number) {
+    setEventId(eventId);
+    setShowModal(true);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -89,8 +109,8 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                     <FormItem className=" flex items-start gap-2">
                       <FormControl className="mt-1">
                         <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
+                          checked={data.isPublished ? true : false}
+                          onCheckedChange={() => handlePublishEvent(data.id)}
                         />
                       </FormControl>
                       <div className="text-sm text-primary">Publish</div>
@@ -159,6 +179,27 @@ const MyEventBox = ({ data }: { data: EventType }) => {
           </div>
         </form>
       </Form>
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        title="Confirm Delete"
+      >
+        <ModalContent>
+          <ModalBody>Do you want publish/un-publish this event?</ModalBody>
+          <ModalFooter>
+            <Button onClick={() => setShowModal(false)} color="primary">
+              No
+            </Button>
+            <Button
+              onClick={handleConfirmPublishEvent}
+              color="success"
+              variant="light"
+            >
+              Yes
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

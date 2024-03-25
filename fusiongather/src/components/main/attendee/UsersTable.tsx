@@ -19,6 +19,7 @@ import {
   ModalFooter,
   ModalBody,
   Input,
+  SortDescriptor,
 } from "@nextui-org/react";
 import { use, useCallback, useEffect, useMemo, useState } from "react";
 import { deleteAttendee, getAttendeeByEventId } from "@/lib/actions/attendee";
@@ -84,6 +85,7 @@ export default function UsersTable({tickets}: {tickets: Ticket[]}) {
 
   // calculate the number of pages
   const pages = Math.ceil(ticket.length / rowsPerPage);
+
   // get the items to display on the current page
   const items: Ticket[] = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -93,6 +95,25 @@ export default function UsersTable({tickets}: {tickets: Ticket[]}) {
     }
     return [];
   }, [page, filterItems]);
+
+  //sort descriptor state
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "name",
+    direction: "ascending",
+  }); 
+
+  // sort attendee by name
+  const sortedItems = useMemo(() => {
+    return [...items].sort((a: Ticket, b: Ticket) => {
+      if (typeof a === 'object' && typeof b === 'object') {
+        const first = a.userId.firstName;
+        const second = b.userId.firstName;
+        const cmp = first.toUpperCase() < second.toUpperCase() ? -1 : first.toUpperCase() > second.toUpperCase() ? 1 : 0;
+        return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      }
+      return 0;
+    })
+  }, [sortDescriptor, items])
 
   // handle search value change
   const onSearchChange = useCallback((value?: string) => {
@@ -146,16 +167,21 @@ export default function UsersTable({tickets}: {tickets: Ticket[]}) {
             />
           </div>
         }
+        bottomContentPlacement="outside"
+        sortDescriptor={sortDescriptor}
+        onSortChange={setSortDescriptor}
         classNames={{
           wrapper: "min-h-[222px]",
         }}
       >
         <TableHeader columns={columns}>
           {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
+            <TableColumn key={column.key}
+            {...(column.key === "name" ? {allowsSorting: true} : {})}
+            >{column.label}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={items} emptyContent="No attendees to display">
+        <TableBody items={sortedItems} emptyContent="No attendees to display">
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
