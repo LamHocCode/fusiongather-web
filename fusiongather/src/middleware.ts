@@ -7,11 +7,10 @@ import {
     authRoutes,
     publicRoutes,
 } from "@/routes";
-import { NextAuthRequest } from "next-auth/lib";
 
 const { auth } = NextAuth(authConfig);
 
-export default auth(async (req: NextAuthRequest): Promise<void | Response> => {
+export default auth((req) => { // Change req to res
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
 
@@ -20,14 +19,14 @@ export default auth(async (req: NextAuthRequest): Promise<void | Response> => {
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
     if (isApiAuthRoute) {
-        return;
+        return null;
     }
 
     if (isAuthRoute) {
         if (isLoggedIn) {
             return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
         }
-        return;
+        return null;
     }
 
     if (!isLoggedIn && !isPublicRoute && !nextUrl.pathname.startsWith('/api/uploadthing')) { // Exclude /api/uploadthing route
@@ -42,7 +41,7 @@ export default auth(async (req: NextAuthRequest): Promise<void | Response> => {
         ));
     }
 
-    return;
+    return null;
 })
 
 // Optionally, don't invoke Middleware on some paths

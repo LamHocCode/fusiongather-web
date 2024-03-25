@@ -39,34 +39,12 @@ import { getImagesByEventId } from "@/lib/actions/image";
 
 type EventFormProps = {
   type: "Create" | "Update";
-  event?: EventType;
-  eventId?: number;
+  event: EventType;
+  eventId: number;
 };
 
 export function EventForm({ type, event, eventId }: EventFormProps) {
   // const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-  const [eventEmpty, setEventEmpty] = useState<EventType>({
-    id: 0,
-    title: "",
-    description: "",
-    location: "",
-    lng: 0,
-    lat: 0,
-    imageUrl: [],
-    category: "", // Add the 'category' property
-    isFree: false,
-    price: "0", // Convert price to a string
-    startDateTime: new Date().toISOString(),
-    endDateTime: new Date().toISOString(),
-    author: {
-      firstName: "", // Add the 'firstName' property
-      lastName: "", // Add the 'lastName' property
-      email: "", // Add the 'email' property
-      dob: new Date().toISOString(), // Add the 'dob' property
-      phoneNumber: "", // Add the 'phoneNumber' property
-    }, // Add the 'author' property
-    isPublished: false, // Add the 'isPublished' property
-  });
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -252,7 +230,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
                           onUpload={handleUpload}
                           endpoint="imageUploader"
                           setImageUrl={setEventImageUrl}
-                          event={event? event : eventEmpty}
+                          event={event}
                         />
                       </FormControl>
                     </FormItem>

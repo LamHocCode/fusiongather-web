@@ -28,7 +28,7 @@ const FileUploader = ({
     const fetchData = async () => {
         try {
             const uploadedFiles = await getImagesByEventId(event.id);
-            const urls = uploadedFiles.map((image: { url: any; }) => image.url);
+            const urls = uploadedFiles.map(image => image.url);
             if (uploadedFiles && uploadedFiles.length > 0) {
               setUploadedFiles(urls);
               console.log("votoiday",uploadedFiles );

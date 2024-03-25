@@ -12,7 +12,6 @@ export interface EventType {
     description: string,
     location: string,
     imageUrl: string[],
-    category: string,
     startDateTime: string,
     endDateTime: string,
     price: string,
