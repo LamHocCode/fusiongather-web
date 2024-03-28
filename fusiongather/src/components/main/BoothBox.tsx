@@ -51,6 +51,7 @@ import { useForm } from "react-hook-form";
 import { TfiPencilAlt } from "react-icons/tfi";
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { checkIsEventOwner } from "@/lib/actions/event";
 
 const BoothBox = ({ data }: { data: BoothType }) => {
     const [showModal, setShowModal] = useState(false);
@@ -62,6 +63,7 @@ const BoothBox = ({ data }: { data: BoothType }) => {
     const [registerSuccess, setRegisterSuccess] = useState(false);
     const [reason, setReason] = useState("");
     const [reasonIsEmpty, setReasonIsEmpty] = useState(false);
+    const [isEventOwner, setIsEventOwner] = useState(false);
 
     const form = useForm<z.infer<typeof registerFormSchema>>({
         defaultValues: {
@@ -78,15 +80,15 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                 closeOnClick: true,
                 draggable: false,
                 type: "success",
-                toastId: 13                      
+                toastId: 13
             })
- } else toast('Delete booth successfully!', {
-                position: "top-right",
-                closeOnClick: true,
-                draggable: false,
-                type: "success",
-                toastId: 13                      
-            })
+        } else toast('Delete booth successfully!', {
+            position: "top-right",
+            closeOnClick: true,
+            draggable: false,
+            type: "success",
+            toastId: 13
+        })
     };
 
     const handleDelete = (id: number) => {
@@ -128,10 +130,12 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                 setBoothImage(image[0]?.url);
                 const isRequest = await checkIsRequested(data.id);
                 setIsRequested(isRequest);
+                const isOwner = await checkIsEventOwner(data.eventId.id);
+                setIsEventOwner(isOwner);
 
             } catch (error) {
                 console.error("Error fetching follower count:", error);
-                
+
             }
         };
         fetchData();
@@ -145,13 +149,12 @@ const BoothBox = ({ data }: { data: BoothType }) => {
             setReasonIsEmpty(true);
             return;
         } else
-        setShowConfirmModal(true)
-        
-    };
+            setShowConfirmModal(true)
 
+    };
     return (
         <>
-            
+
             <Modal
                 isOpen={showModal}
                 onClose={() => setShowModal(false)}
@@ -260,7 +263,7 @@ const BoothBox = ({ data }: { data: BoothType }) => {
 
 
             <div className="flex w-full p-4 border rounded-xl">
-            <ToastContainer />
+                <ToastContainer />
                 <div className="w-[42%] pr-6">
                     <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
                         <Image
@@ -294,7 +297,10 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                             </span>
                         </div>
                     </div>
+
+                    {!data.eventId.isPublished ?
                     <div className="flex items-center justify-between gap-4 pt-5 px-4 text-black">
+
                         {!isRequested ? <HoverCard>
                             <HoverCardTrigger asChild>
                                 <div className="cursor-pointer hover:bg-secondary p-2 rounded-full" onClick={handleRegisterClick}>
@@ -318,11 +324,13 @@ const BoothBox = ({ data }: { data: BoothType }) => {
                                     Delete
                                 </div>
                             </HoverCardContent>
-                        </HoverCard>
+                        </HoverCard> 
 
                         <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
                         </div>
-                    </div>
+
+                    </div> : null
+}
                 </div>
             </div>
         </>

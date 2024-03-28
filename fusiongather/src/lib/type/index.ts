@@ -20,6 +20,7 @@ export interface EventType {
     lat: number,
     isFree: boolean,
     author: {
+        id: number,
         firstName: string,
         lastName: string,
         email: string,
@@ -47,7 +48,8 @@ export type BoothType = {
         price: string,
         lng: number,
         lat: number,
-        isFree: boolean
+        isFree: boolean,
+        isPublished: boolean,
     },
     vendorId: {
         id: number,
