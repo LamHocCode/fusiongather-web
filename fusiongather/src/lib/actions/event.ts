@@ -165,16 +165,17 @@ export const followEvent = async (eventId: number) => {
     try {
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
+        const userId = session?.user?.id
         const res = await fetch(`${process.env.BASE_URL}/followevent`, {
             method: "POST",
-            body: JSON.stringify({ eventId }),
+            body: JSON.stringify({ eventId, userId }),
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
         })
         if (!res.ok) {
-            console.error(`Request failed with status: ${res.status}`);
+            console.error(`Follow event failed with status: ${res.status}`);
             return await res.json();;
         }
         return res.json()
@@ -197,7 +198,7 @@ export const checkIsFollowed = async (eventId: number) => {
             }
         })
         if (!res.ok) {
-            console.error(`Request failed with status: ${res.status}`);
+            console.error(`Check is follow failed with status: ${res.status}`);
             return await res.json();;
         }
         return res.json()
@@ -296,4 +297,13 @@ export const publishEvent = async (id: number) => {
         return null
     }
   
+}
+
+export const checkIsEventOwner = async (ownerId: number) => {
+        const session = await getSession()
+        const userId = session?.user?.id
+        if (userId === ownerId) {
+            return true
+        }
+        return false
 }

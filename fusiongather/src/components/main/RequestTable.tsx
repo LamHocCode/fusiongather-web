@@ -56,11 +56,6 @@ export default function RequestTable({ eventId }: { eventId: number }) {
         setRequest(res)
     }
 
-    const handleDeleteRequest = (userId:number, boothId: number) => {
-        setDeleteBoothId(boothId)
-        setDeleteBoothUserId(userId)
-        setShowModal(true)
-    }
 
     const handleSetAssignBooth = async (userId: number, boothId: number) => {
         setAssignBoothId(boothId)
@@ -134,13 +129,6 @@ export default function RequestTable({ eventId }: { eventId: number }) {
                                             <Tooltip content = "Assign Booth">
                                                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                                                     <EyeIcon onClick={() => handleSetAssignBooth(item.user.id, item.booth.id)}/>
-                                                </span>
-                                            </Tooltip>
-                                            <Tooltip color="danger" content="Delete Attendee">
-                                                <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                                                    <DeleteIcon
-                                                        onClick={() => handleDeleteRequest(item.user.id, item.booth.id)}
-                                                    />
                                                 </span>
                                             </Tooltip>
                                         </div>

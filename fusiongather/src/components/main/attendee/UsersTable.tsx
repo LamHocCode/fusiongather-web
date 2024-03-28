@@ -50,7 +50,7 @@ export default function UsersTable({tickets}: {tickets: Ticket[]}) {
   }, [isDelete]);
 
   async function getAttendee() {
-    const res = await getAttendeeByEventId(10);
+    const res = await getAttendeeByEventId(1);
     setTicket(res);
   }
   // handle delete attendee

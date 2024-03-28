@@ -4,11 +4,6 @@ import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiImageOn } from "react-icons/ci";
 import { RiMapPin2Line } from "react-icons/ri";
-import { HiOutlineTicket } from "react-icons/hi";
-import { IoIosTimer } from "react-icons/io";
-import { Switch } from "@/components/ui/switch";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import { BiCategory } from "react-icons/bi";
 import { IoIosArrowBack } from "react-icons/io";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +16,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { boothFormSchema } from "@/lib/validatior";
 import { z } from "zod";
-import DropDown from "./DropDown";
 import { useState } from "react";
 import QuillText from "./QuillText";
 import LocationModal from "./LocationModal";
 import { useRouter } from "next/navigation";
-import DatePicker from "react-datepicker";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createBooth, updateBooth } from "@/lib/actions/booth";
@@ -34,8 +27,7 @@ import { BoothType } from "@/lib/type";
 import { boothDefaultValues } from "@/contants";
 import BoothFileUploader from "./BoothFileUploader";
 import "react-toastify/dist/ReactToastify.css";
-import Image from "next/image";
-
+import { checkIsEventOwner } from "@/lib/actions/event";
 type BoothFormProps = {
   type: "Create" | "Update";
   booth?: BoothType;
@@ -67,6 +59,7 @@ export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
         lng: 0,
         lat: 0,
         isFree: false,
+        isPublished: false,
     },
     vendorId: {
       id: 0,
@@ -113,6 +106,7 @@ export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
   const onSubmit: SubmitHandler<z.infer<typeof boothFormSchema>> = async (
     data
   ) => {
+    const isOwner = await checkIsEventOwner(booth?.eventId.id ?? 0)
     if (type === "Create") {
       try {
         await createBooth(eventId ?? 0, data);
@@ -127,11 +121,15 @@ export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
         router.back();
         return;
       }
-      try {
+      try {      
         const updatedEvent = await updateBooth(boothId, data);
-        if (updatedEvent) {
+
+        if (updatedEvent && isOwner) {
           form.reset();
+
           router.push(`/event/${booth?.eventId.id}`);
+        } else {
+          router.push(`/event/booth/${boothId}`);
         }
       } catch (error) {
         console.log(error);
@@ -144,9 +142,18 @@ export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
     form.setValue("latitude", lat);
   }
 
-  const handleCancel = () => {
+  const handleCancel = async  () => {
+    const isOwner = await checkIsEventOwner(booth?.eventId.id ?? 0)
+    if (type === "Create") {
+      router.back();
+      return;
+    }
+    if (type === "Update" && isOwner) {
     form.reset();
-    router.push("/event/booth");
+    router.push(`/event/${booth?.eventId.id}`);
+    } else {
+      router.push(`/event/booth/${boothId}`);
+    }
   };
 
   return (
@@ -164,7 +171,7 @@ export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
             className="text-secondary cursor-pointer hover:text-primary"
           />
         </div>
-        <h3 className="text-secondary">Create Event</h3>
+        <h3 className="text-secondary">{type} Booth</h3>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

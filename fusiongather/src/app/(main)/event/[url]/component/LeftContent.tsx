@@ -18,6 +18,7 @@ interface Props {
 const LeftContent = ({ event }: Props) => {
     const [followerCount, setFollowerCount] = useState(0);
     const [isFollowed, setIsFollowed] = useState(false);
+    const [isOwner, setIsOwner] = useState(false);
     const router = useRouter();
     useEffect(() => {
         const fetchData = async () => {
@@ -26,6 +27,9 @@ const LeftContent = ({ event }: Props) => {
                 setFollowerCount(count);
                 const isFollowed = await checkIsFollowed(event.id);
                 setIsFollowed(isFollowed);
+                const owner = await checkIsFollowed(event.author.id);
+                setIsOwner(owner);
+                console.log(isOwner);
             } catch (error) {
                 console.error("Error fetching follower count:", error);
             }
@@ -49,7 +53,7 @@ const LeftContent = ({ event }: Props) => {
             console.error("Error toggling follow status:", error);
         }
     };
-
+    console.log(isOwner);
     return (
         <>
             <div className="w-full flex items-start gap-8">
@@ -69,11 +73,16 @@ const LeftContent = ({ event }: Props) => {
                     </div>
                     <div className="w-[1px] h-10 bg-secondary"></div>
                 </div>
-                <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={() => router.push(`/event/request/${event.id}`)} >
+                {isOwner ?
+                    <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={() => router.push(`/event/request/${event.id}`)} >
                         <IoShareSocialOutline />
                         <span className="text-secondary text-sm">View request</span>
-                </div>
-
+                    </div> :
+                    <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" >
+                        <IoShareSocialOutline />
+                        <span className="text-secondary text-sm">View QRCode</span>
+                    </div>
+                }
             </div>
             <div>
                 <span dangerouslySetInnerHTML={{ __html: event.description }} suppressHydrationWarning></span>
