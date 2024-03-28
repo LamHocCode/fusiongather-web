@@ -63,7 +63,7 @@ export type BoothType = {
 
 export interface ImageType {
     id: number,
-    url: string[],
+    url: string,
     eventId?: number,
     boothId?: number,
 }
