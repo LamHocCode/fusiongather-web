@@ -25,7 +25,6 @@ const EventItem = ({ event }: any) => {
             try {
                 const isFollowed = await checkIsFollowed(event.id);
                 setIsFollowed(isFollowed);
-                console.log(isFollowed);
                 const image = await getImagesByEventId(event.id);
                 setEventImage(image[0]?.url);
             } catch (error) {

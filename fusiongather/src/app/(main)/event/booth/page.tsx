@@ -15,7 +15,6 @@ const BoothPage = ({ eventId, isOwner }: { eventId: number , isOwner: boolean })
     const [booths, setBooths] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    console.log(isOwner);
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -68,7 +67,7 @@ const BoothPage = ({ eventId, isOwner }: { eventId: number , isOwner: boolean })
                         {booths.length === 0 ? (
                             <div>This event does not have any booths.</div>
                         ) : (
-                            <BoothOfEvent booths={booths} />
+                            <BoothOfEvent booths={booths} isOwner={isOwner}/>
                         )}
                     </>
                 )}

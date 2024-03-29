@@ -44,7 +44,6 @@ const Content = ({ booth, isOwner }: { booth: BoothType, isOwner: boolean }) => 
     const handleUpdateNavigate = () => {
         router.push(`/event/booth/update/${booth.id}`);
     }
-    console.log(isOwner);
     return (
         <>
             
