@@ -59,6 +59,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
     startDateTime: new Date().toISOString(),
     endDateTime: new Date().toISOString(),
     author: {
+      id: 0,
       firstName: "", // Add the 'firstName' property
       lastName: "", // Add the 'lastName' property
       email: "", // Add the 'email' property
@@ -83,10 +84,8 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
   const setEventImageUrl = (imageUrl: string[]) => {
     setImageUrl(imageUrl);
     form.setValue("imageUrl", imageUrl);
-    console.log("data imageUrl", imageUrl);
   };
 
-  console.log("event for updating", event);
   const initialValues =
     event && type === "Update"
       ? {
