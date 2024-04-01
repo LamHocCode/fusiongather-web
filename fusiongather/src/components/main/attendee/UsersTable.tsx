@@ -4,7 +4,7 @@ import {
   Ticket,
   columns,
   renderCell,
-} from "@/app/(main)/event/attendeeList/columns";
+} from "@/app/(main)/event/attendeeList/[url]/columns";
 import {
   Table,
   TableHeader,
@@ -31,10 +31,10 @@ import { SearchIcon } from "lucide-react";
 import { get } from "http";
 
 interface Props {
-  ticket: Ticket[];
+  tickets: Ticket[];
+  eventId: number;
 }
-
-export default function UsersTable({tickets}: {tickets: Ticket[]}) {
+export default function UsersTable({ tickets, eventId }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [ticket, setTicket] = useState<Ticket[]>([]);
@@ -50,8 +50,12 @@ export default function UsersTable({tickets}: {tickets: Ticket[]}) {
   }, [isDelete]);
 
   async function getAttendee() {
-    const res = await getAttendeeByEventId(1);
-    setTicket(res);
+    const res = await getAttendeeByEventId(eventId);
+    if(res && res.message){
+      setTicket([]);
+    } else{
+      setTicket(res);
+    }   
   }
   // handle delete attendee
   const handleDeleteAttendee = (id: number) => {
