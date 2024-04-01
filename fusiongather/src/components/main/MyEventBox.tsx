@@ -166,7 +166,9 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                       <DropdownMenuItem>Profile</DropdownMenuItem>
                       <DropdownMenuSeparator />
 
-                      <DropdownMenuItem>Billing</DropdownMenuItem>
+                      <Link href={`/event/attendeeList/${data.id}`}>
+                      <DropdownMenuItem>Manage Attendee</DropdownMenuItem>
+                      </Link>
                       <DropdownMenuSeparator />
 
                       <DropdownMenuItem>Settings</DropdownMenuItem>
