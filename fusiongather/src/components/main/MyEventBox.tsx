@@ -16,9 +16,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   HoverCard,
   HoverCardContent,
@@ -30,16 +27,37 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PublishFormSchema } from "@/lib/validatior";
-import { Label } from "../ui/label";
 import { useEffect, useState } from "react";
 import { getImagesByEventId } from "@/lib/actions/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { DeleteConfirmation } from "../shared/DeleteConfirmation";
+import { getQRCodebyEventId } from "@/lib/actions/event";
 
 const MyEventBox = ({ data }: { data: EventType }) => {
   const [eventImage, setEventImage] = useState<string>("");
   const router = useRouter();
+  const [isChange, setIsChange] = useState(false);
+  const [qrCodeImageUrl, setQrCodeImageUrl] = useState<string>("");
+  const handleClickShare = async () => {
+    try {
+      const url = await getQRCodebyEventId(data.id);
+      if (url !== null) {
+        setQrCodeImageUrl(url);
+      } else {
+        console.error('QR code URL is null.');
+      }
+    } catch (error) {
+      console.error('Error generating QR code:', error);
+    }
+  };
+  
+
+  // useEffect(() => {
+  //   setQrCodeImageUrl("");
+  // }, [data]);
+
+
   const form = useForm<z.infer<typeof PublishFormSchema>>({
     resolver: zodResolver(PublishFormSchema),
     defaultValues: {
@@ -57,9 +75,16 @@ const MyEventBox = ({ data }: { data: EventType }) => {
         console.error("Error fetching follower count:", error);
       }
     };
-
     fetchData();
   }, [data.id]);
+
+  useEffect(() => {
+    if (isChange) {
+      // Reload trang khi xóa hoàn tất
+      window.location.reload();
+    }
+  }, [isChange]);
+
   const handleClick = () => {
     router.push(`/event/update/${data.id}`);
   };
@@ -131,10 +156,20 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                     <div className="text-center">Edit</div>
                   </HoverCardContent>
                 </HoverCard>
-                <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-                  <IoShareSocialOutline size={24} />
-                </div>
+                <div>
+                  <div
+                    className="cursor-pointer hover:bg-secondary p-2 rounded-full"
+                    onClick={handleClickShare}
+                  >
+                    <IoShareSocialOutline size={24} />
+                  </div>
 
+                  {qrCodeImageUrl && (
+                    <div>
+                      <Image src={qrCodeImageUrl}  width="100" height = "100" alt="QR code" />
+                    </div>
+                  )}
+                </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
@@ -143,13 +178,11 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-40">
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>Profile</DropdownMenuItem>
+                      <DropdownMenuItem>Management Attendee</DropdownMenuItem>
                       <DropdownMenuSeparator />
 
                       <DropdownMenuItem>Billing</DropdownMenuItem>
                       <DropdownMenuSeparator />
-
-                      <DropdownMenuItem>Settings</DropdownMenuItem>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>

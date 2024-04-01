@@ -26,6 +26,7 @@ export interface EventType {
         phoneNumber: string
     }
     isPublished: boolean
+    url: string
 }
 
 export type BoothType = {

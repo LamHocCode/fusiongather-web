@@ -1,3 +1,4 @@
+import CheckoutButton from "@/components/shared/CheckoutButton";
 import { EventType } from "@/lib/type";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -15,7 +16,9 @@ const Ticket = ({ isHidden, data }: { isHidden: boolean; data: Props }) => {
               <>
                 <span className="text-secondary text-sm">Early Bird | Kid</span>
                 <div className="flex items-center gap-8">
-                  <span className="text-sm font-semibold">{data.event.price}</span>
+                  <span className="text-sm font-semibold">
+                    {data.event.price}
+                  </span>
                   <IoIosArrowForward />
                 </div>
               </>
@@ -33,7 +36,7 @@ const Ticket = ({ isHidden, data }: { isHidden: boolean; data: Props }) => {
         type="button"
         className="p-4 rounded-full bg-primary text-white text-sm w-full border hover:bg-white hover:border-[#FF8E3C] hover:text-[#FF8E3C]"
       >
-        Register Tikets
+        <CheckoutButton event={data.event} />
       </button>
     </>
   );
