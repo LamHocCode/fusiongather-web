@@ -30,15 +30,15 @@ const EventInfo = (data: any) => {
           <FaRegUserCircle size="24" />
           <Link href={"/"}>
             <span className="text-lg truncate">
-              {data.event.author.firstName} {data.event.author.lastName}
+              {data?.event?.author?.firstName} {data?.event?.author?.lastName}
             </span>
           </Link>
         </div>
         <div className="flex items-center gap-6 ">
           <LiaCalendarWeekSolid size="24" />
           <div className="text-gray-600 text-sm leading-6">
-            <div>{formatTime(data.event.startDateTime)}</div>
-            <div>{formatTime(data.event.endDateTime)}</div>
+            <div>{formatTime(data?.event?.startDateTime)}</div>
+            <div>{formatTime(data?.event?.endDateTime)}</div>
           </div>
         </div>
         <div
@@ -47,7 +47,7 @@ const EventInfo = (data: any) => {
         >
           <RiMapPin2Line size="24" />
           <span className="text-secondary text-sm truncate-2-line hover:text-orange-500 cursor-pointer">
-            {data.event.location}
+            {data?.event?.location}
           </span>
         </div>
       </div>

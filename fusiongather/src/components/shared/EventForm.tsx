@@ -67,7 +67,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
       phoneNumber: "", // Add the 'phoneNumber' property
     }, // Add the 'author' property
     isPublished: false, // Add the 'isPublished' property
-  });
+  }); 
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();
@@ -422,7 +422,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
             <Button
               type="submit"
               size="sm"
-              className="rounded-full w-20 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
+              className="rounded-full w-fit px-4 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
             >
               {form.formState.isSubmitting ? "Submitting..." : `${type} Event `}
             </Button>

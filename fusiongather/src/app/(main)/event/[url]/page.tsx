@@ -41,7 +41,7 @@ export default async function EventDetail({ params: { url } }: Props) {
     const id = Number(url)
     const event = await getEventById(id);
     const image = await getImagesByEventId(id);
-    const isOwner = await checkIsEventOwner(event.author.id)
+    const isOwner = await checkIsEventOwner(event?.author?.id)
 
     return (
         <main className="mt-[90px] min-h-screen">

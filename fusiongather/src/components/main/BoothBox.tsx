@@ -258,12 +258,12 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
             </Modal>
 
 
-            <div className="flex w-full p-4 border rounded-xl">
+            <div className="flex w-full p-4 border border-gray-300 rounded-xl">
                 <ToastContainer />
                 <div className="w-[42%] pr-6">
-                    <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
+                    <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4 cursor-pointer">
                         <Image
-                            src={boothImage}
+                            src={boothImage ? boothImage : '/test-event.png'}
                             alt={`booth-image`}
                             fill
                             className="w-full h-full object-fill z-20"
@@ -271,17 +271,17 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
                     </div>
 
                 </div>
-                <div className="w-[58%] pl-6 border-l ">
-                    <div className="flex flex-col gap-5 border-b pb-5">
-                        <div className="font-bold truncate-2-line">
-                            <Link href={`/event/booth/${data.id}`}>
-                                {data.name}
+                <div className="w-[58%] pl-6 border-l border-gray-300 ">
+                    <div className="flex flex-col gap-5 border-b border-gray-300 pb-5">
+                        <div className="font-bold truncate-2-line hover:text-primary">
+                            <Link href={`/event/booth/${data?.id}`}>
+                                {data?.name}
                             </Link>
                         </div>
                         <div className="flex items-center gap-4">
                             <span><LuPartyPopper size={20} /></span>
                             <span className="text-xs">
-                                {data.eventId.title}
+                                {data?.eventId?.title}
                             </span>
                         </div>
                         <div className="flex items-center gap-4">
@@ -289,12 +289,12 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
                                 <IoIosPerson size={20} />
                             </span>
                             <span className="text-xs">
-                                {data.vendorId.firstName} {data.vendorId.lastName}
+                                {data?.vendorId?.firstName} {data?.vendorId?.lastName}
                             </span>
                         </div>
                     </div>
 
-                    {!data.eventId.isPublished ?
+                    {!data?.eventId?.isPublished ?
                         <div className="flex items-center justify-between gap-4 pt-5 px-4 text-black">
 
                             {!isRequested ? <HoverCard>

@@ -36,15 +36,16 @@ const LeftContent = ({ event }: Props) => {
         };
 
         fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [event.id]);
 
     const handleFollowEvent = async () => {
         try {
             if (isFollowed) {
-                await unFollowEvent(event.id);
+                await unFollowEvent(event?.id);
                 setIsFollowed(false);
             } else {
-                await followEvent(event.id);
+                await followEvent(event?.id);
                 setIsFollowed(true);
             }
             const newFollowerCount = await countFollower(event.id);
@@ -60,7 +61,7 @@ const LeftContent = ({ event }: Props) => {
                 <Calendar event={event} />
                 <div className="flex-1">
                     <h3 className="text-3xl uppercase text-gray-600 leading-normal mb-6">
-                        {event.title}
+                        {event?.title}
                     </h3>
                     <EventInfo event={event} />
                 </div>
@@ -71,7 +72,7 @@ const LeftContent = ({ event }: Props) => {
                         {isFollowed ? <FaHeart /> : <FaRegHeart />}
                         <span className="text-secondary text-sm">{followerCount}</span>
                     </div>
-                    <div className="w-[1px] h-10 bg-secondary"></div>
+                    <div className="w-[1px] h-10 bg-secondary"/>
                 </div>
                 {isOwner ?
                     <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={() => router.push(`/event/request/${event.id}`)} >
