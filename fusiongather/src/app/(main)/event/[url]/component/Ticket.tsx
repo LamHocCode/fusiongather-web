@@ -31,7 +31,7 @@ const Ticket = ({ isHidden, data }: { isHidden: boolean; data: Props }) => {
           </div>
         </div>
       )}
-
+      
       <button
         type="button"
         className="p-4 rounded-full bg-primary text-white text-sm w-full border hover:bg-white hover:border-[#FF8E3C] hover:text-[#FF8E3C]"

@@ -12,6 +12,7 @@ export interface EventType {
     description: string,
     location: string,
     imageUrl: string[],
+    category: string,
     startDateTime: string,
     endDateTime: string,
     price: string,
@@ -19,6 +20,7 @@ export interface EventType {
     lat: number,
     isFree: boolean,
     author: {
+        id: number,
         firstName: string,
         lastName: string,
         email: string,
@@ -33,6 +35,7 @@ export type BoothType = {
     id: number,
     name: string,
     description: string,
+    imageUrl: string[],
     latitude: number,
     longitude: number,
     eventId: {
@@ -40,13 +43,14 @@ export type BoothType = {
         title: string,
         description: string,
         location: string,
-        imageUrl: string,
+        imageUrl: string[],
         startDateTime: string,
         endDateTime: string,
         price: string,
         lng: number,
         lat: number,
-        isFree: boolean
+        isFree: boolean,
+        isPublished: boolean,
     },
     vendorId: {
         id: number,
@@ -60,7 +64,28 @@ export type BoothType = {
 
 export interface ImageType {
     id: number,
-    url: string[],
+    url: string,
     eventId?: number,
     boothId?: number,
+}
+
+export interface RequestType {
+    userId: number,
+    boothId: number,
+    reason: string,
+    user: {
+        id: number,
+        firstName: string,
+        lastName: string,
+        email: string,
+        dob: string,
+        isAdmin: boolean,
+        phoneNumber: string
+    },
+    booth: {
+        id: number,
+        name: string,
+        description: string,
+    }
+
 }

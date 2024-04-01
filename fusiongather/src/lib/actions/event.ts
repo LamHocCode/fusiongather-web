@@ -178,16 +178,17 @@ export const followEvent = async (eventId: number) => {
   try {
     const session = await getSession();
     const accessToken = session?.tokens?.accessToken;
+    const userId = session?.user?.id;
     const res = await fetch(`${process.env.BASE_URL}/followevent`, {
       method: "POST",
-      body: JSON.stringify({ eventId }),
+      body: JSON.stringify({ eventId, userId }),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     });
     if (!res.ok) {
-      console.error(`Request failed with status: ${res.status}`);
+      console.error(`Follow event failed with status: ${res.status}`);
       return await res.json();
     }
     return res.json();
@@ -213,7 +214,7 @@ export const checkIsFollowed = async (eventId: number) => {
       }
     );
     if (!res.ok) {
-      console.error(`Request failed with status: ${res.status}`);
+      console.error(`Check is follow failed with status: ${res.status}`);
       return await res.json();
     }
     return res.json();
@@ -292,44 +293,14 @@ export const deleteEvent = async (id: number) => {
   }
 };
 
-
-// export const generateQRCode = async (eventId:number) => {
-//   try {
-//     const session = await getSession();
-//     const accessToken = session?.tokens?.accessToken;
-
-//     const response = await fetch(`${process.env.BASE_URL}/qr-code/`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${accessToken}`,
-//       },
-//       body: JSON.stringify({ eventId }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error(`Request failed with status: ${response.status}`);
-//     }
-
-//     const qrCodeUrl = await response.json(); 
-//     return qrCodeUrl;
-//   } catch (error) {
-//     console.error('Error generating QR code:', error);
-//     throw new Error('Internal Server Error');
-//   }
-// };
-
 export const getQRCodebyEventId = async (eventId: number) => {
   try {
-    const res = await fetch(
-      `${process.env.BASE_URL}/qr-code/${eventId}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await fetch(`${process.env.BASE_URL}/qr-code/${eventId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (!res.ok) {
       console.error(`Request failed with status: ${res.status}`);
       throw new Error(`Request failed with status: ${res.status}`);
@@ -343,5 +314,38 @@ export const getQRCodebyEventId = async (eventId: number) => {
     console.log(error);
     return null;
   }
-}
+};
 
+export const publishEvent = async (id: number) => {
+  try {
+    const session = await getSession();
+    const accessToken = session?.tokens?.accessToken;
+    const res = await fetch(
+      `${process.env.BASE_URL}/event/publishEvent/${id}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (!res.ok) {
+      console.error(`Request failed with status: ${res.status}`);
+      return await res.json();
+    }
+    return res.json();
+  } catch (error: any) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const checkIsEventOwner = async (ownerId: number) => {
+  const session = await getSession();
+  const userId = session?.user?.id;
+  if (userId === ownerId) {
+    return true;
+  }
+  return false;
+};

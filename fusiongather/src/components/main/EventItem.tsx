@@ -9,6 +9,7 @@ import { EventType, ImageType } from "@/lib/type";
 import { useState, useEffect } from "react";
 import { checkIsFollowed, followEvent, unFollowEvent } from "@/lib/actions/event";
 import { getImagesByEventId } from "@/lib/actions/image";
+import { useRouter } from "next/navigation";
 
 const EventItem = ({ event }: any) => {
     const [isFollowed, setIsFollowed] = useState(false);
@@ -17,6 +18,7 @@ const EventItem = ({ event }: any) => {
         const dateTime = new Date(date);
         return dateTime.toLocaleString();
     }
+    const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,7 +31,7 @@ const EventItem = ({ event }: any) => {
                 console.error("Error fetching follower count:", error);
             }
         };
-
+        router.refresh();
         fetchData();
     }
         , [event.id]);
@@ -41,6 +43,7 @@ const EventItem = ({ event }: any) => {
                 setIsFollowed(false);
             } else {
                 await followEvent(event.id);
+                console.log("followed");
                 setIsFollowed(true);
             }
         } catch (error) {
