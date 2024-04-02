@@ -6,7 +6,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import { IoShareSocialOutline } from "react-icons/io5";
 import BoxTicket from "./BoxTicket";
 import EventInfo from "./EventInfo";
-import { followEvent, countFollower, checkIsFollowed, unFollowEvent } from "@/lib/actions/event";
+import { followEvent, countFollower, checkIsFollowed, unFollowEvent, checkIsEventOwner } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
 import { FaHeart } from "react-icons/fa";
 import Link from "next/link";
@@ -27,9 +27,8 @@ const LeftContent = ({ event }: Props) => {
                 setFollowerCount(count);
                 const isFollowed = await checkIsFollowed(event.id);
                 setIsFollowed(isFollowed);
-                const owner = await checkIsFollowed(event.author.id);
+                const owner = await checkIsEventOwner(event.author.id);
                 setIsOwner(owner);
-                console.log(isOwner);
             } catch (error) {
                 console.error("Error fetching follower count:", error);
             }
@@ -54,7 +53,6 @@ const LeftContent = ({ event }: Props) => {
             console.error("Error toggling follow status:", error);
         }
     };
-    console.log(isOwner);
     return (
         <>
             <div className="w-full flex items-start gap-8">

@@ -51,7 +51,6 @@ import { useForm } from "react-hook-form";
 import { TfiPencilAlt } from "react-icons/tfi";
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { checkIsEventOwner } from "@/lib/actions/event";
 
 const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
     const [showModal, setShowModal] = useState(false);
@@ -141,6 +140,7 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
 
     const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
         setReason(data.reason);
+
         if (data.reason === "") {
             setReasonIsEmpty(true);
             return;
@@ -296,20 +296,24 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
 
                     {!data?.eventId?.isPublished ?
                         <div className="flex items-center justify-between gap-4 pt-5 px-4 text-black">
-
-                            {!isRequested ? <HoverCard>
-                                <HoverCardTrigger asChild>
-                                    <div className="cursor-pointer hover:bg-secondary p-2 rounded-full" onClick={handleRegisterClick}>
-                                        <LuPenLine size={24} />
-                                    </div>
-                                </HoverCardTrigger>
-                                <HoverCardContent className="w-24">
-                                    <div className="text-center">
-                                        Register
-                                    </div>
-                                </HoverCardContent>
-                            </HoverCard> : <div className="cursor-pointer hover:bg-secondary p-2 rounded-full" > You already registed this booth </div>}
-
+                            {!isOwner &&
+                                (!isRequested ?
+                                    <HoverCard>
+                                        <HoverCardTrigger asChild>
+                                            <div className="cursor-pointer hover:bg-secondary p-2 rounded-full" onClick={handleRegisterClick}>
+                                                <LuPenLine size={24} />
+                                            </div>
+                                        </HoverCardTrigger>
+                                        <HoverCardContent className="w-24">
+                                            <div className="text-center">
+                                                Register
+                                            </div>
+                                        </HoverCardContent>
+                                    </HoverCard>
+                                    :
+                                    <div className="cursor-pointer hover:bg-secondary p-2 rounded-full" > You already registered this booth </div>
+                                )
+                            }
                             {isOwner && (
                                 <HoverCard>
                                     <HoverCardTrigger asChild>
@@ -324,12 +328,11 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
                                     </HoverCardContent>
                                 </HoverCard>
                             )}
-
                             <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
                             </div>
+                        </div>
+                        : null}
 
-                        </div> : null
-                    }
                 </div>
             </div>
         </>
