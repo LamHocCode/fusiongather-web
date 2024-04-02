@@ -136,7 +136,6 @@ export const updateBooth = async (boothId: number, data: z.infer<typeof boothFor
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
         const userId = session?.user?.id
-        console.log("data", data);
 
         const res = await fetch(`${process.env.BASE_URL}/booth/${userId}/${boothId}`, {
             method: "PATCH",
@@ -217,6 +216,7 @@ export const registerBooth = async (data: z.infer<typeof registerFormSchema>) =>
     try {
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
+        data.userId = session?.user?.id as number;
         const res = await fetch(`${process.env.BASE_URL}/registerbooth`, {
             method: "POST",
             body: JSON.stringify(data),
