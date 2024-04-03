@@ -22,8 +22,8 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Fasion Gather',
-    template: `%s | Fasion Gather`,
+    default: 'Fusion Gather',
+    template: `%s | Fusion Gather`,
   },
   description: 'Manage event',
   verification: {

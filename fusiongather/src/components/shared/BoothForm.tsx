@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import { TfiPencilAlt } from "react-icons/tfi";
 import "react-datepicker/dist/react-datepicker.css";
 import { createBooth, updateBooth } from "@/lib/actions/booth";
-import { BoothType } from "@/lib/type";
+import { BoothType, EventType } from "@/lib/type";
 import { boothDefaultValues } from "@/contants";
 import BoothFileUploader from "./BoothFileUploader";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,9 +33,10 @@ type BoothFormProps = {
   booth?: BoothType;
   boothId?: number;
   eventId?: number;
+  event?: EventType;
 };
 
-export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
+export function BoothForm({ type, booth, boothId, eventId, event }: BoothFormProps) {
   // const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -95,12 +96,19 @@ export function BoothForm({ type, booth, boothId, eventId }: BoothFormProps) {
         eventId: booth.eventId.id,
         vendorId: booth.vendorId.id,
       }
-      : boothDefaultValues;
+      : {
+        ...boothDefaultValues,
+        longitude: Number(event?.lng),
+        latitude: Number(event?.lat),
+        name: "",
+        description: "",
+        eventId: 0,
+        vendorId: 0,
+      };
 
   const form = useForm<z.infer<typeof boothFormSchema>>({
     defaultValues: initialValues,
   });
-
   const currentCoords = [form.getValues("longitude"), form.getValues("latitude")];
 
   const onSubmit: SubmitHandler<z.infer<typeof boothFormSchema>> = async (

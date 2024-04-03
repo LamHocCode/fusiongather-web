@@ -15,13 +15,16 @@ import EventItemSkeleton from "./EventItemSkeleton";
 const EventItem = ({ event }: any) => {
     const [isFollowed, setIsFollowed] = useState(false);
     const [eventImage, setEventImage] = useState<string>("");
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const isFollowed = await checkIsFollowed(event?.id);
+                if (isFollowed === null) {
+                    setIsFollowed(false);
+                }
                 setIsFollowed(isFollowed);
                 const image = await getImagesByEventId(event?.id);
                 if (image) {
@@ -41,7 +44,11 @@ const EventItem = ({ event }: any) => {
             if (isFollowed) {
                 await unFollowEvent(event.id);
                 setIsFollowed(false);
-            } else {
+            } 
+            else if (isFollowed === null) {
+                router.push("/login");
+            }             
+            else {
                 await followEvent(event.id);
                 setIsFollowed(true);
             }
