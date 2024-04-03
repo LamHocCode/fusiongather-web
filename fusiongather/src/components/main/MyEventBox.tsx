@@ -33,17 +33,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { DeleteConfirmation } from "../shared/DeleteConfirmation";
 import { publishEvent } from "@/lib/actions/event";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { getQRCodebyEventId } from "@/lib/actions/event";
 
 const MyEventBox = ({ data }: { data: EventType }) => {
   const [eventImage, setEventImage] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const [eventId, setEventId] = useState<number>(0);
   const router = useRouter();
   const [isChange, setIsChange] = useState(false);
   const [qrCodeImageUrl, setQrCodeImageUrl] = useState<string>("");
   const handleClickShare = async () => {
+    setShowQRModal(true);
     try {
       const url = await getQRCodebyEventId(data.id);
       if (url !== null) {
@@ -112,6 +114,29 @@ const MyEventBox = ({ data }: { data: EventType }) => {
 
   return (
     <>
+    <Modal
+                isOpen={showQRModal}
+                onClose={() => setShowQRModal(false)}
+                title="Event QR Code"
+            >
+                <ModalContent>
+                    <ModalHeader>Event QR Code</ModalHeader>
+                    <ModalBody>{qrCodeImageUrl ? (
+                        <div>
+                            <div className="flex items-center justify-center">
+                                <Image src={qrCodeImageUrl} width="300" height="300" alt="QR code" />
+                            </div>
+
+                        </div>
+                    ) : <div>This event has no QR Code</div>}</ModalBody>
+                    <ModalFooter>
+                        <Button onClick={() => setShowQRModal(false)} color="primary">
+                            Close
+                        </Button>
+
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -184,12 +209,6 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                   >
                     <IoShareSocialOutline size={24} />
                   </div>
-
-                  {qrCodeImageUrl && (
-                    <div>
-                      <Image src={qrCodeImageUrl}  width="100" height = "100" alt="QR code" />
-                    </div>
-                  )}
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -199,7 +218,6 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-40">
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>Management Attendee</DropdownMenuItem>
                       <DropdownMenuSeparator />
 
                       <Link href={`/event/attendeeList/${data.id}`}>

@@ -305,3 +305,24 @@ export const assignBooth = async (boothId: number, userId: number) => {
         throw new Error("Failed to assign booth");
     }
 }
+
+export const getQRCodebyBoothId = async (boothId: number) => {
+    try {
+        const res = await fetch(`${process.env.BASE_URL}/qr-code/booth/${boothId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!res.ok) {
+          console.error(`Request failed with status: ${res.status}`);
+          throw new Error(`Request failed with status: ${res.status}`);
+        }
+
+        const qrCodeData = await res.text();
+        return qrCodeData;
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
+}
