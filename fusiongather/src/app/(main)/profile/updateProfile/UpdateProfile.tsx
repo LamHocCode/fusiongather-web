@@ -21,17 +21,26 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { zodResolver } from '@hookform/resolvers/zod';
+import toast from "react-hot-toast";
+import { UserType } from "@/lib/type";
 
+interface Props {
+  user: UserType,
+  isOpen?: boolean;
+  onClose: () => void;
+  isUpdateUser?: (userId: number) => void;
+  setIsOpen: (isOpen: boolean) => void;
+}
 
-const UpdateProfile = (props : any) => {
+const UpdateProfile = ({user, isOpen, onClose, isUpdateUser, setIsOpen}: Props) => {
   const router = useRouter();
   const {data: session, update} = useSession();
   const initialValues = {
-    firstName: props.user?.firstName || "",
-    lastName: props.user?.lastName || "",
-    email: props.user?.email || "",
-    phoneNumber: props.user?.phoneNumber || "",
-    dob: props.user?.dob || "",
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    phoneNumber: user?.phoneNumber || "",
+    dob: user?.dob || "",
   };
   const form = useForm<z.infer<typeof profileFormSchema>>({
     defaultValues: initialValues,
@@ -41,9 +50,12 @@ const UpdateProfile = (props : any) => {
     data
   ) => {
     try{
-        await updateProfile(data, props.user?.id);       
-        props.isUpdateUser(props.user?.id);
-        props.setIsOpen(false);
+        await updateProfile(data, user?.id);       
+        if (isUpdateUser) {
+          isUpdateUser(user?.id);
+        }
+        setIsOpen(false);
+        toast.success("Profile updated successfully")
     }
     catch(error){
         console.log(error)
@@ -52,7 +64,7 @@ const UpdateProfile = (props : any) => {
 
   const handleCancel = () => {
     form.reset();
-    props.setIsOpen(false);
+    setIsOpen(false);
   };
   return (
     <Form {...form}>
@@ -67,7 +79,7 @@ const UpdateProfile = (props : any) => {
               <FormField
                 name="firstName"
                 control={form.control}
-                defaultValue={props.user?.firstName}
+                defaultValue={user?.firstName}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
@@ -84,7 +96,7 @@ const UpdateProfile = (props : any) => {
               <FormField
                 name="lastName"
                 control={form.control}
-                defaultValue={props.user?.lastName}
+                defaultValue={user?.lastName}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
@@ -100,7 +112,7 @@ const UpdateProfile = (props : any) => {
               />
               <FormField
                 name="email"
-                defaultValue={props.user?.email}
+                defaultValue={user?.email}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
@@ -117,7 +129,7 @@ const UpdateProfile = (props : any) => {
               />
               <FormField
                 name="phoneNumber"
-                defaultValue={props.user?.phoneNumber}
+                defaultValue={user?.phoneNumber}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
@@ -144,7 +156,7 @@ const UpdateProfile = (props : any) => {
                             className="text-primary"
                           />
                           <DatePicker
-                            selected={field.value ? new Date(field.value) : new Date(props.user?.dob)}
+                            selected={field.value ? new Date(field.value) : new Date(user?.dob)}
                             onChange={(date: Date) => {
                               field.onChange(date?.toISOString().split('T')[0])
                             }}

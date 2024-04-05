@@ -6,7 +6,7 @@ import { get } from "http";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
-import UpdateProfileModal from "../updateProfile/page";
+import UpdateProfileModal from "../updateProfile/UpdateProfileModal";
 
 interface Props {
   params: {
