@@ -36,3 +36,11 @@ export const registerFormSchema = z.object({
 export const PublishFormSchema = z.object({
   publish: z.boolean()
 })
+
+export const profileFormSchema = z.object({
+  firstName: z.string().min(1, "First Name is required!"),
+  lastName: z.string().min(1, "Last Name is required!"),
+  email: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  dob: z.string().min(1, "Date of Birth is required!"),
+});

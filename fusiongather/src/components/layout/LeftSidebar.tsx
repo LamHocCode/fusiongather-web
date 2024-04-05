@@ -5,7 +5,11 @@ import { useSidebar } from "../../hook/useSidebar";
 import LeftSidebarItem from "./LeftSidebarItem";
 import { LeftSidebarLinks } from "@/contants";
 
-const LeftSidebar = () => {
+interface Props {
+    userId: number
+}
+
+const LeftSidebar = ({userId}: Props) => {
     const { isOpen, handleOpenSidebar } = useSidebar()
 
     return (
@@ -15,7 +19,7 @@ const LeftSidebar = () => {
                     <ul role="list" className="flex flex-col">
                         {LeftSidebarLinks.top.map((link) => {
                             return (
-                                <LeftSidebarItem item={link} key={link.label} />
+                                <LeftSidebarItem item={link} key={link.label} userId={userId} />
                             )
                         })}
                     </ul>
@@ -25,7 +29,7 @@ const LeftSidebar = () => {
                     <ul role="list" className="flex flex-col">
                         {LeftSidebarLinks.bottom.map((link) => {
                             return (
-                                <LeftSidebarItem item={link} key={link.label} />
+                                <LeftSidebarItem item={link} key={link.label} userId={userId}/>
                             )
                         })}
                     </ul>

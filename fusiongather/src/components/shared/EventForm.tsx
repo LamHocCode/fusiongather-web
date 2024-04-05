@@ -67,6 +67,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
       phoneNumber: "", // Add the 'phoneNumber' property
     }, // Add the 'author' property
     isPublished: false, // Add the 'isPublished' property
+    url: "", // Add the 'url' property
   });
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
