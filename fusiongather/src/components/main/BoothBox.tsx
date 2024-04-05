@@ -49,7 +49,7 @@ import { Label } from "@radix-ui/react-dropdown-menu";
 import { boothFormSchema, registerFormSchema } from "@/lib/validatior";
 import { useForm } from "react-hook-form";
 import { TfiPencilAlt } from "react-icons/tfi";
-import { toast, ToastContainer } from 'react-toastify';
+import toast from 'react-hot-toast'
 import "react-toastify/dist/ReactToastify.css";
 
 const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
@@ -73,20 +73,8 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
 
     const showToastMessage = (type: number) => {
         if (type === 1) {
-            toast('Register booth successfully!', {
-                position: "top-right",
-                closeOnClick: true,
-                draggable: false,
-                type: "success",
-                toastId: 13
-            })
-        } else toast('Delete booth successfully!', {
-            position: "top-right",
-            closeOnClick: true,
-            draggable: false,
-            type: "success",
-            toastId: 13
-        })
+            toast.success('Register booth successfully!')
+        } else toast.success('Delete booth successfully!')
     };
 
     const handleDelete = (id: number) => {
@@ -117,7 +105,9 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
             await deleteBooth(deleteItemId)
             setShowModal(false);
             showToastMessage(2);
-            window.location.reload();
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         };
     };
 
@@ -259,7 +249,6 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
 
 
             <div className="flex w-full p-4 border border-gray-300 rounded-xl">
-                <ToastContainer />
                 <div className="w-[42%] pr-6">
                     <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4 cursor-pointer">
                         <Image
