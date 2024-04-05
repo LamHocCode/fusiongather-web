@@ -57,7 +57,7 @@ const UpdateProfile = (props : any) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="gap-8 grid lg:grid-cols-2 grid-cols-1">
+        <div className="gap-8 grid grid-cols-1">
           <div className="flex flex-col gap-5 p-8 bg-white rounded-2xl">
             <div className="flex gap-2 items-center text-secondary">
               <TfiPencilAlt />
