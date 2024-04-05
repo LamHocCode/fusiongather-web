@@ -4,10 +4,11 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { FiUser } from "react-icons/fi";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { useEffect } from "react";
 
 const UserInfo = () => {
     const { data: session } = useSession()
-
+    
     if (session) {
         return (
             <div className="md:flex hidden items-center gap-3 py-2">
@@ -21,6 +22,7 @@ const UserInfo = () => {
             </div>
         )
     }
+
     return (
         <Link href={'/login'}
             className="flex gap-2 items-center border border-solid border-[#5B5B5B] rounded-full px-4 py-2.5 text-primary font-semibold hover:bg-[#FF8E3C]  hover:bg-opacity-20 cursor-pointer">

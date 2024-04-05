@@ -8,7 +8,6 @@ import { TbBuildingWarehouse } from "react-icons/tb";
 import { FiPlusCircle } from "react-icons/fi";
 import { MdOutlinePendingActions } from "react-icons/md";
 
-
 export const LeftSidebarLinks = {
     top: [
         {
@@ -38,7 +37,7 @@ export const LeftSidebarLinks = {
         },
         {
             label: 'Profile',
-            href: '/profile',
+            href: `/profile`,
             icon: LuUser2,
         }],
     bottom: [

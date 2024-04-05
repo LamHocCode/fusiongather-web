@@ -68,7 +68,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
     }, // Add the 'author' property
     isPublished: false, // Add the 'isPublished' property
     url: "", // Add the 'url' property
-  }); 
+  });
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const router = useRouter();

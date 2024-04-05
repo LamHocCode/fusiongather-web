@@ -30,7 +30,7 @@ export default async function Layout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-        {session && <LeftSidebar />}
+        {session && <LeftSidebar userId={session?.user?.id}/>}
         <div className="lex w-full flex-col justify-between">
           <Header />
           <Sider>
