@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 import { EventType } from '@/lib/type';
 import { Button } from '../ui/button';
@@ -14,7 +13,6 @@ function Checkout({ event }: CheckoutProps) {
 
   const handleCheckout = async () => {
    await createPaymentUrl(100, event.title, 'payment', 'vn')
-   console.log("dc roi")
     // amount: 100, // Thay 100 bằng số tiền cần thanh toán
     //     orderDescription: event.title, // Thông tin đơn hàng
     //     orderType: 'payment', // Loại đơn hàng
@@ -23,8 +21,8 @@ function Checkout({ event }: CheckoutProps) {
 
   return (
     <>
-      <p>Checkout for {event.title}</p>
-      <Button onClick={handleCheckout}>Proceed to Payment</Button>
+      <p className='w-1/2'>Checkout</p>
+      <Button className='w-1/2' onClick={handleCheckout}>Proceed to Payment</Button>
     </>
   );
 }

@@ -15,10 +15,8 @@ const EventPage = async () => {
 
     return (
         <div>
-            <div className="flex items-center justify-between">
-                <div>
-                    select search event here
-                </div>
+            <div className="">
+    
                 <Link href={'/event/create'}>
                     <Button type="button" className="min-w-[200px] h-14 text-lg text-primary bg-white border border-[#FF8E3C] rounded-full hover:bg-primary/20">
                         <FiPlusCircle className="mr-4" />

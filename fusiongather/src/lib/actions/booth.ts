@@ -136,7 +136,6 @@ export const updateBooth = async (boothId: number, data: z.infer<typeof boothFor
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
         const userId = session?.user?.id
-        console.log("data", data);
 
         const res = await fetch(`${process.env.BASE_URL}/booth/${userId}/${boothId}`, {
             method: "PATCH",
@@ -217,6 +216,7 @@ export const registerBooth = async (data: z.infer<typeof registerFormSchema>) =>
     try {
         const session = await getSession()
         const accessToken = session?.tokens?.accessToken
+        data.userId = session?.user?.id as number;
         const res = await fetch(`${process.env.BASE_URL}/registerbooth`, {
             method: "POST",
             body: JSON.stringify(data),
@@ -304,4 +304,25 @@ export const assignBooth = async (boothId: number, userId: number) => {
         console.log(error);
         throw new Error("Failed to assign booth");
     }
+}
+
+export const getQRCodebyBoothId = async (boothId: number) => {
+    try {
+        const res = await fetch(`${process.env.BASE_URL}/qr-code/booth/${boothId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!res.ok) {
+          console.error(`Request failed with status: ${res.status}`);
+          throw new Error(`Request failed with status: ${res.status}`);
+        }
+
+        const qrCodeData = await res.text();
+        return qrCodeData;
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
 }

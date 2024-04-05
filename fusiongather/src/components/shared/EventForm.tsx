@@ -423,7 +423,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
             <Button
               type="submit"
               size="sm"
-              className="rounded-full w-20 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
+              className="rounded-full w-fit px-4 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
             >
               {form.formState.isSubmitting ? "Submitting..." : `${type} Event `}
             </Button>

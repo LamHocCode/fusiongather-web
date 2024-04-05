@@ -12,12 +12,12 @@ const Ticket = ({ isHidden, data }: { isHidden: boolean; data: Props }) => {
       {!isHidden && (
         <div className="flex flex-col gap-2 mb-8">
           <div className="flex items-start justify-between">
-            {!data.event.isFree ? (
+            {!data?.event?.isFree ? (
               <>
                 <span className="text-secondary text-sm">Early Bird | Kid</span>
                 <div className="flex items-center gap-8">
                   <span className="text-sm font-semibold">
-                    {data.event.price}
+                    {data?.event?.price}
                   </span>
                   <IoIosArrowForward />
                 </div>
@@ -34,9 +34,9 @@ const Ticket = ({ isHidden, data }: { isHidden: boolean; data: Props }) => {
       
       <button
         type="button"
-        className="p-4 rounded-full bg-primary text-white text-sm w-full border hover:bg-white hover:border-[#FF8E3C] hover:text-[#FF8E3C]"
+        className="lg:p-4 py-2 px-4 rounded-full bg-primary text-white text-sm  border hover:bg-white hover:border-[#FF8E3C] hover:text-[#FF8E3C] w-full"
       >
-        <CheckoutButton event={data.event} />
+        <CheckoutButton event={data?.event} />
       </button>
     </>
   );

@@ -8,16 +8,14 @@ function CheckoutButton({ event }: { event: EventType }) {
 
   const hasEventFinished = new Date(event.endDateTime) < new Date();
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center">
       {hasEventFinished ? (
         <p className="p-2 text-red-400">
           {" "}
           Sorry, tickets are no longer available.
         </p>
       ) : (
-        <>
         <Checkout event = {event} />
-        </>
       )}
     </div>
   );

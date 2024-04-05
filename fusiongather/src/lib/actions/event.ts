@@ -5,6 +5,7 @@ import { eventFormSchema } from "../validatior";
 import getSession from "./getSession";
 import { GetAllEventType } from "../type";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export const createEvent = async (data: z.infer<typeof eventFormSchema>) => {
   try {
@@ -201,6 +202,9 @@ export const followEvent = async (eventId: number) => {
 export const checkIsFollowed = async (eventId: number) => {
   try {
     const session = await getSession();
+    if (!session) {
+      return null;
+    }
     const userId = session?.user?.id;
     const accessToken = session?.tokens?.accessToken;
     const res = await fetch(

@@ -9,11 +9,11 @@ interface Props {
 
 const Content = async (event: Props) => {
     return (
-        <section className="flex gap-8 py-10">
-            <div className="w-[61%]">
+        <section className="flex lg:flex-row flex-col gap-8 py-10">
+            <div className="lg:w-3/5 w-full">
                 <LeftContent {...event} />
             </div>
-            <div className="w-[39%]">
+            <div className="lg:flex-1 w-full">
                 <RightContent {...event} />
             </div>
         </section>

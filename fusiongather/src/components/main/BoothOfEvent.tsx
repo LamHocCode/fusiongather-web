@@ -10,7 +10,7 @@ const BoothOfEvent = ({ booths, isOwner }: { booths: BoothType[], isOwner: boole
 
     return (
         <>
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:w-3/5 w-full gap-8">
                 {booths.map((booth, index) => (
                     <BoothBox key={index} data={booth} isOwner={isOwner}/>
                 ))}

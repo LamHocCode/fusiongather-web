@@ -6,7 +6,7 @@ export async function generateMetadata(): Promise<Metadata> {
     try {
         return {
             title: "Signup",
-            description: 'This is signup page of Fasion Gather',
+            description: 'This is signup page of Fusion Gather',
             robots: {
                 index: false,
                 follow: true,

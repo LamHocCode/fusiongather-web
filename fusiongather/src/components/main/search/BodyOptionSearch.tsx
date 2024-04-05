@@ -18,7 +18,7 @@ const BodyOptionsSearch = ({ data, searchString, onClose, setSearchString, onClo
     const router = useRouter()
 
     const handleClick = (event: any) => {
-        router.push(`/event/${event.title}`)
+        router.push(`/event/${event?.id}`)
         onClose()
         setSearchString()
         if (onCloseToggle) {
