@@ -1,17 +1,12 @@
 'use client'
 
+import { UserType } from "@/lib/type";
 import UpdateProfile from "./UpdateProfile";
 import Modal from "@/components/shared/Modal";
+import { never } from "zod";
 
 interface Props {
-    user: {
-        id: number;
-        firstName: string;
-        lastName: string;
-        email: string;
-        phoneNumber: string;
-        dob: string;
-    }
+    user: UserType;
     isOpen?: boolean;
     onClose: () => void;
     isUpdateUser?: (userId: number) => void;
@@ -25,7 +20,9 @@ const UpdateProfileModal = ({user, isOpen, onClose, isUpdateUser, setIsOpen}: Pr
             onClose={onClose}
         >
             <div>
-                <UpdateProfile user={user} setIsOpen={setIsOpen} isUpdateUser={isUpdateUser}/>
+                <UpdateProfile user={user} setIsOpen={setIsOpen} isUpdateUser={isUpdateUser} onClose={function (): void {
+                    throw new Error("Function not implemented.");
+                } }/>
             </div>
         </Modal>
         
