@@ -31,10 +31,9 @@ import { SearchIcon } from "lucide-react";
 import { get } from "http";
 
 interface Props {
-  tickets: Ticket[];
   eventId: number;
 }
-export default function UsersTable({ tickets, eventId }: Props) {
+export default function UsersTable({eventId }: Props) {
   const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [ticket, setTicket] = useState<Ticket[]>([]);
@@ -75,7 +74,7 @@ export default function UsersTable({ tickets, eventId }: Props) {
 
   // filter items out based on search value
   const filterItems = useMemo(() => {
-    if(ticket.length > 0){
+    if(ticket?.length > 0){
       let filteredTickets = [...ticket];
     // if search value is empty, return all items
     if(hasSearchFilter){
