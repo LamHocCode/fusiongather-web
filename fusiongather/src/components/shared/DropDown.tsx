@@ -11,11 +11,12 @@ import { NextAuthMiddleware } from "next-auth/lib";
 
 type DropDownProps = {
   value?: string;
-onChangeHandler?: (selectedValue: string) => void; 
+  initialCategoryId?: number;
+  onChangeHandler?: (selectedValue: string) => void; 
 };
 
 
-function DropDown({ value,onChangeHandler }: DropDownProps) {
+function DropDown({ value,onChangeHandler, initialCategoryId }: DropDownProps) {
   const [categories, setCategories] = useState<any>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
@@ -25,7 +26,6 @@ function DropDown({ value,onChangeHandler }: DropDownProps) {
       try {
         const data = await getAllCategory();
         setCategories(data);
-        console.log("đây là cate", data);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
@@ -33,7 +33,7 @@ function DropDown({ value,onChangeHandler }: DropDownProps) {
 
     fetchData();
   }, []);
-
+  
    const onValueChangeHandler = (selectedValue: string) => {
     setSelectedCategory(selectedValue);
     if (onChangeHandler) {

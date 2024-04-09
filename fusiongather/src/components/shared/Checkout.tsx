@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { EventType } from '@/lib/type';
 import { Button } from '../ui/button';
-import { createPaymentUrl } from '@/lib/actions/payment';
+import { createPaymentUrl } from '@/lib/actions/payment'; // Import hàm createPaymentUrl
 
 interface CheckoutProps {
   event: EventType;
@@ -13,19 +13,25 @@ function Checkout({ event }: CheckoutProps) {
   const [paymentUrl, setPaymentUrl] = useState('');
 
   const handleCheckout = async () => {
-   await createPaymentUrl(100, event.title, 'payment', 'vn')
-   console.log("dc roi")
-    // amount: 100, // Thay 100 bằng số tiền cần thanh toán
-    //     orderDescription: event.title, // Thông tin đơn hàng
-    //     orderType: 'payment', // Loại đơn hàng
-    //     language: 'vn', // Ngôn ngữ
+    try {
+      // Gọi hàm createPaymentUrl để lấy URL thanh toán
+      const response = await createPaymentUrl(event.id);
+      
+      // if (response.paymentLink) {
+      //   window.location.href = response.paymentLink;
+      // } else {
+      //   console.error('Failed to get payment URL');
+      // }
+    } catch (error) {
+      console.error('Error during checkout:', error);
+    }
   };
 
   return (
-    <>
-      <p>Checkout for {event.title}</p>
+    <div className="flex flex-col items-center justify-center mt-10">
+      <h2 className="text-2xl font-semibold mb-4">Checkout for {event.title}</h2>
       <Button onClick={handleCheckout}>Proceed to Payment</Button>
-    </>
+    </div>
   );
 }
 

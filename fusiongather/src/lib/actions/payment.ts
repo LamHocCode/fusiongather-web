@@ -1,27 +1,24 @@
 "use server"
+import getSession from "./getSession";
+export const createPaymentUrl = async (eventId: number) => {
+  try {
+  const session = await getSession();
+  const accessToken = session?.tokens?.accessToken;
+    const response = await fetch(`${process.env.BASE_URL}/payments/${eventId}/${session?.user.id}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-export const createPaymentUrl = async (amount: number, orderDescription: string, orderType: string, language: string) => {
-    try {
-      const res = await fetch(`${process.env.BASE_URL}/payment/create_payment_url`, {
-        method: "POST",
-        body: JSON.stringify({ 
-          amount,
-          orderDescription,
-          orderType,
-          language,
-          // Các thông tin khác cần thiết
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if (!res.ok) {
-        console.error(`Request failed with status: ${res.status}`);
-        return await res.json();
-      }
-      return await res.json();
-    } catch (error) {
-      console.log(error);
-      return null;
+    if (!response.ok) {
+      throw new Error('Failed to create payment URL');
     }
-  };
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error creating payment URL:', error);
+    throw error;
+  }
+};
+

@@ -26,26 +26,25 @@ const FileUploader = ({
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const uploadedFiles = await getImagesByEventId(event.id);
-            const urls = uploadedFiles.map((image: { url: any; }) => image.url);
-            if (uploadedFiles && uploadedFiles.length > 0) {
-              setUploadedFiles(urls);
-              console.log("votoiday",uploadedFiles );
-            }
-        } catch (error) {
-            console.error("Error fetching image:", error);
+      try {
+        const uploadedFiles = await getImagesByEventId(event.id);
+        const urls = uploadedFiles.map((image: { url: any }) => image.url);
+        if (uploadedFiles && uploadedFiles.length > 0) {
+          setUploadedFiles(urls);
         }
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
     };
     fetchData();
-}, [event?.id]);
+  }, [event?.id]);
 
   const handleUploadComplete = (res: any) => {
     const uploadedImageUrls = res.map((uploadedFile: any) => uploadedFile.url);
     if (uploadedImageUrls.length > 0) {
       setUploadedFiles((prevUploadedFiles) => [
         ...prevUploadedFiles,
-        ...uploadedImageUrls,       
+        ...uploadedImageUrls,
       ]);
       onUpload([], uploadedImageUrls)
         .then(() => {
@@ -58,7 +57,6 @@ const FileUploader = ({
     } else {
       console.warn("No images uploaded.");
     }
-
   };
 
   const handleUploadError = (error: any) => {
@@ -74,10 +72,10 @@ const FileUploader = ({
     onUpload([], newUploadedFiles);
   };
 
-  const clearUploadedFiles = () => {
-    setUploadedFiles([]);
-    onUpload([], []);
-  };
+  // const clearUploadedFiles = () => {
+  //   setUploadedFiles([]);
+  //   onUpload([], []);
+  // };
   return (
     <>
       <ToastContainer />
@@ -107,14 +105,6 @@ const FileUploader = ({
                   X
                 </button>
               </div>
-              <button
-                onClick={clearUploadedFiles}
-                type="button"
-                className="absolute right-2 flex space-x-2 items-center bg-slate-900 rounded-md shadow text-slate-50 py-2 px-4"
-              >
-                <Pencil className="w-5 h-5" />
-                <span>Change Image</span>
-              </button>
             </div>
           ))}
         </div>

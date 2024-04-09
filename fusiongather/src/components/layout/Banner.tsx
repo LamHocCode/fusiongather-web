@@ -27,10 +27,10 @@ const Banner = (data: Props) => {
       >
         {data.imageSrc && data.imageSrc.length !== 0 ? (
           data.imageSrc.map((image: any, index: Key) => (
-            <Link href={image[0].eventId.id ? `/event/${image[0].eventId.id}` : ''} key={index}>
+            <Link href={image[0]?.eventId.id ? `/event/${image[0].eventId.id}` : ''} key={index}>
               <BackgroupImage
               key={index}
-              src={image[0].url}
+              src={image[0]?.url}
               page="home"
             />
             </Link>
