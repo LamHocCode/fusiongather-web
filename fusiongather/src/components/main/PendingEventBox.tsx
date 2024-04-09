@@ -107,48 +107,6 @@ const PendingEventBox = ({ data }: { data: EventType }) => {
                                     </span>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-between gap-4 pt-5 px-4 text-black">
-                                {/* <HoverCard>
-                                    <HoverCardTrigger asChild>
-                                        <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-                                            <LuPenLine size={24} />
-                                        </div>
-                                    </HoverCardTrigger>
-                                    <HoverCardContent className="w-24">
-                                        <div className="text-center">
-                                            Edit
-                                        </div>
-                                    </HoverCardContent>
-                                </HoverCard> */}
-                                <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-                                    <IoShareSocialOutline size={24} />
-                                </div>
-
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <div className="cursor-pointer hover:bg-secondary p-2 rounded-full">
-                                            <BsThreeDotsVertical size={24} />
-                                        </div>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent className="w-40">
-                                        <DropdownMenuGroup>
-                                            <DropdownMenuItem>
-                                                Profile
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-
-                                            <DropdownMenuItem>
-                                                Billing
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-
-                                            <DropdownMenuItem>
-                                                Settings
-                                            </DropdownMenuItem>
-                                        </DropdownMenuGroup>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </div>
                         </div>
                     </div>
 

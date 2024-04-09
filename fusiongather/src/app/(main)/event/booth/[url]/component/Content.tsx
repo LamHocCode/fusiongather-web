@@ -66,7 +66,7 @@ const Content = ({ booth, isOwner }: { booth: BoothType, isOwner: boolean }) => 
                     <BoothInfo booth={booth} />
                 </div>
             </div>
-            <div className="w-full border rounded-full flex my-8 h-[64px] cursor-pointer">
+            <div className="w-full border rounded-full flex my-8 h-[128px] cursor-pointer">
                 <div className="flex items-center justify-center w-1/2 h-full ">
                     <div className="flex rounded-full h-full hover:bg-gray-100 items-center gap-2 w-full justify-center transition-all duration-400" onClick={handleShowQR}>
                         <FaRegHeart />
