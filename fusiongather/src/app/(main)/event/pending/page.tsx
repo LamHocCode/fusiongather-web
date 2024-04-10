@@ -2,7 +2,7 @@ import PendingEvents from "@/components/main/PendingEvent";
 import { Button } from "@/components/ui/button";
 import { getPendingEvents } from "@/lib/actions/event";
 import Link from "next/link";
-import { FiPlusCircle } from "react-icons/fi";
+import { FaRegListAlt } from "react-icons/fa";
 
 const PendingEventPage = async () => {
     const events = await getPendingEvents()
@@ -15,7 +15,7 @@ const PendingEventPage = async () => {
                 </div>
                 <Link href={'/event/pending/mybooth'}>
                     <Button type="button" className="min-w-[200px] h-14 text-lg text-primary bg-white border border-[#FF8E3C] rounded-full hover:bg-primary/20">
-                        <FiPlusCircle className="mr-4" />
+                        <FaRegListAlt className="mr-4" />
                         My Booths
                     </Button>
                 </Link>

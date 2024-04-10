@@ -19,7 +19,7 @@ import {
 } from "@nextui-org/react";
 import { getRequestByEventId, deleteRequest, assignBooth } from '@/lib/actions/booth';
 import { columns, renderCell } from '@/app/(main)/event/request/[id]/columns';
-import { EyeIcon, DeleteIcon } from 'lucide-react';
+import { HiOutlineCheck } from "react-icons/hi";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -128,7 +128,7 @@ export default function RequestTable({ eventId }: { eventId: number }) {
                                         <div className="relative flex items-center gap-2">
                                             <Tooltip content = "Assign Booth">
                                                 <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                                                    <EyeIcon onClick={() => handleSetAssignBooth(item.user.id, item.booth.id)}/>
+                                                    <HiOutlineCheck size={30} onClick={() => handleSetAssignBooth(item.user.id, item.booth.id)}/>
                                                 </span>
                                             </Tooltip>
                                         </div>

@@ -28,6 +28,7 @@ import { boothDefaultValues } from "@/contants";
 import BoothFileUploader from "./BoothFileUploader";
 import "react-toastify/dist/ReactToastify.css";
 import { checkIsEventOwner } from "@/lib/actions/event";
+import { zodResolver } from "@hookform/resolvers/zod";
 type BoothFormProps = {
   type: "Create" | "Update";
   booth?: BoothType;
@@ -108,6 +109,7 @@ export function BoothForm({ type, booth, boothId, eventId, event }: BoothFormPro
 
   const form = useForm<z.infer<typeof boothFormSchema>>({
     defaultValues: initialValues,
+    resolver: zodResolver(boothFormSchema),
   });
   const currentCoords = [form.getValues("longitude"), form.getValues("latitude")];
 
@@ -158,7 +160,7 @@ export function BoothForm({ type, booth, boothId, eventId, event }: BoothFormPro
     }
     if (type === "Update" && isOwner) {
     form.reset();
-    router.push(`/event/${booth?.eventId.id}`);
+    router.back();
     } else {
       router.push(`/event/booth/${boothId}`);
     }

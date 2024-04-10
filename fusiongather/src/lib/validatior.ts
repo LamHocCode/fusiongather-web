@@ -19,12 +19,12 @@ export const eventFormSchema = z.object({
 
 export const boothFormSchema = z.object({
   name: z.string().min(1, "Name is required!"),
-  description: z.string().min(1, "Description is required!"),
-  imageUrl: z.string().array(),
+  description: z.string().min(1, "Description is required!").max(500, "Description is too long!"),
+  imageUrl: z.string().array().optional(),
   latitude: z.number(),
   longitude: z.number(),
-  eventId: z.number(),
-  vendorId: z.number(),
+  eventId: z.number().optional(),
+  vendorId: z.number().optional(),
 });
 
 export const registerFormSchema = z.object({

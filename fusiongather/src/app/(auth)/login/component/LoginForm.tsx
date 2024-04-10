@@ -53,19 +53,19 @@ const LoginForm = () => {
                     <span className="text-4xl font-extrabold text-primary drop-shadow-2xl shadow-rose-900 textShadow">FusionGather</span>
                 </div>
                 <h3 className="text-3xl font-medium">Log in</h3>
-                <button type="button" className="w-full border-2 border-black rounded-md bg-white flex items-center justify-center gap-[10px] py-4 hover:bg-slate-100">
+                {/* <button type="button" className="w-full border-2 border-black rounded-md bg-white flex items-center justify-center gap-[10px] py-4 hover:bg-slate-100">
                     <FcGoogle size={"20px"} />
                     <span className="font-semibold text-base">
                         Continue with Google
                     </span>
-                </button>
+                </button> */}
                 <div className="relative w-full">
                     <div className="absolute inset-0 flex items-center">
                         <div className="w-full border-t border-gray-300"></div>
                     </div>
                     <div className="relative flex justify-center text-sm">
                         <span className="px-2 bg-secondary text-secondary">
-                            Or enter your Credential
+                            Enter your Credential
                         </span>
                     </div>
                 </div>
