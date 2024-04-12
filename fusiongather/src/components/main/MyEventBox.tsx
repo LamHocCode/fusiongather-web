@@ -8,6 +8,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { LuPenLine } from "react-icons/lu";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { IoWarningOutline } from "react-icons/io5";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,17 +34,21 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { DeleteConfirmation } from "../shared/DeleteConfirmation";
 import { publishEvent } from "@/lib/actions/event";
-import { Button, Modal, ModalBody, ModalContent, ModalFooter } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/react";
 import { getQRCodebyEventId } from "@/lib/actions/event";
+import toast from "react-hot-toast";
+
 
 const MyEventBox = ({ data }: { data: EventType }) => {
   const [eventImage, setEventImage] = useState<string>("");
   const [showModal, setShowModal] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const [eventId, setEventId] = useState<number>(0);
   const router = useRouter();
   const [isChange, setIsChange] = useState(false);
   const [qrCodeImageUrl, setQrCodeImageUrl] = useState<string>("");
   const handleClickShare = async () => {
+    setShowQRModal(true);
     try {
       const url = await getQRCodebyEventId(data.id);
       if (url !== null) {
@@ -77,8 +82,11 @@ const MyEventBox = ({ data }: { data: EventType }) => {
     }
     setShowModal(false);
     setEventId(0);
-    // re-fetch data status
-    location.reload();
+    toast.success("Event is published successfully!");
+    // Reload page after 2 seconds
+    setTimeout(() => {
+      location.reload();
+    }, 2000);
   }
 
   // handle open publish event modal
@@ -112,6 +120,29 @@ const MyEventBox = ({ data }: { data: EventType }) => {
 
   return (
     <>
+    <Modal
+                isOpen={showQRModal}
+                onClose={() => setShowQRModal(false)}
+                title="Event QR Code"
+            >
+                <ModalContent>
+                    <ModalHeader>Event QR Code</ModalHeader>
+                    <ModalBody>{qrCodeImageUrl ? (
+                        <div>
+                            <div className="flex items-center justify-center">
+                                <Image src={qrCodeImageUrl} width="300" height="300" alt="QR code" />
+                            </div>
+
+                        </div>
+                    ) : <div>This event has no QR Code</div>}</ModalBody>
+                    <ModalFooter>
+                        <Button onClick={() => setShowQRModal(false)} color="primary">
+                            Close
+                        </Button>
+
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -136,7 +167,7 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                       <FormControl className="mt-1">
                         <Switch
                           checked={data.isPublished ? true : false}
-                          onCheckedChange={() => handlePublishEvent(data.id)}
+                          onCheckedChange={data.isPublished === false ? () => handlePublishEvent(data.id): () => {}}
                         />
                       </FormControl>
                       <div className="text-sm text-primary">Publish</div>
@@ -184,12 +215,6 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                   >
                     <IoShareSocialOutline size={24} />
                   </div>
-
-                  {qrCodeImageUrl && (
-                    <div>
-                      <Image src={qrCodeImageUrl}  width="100" height = "100" alt="QR code" />
-                    </div>
-                  )}
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -199,7 +224,6 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-40">
                     <DropdownMenuGroup>
-                      <DropdownMenuItem>Management Attendee</DropdownMenuItem>
                       <DropdownMenuSeparator />
 
                       <Link href={`/event/attendeeList/${data.id}`}>
@@ -221,7 +245,17 @@ const MyEventBox = ({ data }: { data: EventType }) => {
         title="Confirm Delete"
       >
         <ModalContent>
-          <ModalBody>Do you want publish/un-publish this event?</ModalBody>
+          <ModalBody>
+          <div className="flex items-center mb-4">
+        <div className="mr-2">
+          <IoWarningOutline size={24} className="text-red-600" />
+        </div>
+        <p className="text-red-600 font-semibold">
+          WARNING: Once you publish this event, you cannot unpublish it later.
+        </p>
+      </div>
+      <p>Do you still want to publish this event?</p>
+          </ModalBody>
           <ModalFooter>
             <Button onClick={() => setShowModal(false)} color="primary">
               No

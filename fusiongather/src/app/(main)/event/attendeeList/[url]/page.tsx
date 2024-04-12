@@ -11,12 +11,11 @@ interface Props{
 
 
 async function AttendeeList({params: {url}}: Props) {
-  const tickets = await getAttendeeByEventId(1);
   const eventId = Number(url);
   return (
     <>
       <section className="flex items-center justify-between">
-        <UsersTable tickets={tickets} eventId={eventId}/>
+        <UsersTable eventId={eventId}/>
       </section>   
     </>
   );

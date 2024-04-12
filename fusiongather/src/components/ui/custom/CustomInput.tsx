@@ -1,6 +1,10 @@
 'use client'
 
+import ReactDatePicker from "react-datepicker";
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import "react-datepicker/dist/react-datepicker.css";
+import { useState } from "react";
 
 interface InputProps {
     label: string;
@@ -20,8 +24,53 @@ const CustomInput = ({ label,
     errors,
     type = 'text',
     disabled, width }: InputProps) => {
+    const [dob, setDob] = useState<string>('');
+    const [dateString, setDateString] = useState<string>('');
+    const handleDateChange = (date: Date) => {
+        if(date){
+        setDob(date?.toISOString());
+        setDateString(date?.toISOString().split('T')[0]);
+        } else {
+            setDob('');
+            setDateString('');
+        }
+    };
     return (
-        <div className={`w-full relative`}>
+        <>
+            {id && id === 'dob' ? (
+             <div className={'w-full relative'}>
+                <div className="flex items-center w-full h-full p-2 rounded-xl border border-gray-200">
+                    <FaRegCalendarAlt
+                        size={24}
+                        className="text-primary"
+                    />
+                    <ReactDatePicker
+                        selected={dob === '' ? null : new Date(dob)}
+                        onChange={(date: Date) => handleDateChange(date)}                  
+                        dateFormat="yyyy/MM/dd"
+                        placeholderText="Date of birth (yyyy/MM/dd)"
+                        wrapperClassName="datePicker"
+                    />
+                <input
+                    id={id}
+                    disabled={disabled}
+                    type='text'                 
+                    {...register(id, { required })}
+                    value={dateString}
+                    style={{
+                        position: "absolute",
+                        left: "-9999px",
+                        top: "auto",
+                        width: "1px",
+                        height: "1px",
+                    }}
+                />
+                </div>
+                {errors && errors[id] && <p className="text-sm text-rose-400">{`${errors[id]?.message}`}</p>}
+             </div>   
+            )
+            : (
+                <div className={`w-full relative`}>
             <input
                 id={id}
                 type={type}
@@ -38,7 +87,12 @@ const CustomInput = ({ label,
                 htmlFor={id}>{label}
             </label>
         </div >
+            )
+        }
+        </>
     );
 }
 
 export default CustomInput;
+
+

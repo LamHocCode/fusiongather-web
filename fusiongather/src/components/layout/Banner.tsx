@@ -5,9 +5,8 @@ import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { Key, MutableRefObject, useEffect, useRef, useState } from "react";
 import BackgroupImage from "./BackgroupImage";
 import { EventType, ImageType } from "@/lib/type";
-import { getImagesByEventId } from "@/lib/actions/image";
-import { get } from "http";
 import Link from "next/link";
+import BannerSkeleton from "./BannerSkeleton";
 
 interface Props {
   events: EventType[];
@@ -16,8 +15,20 @@ interface Props {
 
 const Banner = (data: Props) => {
   const ref: MutableRefObject<any | null> = useRef(null);
+  const [loading,setLoading]=useState(true)
+  useEffect(()=>{
+if(data) setLoading(false)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[data])
+  console.log(loading);
+  
   return (
-    <div className="mb-8 max-lg:mt-[100px] max-md:mt-[110px] relative">
+    <>
+    {loading ? 
+  <BannerSkeleton/>
+  :  
+  <div className="mb-8 max-lg:mt-[100px] max-md:mt-[110px] relative">
+    
       <Carousel
         autoplay
         autoplaySpeed={5000}
@@ -25,9 +36,9 @@ const Banner = (data: Props) => {
         draggable
         ref={ref}
       >
-        {data.imageSrc && data.imageSrc.length !== 0 ? (
-          data.imageSrc.map((image: any, index: Key) => (
-            <Link href={image[0]?.eventId.id ? `/event/${image[0].eventId.id}` : ''} key={index}>
+        {data?.imageSrc && data?.imageSrc?.length !== 0 ? (
+          data?.imageSrc.map((image: any, index: Key) => (
+            <Link href={image[0].eventId.id ? `/event/${image[0].eventId.id}` : ''} key={index}>
               <BackgroupImage
               key={index}
               src={image[0]?.url}
@@ -59,6 +70,9 @@ const Banner = (data: Props) => {
         <GrFormPrevious size="24" />
       </button>
     </div>
+}
+    </>
+    
   );
 };
 

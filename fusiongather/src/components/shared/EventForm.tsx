@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { Pencil } from "lucide-react";
+
 import { SubmitHandler, useForm } from "react-hook-form";
 import { CiImageOn } from "react-icons/ci";
 import { RiMapPin2Line } from "react-icons/ri";
@@ -33,9 +33,10 @@ import { createEvent, updateEventById } from "@/lib/actions/event";
 import { EventType } from "@/lib/type";
 import { eventDefaultValues } from "@/contants";
 import FileUploader from "./FileUploader";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
+import { getImagesByEventId } from "@/lib/actions/image";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type EventFormProps = {
   type: "Create" | "Update";
@@ -44,7 +45,6 @@ type EventFormProps = {
 };
 
 export function EventForm({ type, event, eventId }: EventFormProps) {
-  const [showUploader, setShowUploader] = useState(true);
   const [eventEmpty, setEventEmpty] = useState<EventType>({
     id: 0,
     title: "",
@@ -55,7 +55,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
     imageUrl: [],
     category: "",
     isFree: false,
-    price: "",
+    price: "0",
     startDateTime: new Date().toISOString(),
     endDateTime: new Date().toISOString(),
     author: {
@@ -86,12 +86,6 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
     setImageUrl(imageUrl);
     form.setValue("imageUrl", imageUrl);
   };
-
-  const clearUploadedFiles = () => {
-    setImageUrl([]);
-    setShowUploader(true);
-  };
-
   const initialValues =
     event && type === "Update"
       ? {
@@ -101,7 +95,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
           startDateTime: new Date(event.startDateTime),
           endDateTime: new Date(event.endDateTime),
         }
-      : eventDefaultValues;
+        : eventDefaultValues;
 
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
@@ -226,7 +220,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
                 <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
                   <FormField
                     control={form.control}
-                    name="category"
+                    name="categoryId"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormControl>
@@ -247,21 +241,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
               <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
                 <div className="flex gap-2 items-center text-secondary">
                   <CiImageOn size={22} />
-                  <span>
-                    Media (your first image will be a banner of event)
-                  </span>
-                  <div className="ml-auto">
-                    {imageUrl.length > 0 && (
-                      <button
-                        onClick={clearUploadedFiles}
-                        type="button"
-                        className="flex space-x-2 items-center bg-slate-900 rounded-md shadow text-slate-50 py-2 px-4"
-                      >
-                        <Pencil className="w-5 h-5" />
-                        <span>Change Image</span>
-                      </button>
-                    )}
-                  </div>
+                  <span>Media</span>
                 </div>
                 <FormField
                   control={form.control}
@@ -269,14 +249,12 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        {showUploader && (
-                          <FileUploader
-                            onUpload={handleUpload}
-                            endpoint="imageUploader"
-                            setImageUrl={setEventImageUrl}
-                            event={event ? event : eventEmpty}
-                          />
-                        )}
+                        <FileUploader
+                          onUpload={handleUpload}
+                          endpoint="imageUploader"
+                          setImageUrl={setEventImageUrl}
+                          event={event ? event : eventEmpty}
+                        />
                       </FormControl>
                     </FormItem>
                   )}
@@ -446,7 +424,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
             <Button
               type="submit"
               size="sm"
-              className="rounded-full w-20 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
+              className="rounded-full w-fit px-4 h-10 bg-white border-[#FF8E3C] border text-primary hover:bg-primary/10"
             >
               {form.formState.isSubmitting ? "Submitting..." : `${type} Event `}
             </Button>

@@ -32,15 +32,15 @@ const RightContent = (data: Props) => {
     return (
         <>
             {isShow ?
-                <div className={`${isShow && "fixed top-[90px] bg-white w-[calc(39%-70px)] right-10 animate-right-content"} border p-4 rounded-md`}>
+                <div className={`${isShow && "lg:fixed lg:top-[90px] lg:bg-white lg:w-[calc(40%-70px)] lg:right-10 animate-right-content"} border p-4 rounded-md`}>
                     <div className="w-full flex items-start gap-2 mb-8">
-                        <Calendar event={data.event}/>
+                        <Calendar event={data?.event}/>
                         <h3 className="text-lg text-gray-600 leading-normal mb-6">
-                            {data.event.title}
+                            {data?.event?.title}
                         </h3>
                     </div>
                     <div className="pb-4">
-                        <EventInfo event={data.event} />
+                        <EventInfo event={data?.event} />
                     </div>
                     {!isHidden &&
                         <hr className="mb-4" />

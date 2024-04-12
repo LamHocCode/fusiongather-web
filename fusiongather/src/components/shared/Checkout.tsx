@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 import { EventType } from '@/lib/type';
 import { Button } from '../ui/button';
