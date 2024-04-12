@@ -71,11 +71,6 @@ const FileUploader = ({
     setUploadedFiles(newUploadedFiles);
     onUpload([], newUploadedFiles);
   };
-
-  // const clearUploadedFiles = () => {
-  //   setUploadedFiles([]);
-  //   onUpload([], []);
-  // };
   return (
     <>
       <ToastContainer />

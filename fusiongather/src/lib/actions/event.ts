@@ -333,10 +333,7 @@ export const getQRCodebyEventId = async (eventId: number) => {
       console.error(`Request failed with status: ${res.status}`);
       throw new Error(`Request failed with status: ${res.status}`);
     }
-
-    // Lấy dữ liệu base64 từ response
     const qrCodeData = await res.text();
-    // Trả về dữ liệu base64 trực tiếp
     return qrCodeData;
   } catch (error) {
     console.log(error);
