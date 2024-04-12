@@ -10,6 +10,7 @@ type UpdateEventProps = {
 
 const UpdateEvent = async ({ params: { id } }: UpdateEventProps) => {
   const event = await getEventById(id);
+  // console.log("event", event);
   return (
     <>
       <section className="bg-gray-100 sm:px-8 px-2 py-4">

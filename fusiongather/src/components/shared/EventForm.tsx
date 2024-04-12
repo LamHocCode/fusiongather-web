@@ -36,6 +36,7 @@ import FileUploader from "./FileUploader";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import { getImagesByEventId } from "@/lib/actions/image";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type EventFormProps = {
   type: "Create" | "Update";
@@ -44,7 +45,6 @@ type EventFormProps = {
 };
 
 export function EventForm({ type, event, eventId }: EventFormProps) {
-  // const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
   const [eventEmpty, setEventEmpty] = useState<EventType>({
     id: 0,
     title: "",
@@ -53,21 +53,21 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
     lng: 0,
     lat: 0,
     imageUrl: [],
-    category: "", // Add the 'category' property
+    category: "",
     isFree: false,
-    price: "0", // Convert price to a string
+    price: "0",
     startDateTime: new Date().toISOString(),
     endDateTime: new Date().toISOString(),
     author: {
       id: 0,
-      firstName: "", // Add the 'firstName' property
-      lastName: "", // Add the 'lastName' property
-      email: "", // Add the 'email' property
-      dob: new Date().toISOString(), // Add the 'dob' property
-      phoneNumber: "", // Add the 'phoneNumber' property
-    }, // Add the 'author' property
-    isPublished: false, // Add the 'isPublished' property
-    url: "", // Add the 'url' property
+      firstName: "",
+      lastName: "",
+      email: "",
+      dob: new Date().toISOString(),
+      phoneNumber: "",
+    },
+    isPublished: false,
+    url: "",
   });
   const [imageUrl, setImageUrl] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -86,7 +86,6 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
     setImageUrl(imageUrl);
     form.setValue("imageUrl", imageUrl);
   };
-
   const initialValues =
     event && type === "Update"
       ? {
@@ -96,11 +95,13 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
           startDateTime: new Date(event.startDateTime),
           endDateTime: new Date(event.endDateTime),
         }
-      : eventDefaultValues;
+        : eventDefaultValues;
 
   const form = useForm<z.infer<typeof eventFormSchema>>({
+    resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
   });
+
   const isFree = form.watch("isFree");
 
   const currentCoords = [form.getValues("lng"), form.getValues("lat")];
@@ -219,7 +220,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
                 <div className="flex justify-between xl:flex-row lg:flex-col sm:flex-col flex-col xl:items-center w-full sm:gap-5 gap-8">
                   <FormField
                     control={form.control}
-                    name="category"
+                    name="categoryId"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormControl>
@@ -252,7 +253,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
                           onUpload={handleUpload}
                           endpoint="imageUploader"
                           setImageUrl={setEventImageUrl}
-                          event={event? event : eventEmpty}
+                          event={event ? event : eventEmpty}
                         />
                       </FormControl>
                     </FormItem>

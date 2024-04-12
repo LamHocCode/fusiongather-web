@@ -61,12 +61,6 @@ const MyEventBox = ({ data }: { data: EventType }) => {
     }
   };
   
-
-  // useEffect(() => {
-  //   setQrCodeImageUrl("");
-  // }, [data]);
-
-
   const form = useForm<z.infer<typeof PublishFormSchema>>({
     resolver: zodResolver(PublishFormSchema),
     defaultValues: {

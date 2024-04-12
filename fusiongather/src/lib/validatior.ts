@@ -1,22 +1,44 @@
 import * as z from "zod";
+
 export const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required!"),
-  description: z
-    .string()
-    .min(1, "Description is required!"),
+  description: z.string().min(1, "Description is required!").max(500, "Description is too long!"),
   location: z.string().min(1, "Location is required!"),
   lng: z.number(),
   lat: z.number(),
-  imageUrl: z.string().array(),
+  imageUrl: z.string().array().optional(),
   startDateTime: z.date(),
   endDateTime: z.date(),
-  price: z.string().min(1, "Price is required!"),
+  price: z.string().optional().refine(price => {
+    const numericPrice = Number(price);
+    return numericPrice >= 0;
+  }, {
+    message: "Price must be a non-negative number!",
+    path: ["price"]
+  }),
   isFree: z.boolean(),
-  category: z.string().min(1, "Category is required!"),
-  isPublished: z.boolean(),
-  // url: z.string().url(),
+  categoryId: z.string().min(1, "Category is required!"),
+  isPublished: z.boolean().optional(),
+  author: z.object({
+    id: z.number(),
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string(),
+    dob: z.string(),
+    phoneNumber: z.string(),
+    isAdmin: z.boolean().optional()
+  }).optional(),
+  url: z.string().optional(),
+}).refine(eventFormSchema => {
+  const { startDateTime, endDateTime } = eventFormSchema;
+  if (startDateTime && endDateTime) {
+    return new Date(startDateTime) < new Date(endDateTime);
+  }
+  return true;
+}, {
+  message: "Start date must be before end date!",
+  path: ["startDateTime"]
 });
-
 export const boothFormSchema = z.object({
   name: z.string().min(1, "Name is required!"),
   description: z.string().min(1, "Description is required!").max(500, "Description is too long!"),
