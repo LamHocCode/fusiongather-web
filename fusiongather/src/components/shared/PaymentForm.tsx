@@ -10,7 +10,7 @@ const PaymentForm = ({ event }: PaymentForm) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     setIsProcessing(true);
 
