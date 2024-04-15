@@ -12,7 +12,7 @@ const Footer = () => {
                         <Logo size="small" />
                     </Link>
                     <div className="flex flex-col gap-2 text-secondary">
-                        <span className="uppercase text-lg">fasion gather team</span>
+                        <span className="uppercase text-lg">Fusion Gather Team</span>
                         <span className="text-sm lg:w-3/4 md:w-full w-1/2">Building Alpha, FPT University, FPT City Urban Area, Ngu Hanh Son, Da Nang.
                         </span>
                     </div>

@@ -6,17 +6,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getAllCategory } from "@/lib/actions/event"; // Thay đường dẫn đến hàm getAllCategory ở đây
+import { getAllCategory } from "@/lib/actions/event";
+import { NextAuthMiddleware } from "next-auth/lib";
 
 type DropDownProps = {
   value?: string;
-  onChangeHandler?: (selectedValue: string) => void; 
+  initialCategoryId?: number;
+  onChangeHandler?: (selectedValue: string) => void;
 };
 
-
-function DropDown({ value,onChangeHandler }: DropDownProps) {
+function DropDown({
+  value,
+  onChangeHandler,
+  initialCategoryId,
+}: DropDownProps) {
   const [categories, setCategories] = useState<any>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,25 +37,21 @@ function DropDown({ value,onChangeHandler }: DropDownProps) {
     fetchData();
   }, []);
 
-   const onValueChangeHandler = (selectedValue: string) => {
+  const onValueChangeHandler = (selectedValue: string) => {
     setSelectedCategory(selectedValue);
     if (onChangeHandler) {
       onChangeHandler(selectedValue);
     }
   };
-  // const onChangeHandler = (selectedValue: string) => {
-  //   setSelectedCategory(selectedValue);
-  // };
-
 
   return (
-    <Select onValueChange={onValueChangeHandler} defaultValue={value}>
+    <Select onValueChange={onValueChangeHandler}>
       <SelectTrigger className="select-field h-14 text-[18px] text-secondary rounded-2xl">
-        <SelectValue placeholder="Choose..." selected={selectedCategory} />
+        <SelectValue placeholder="Choose..." />
       </SelectTrigger>
       <SelectContent>
-        {categories.map((category:any) => (
-          <SelectItem key={category.id} value={category.categoryName}>
+        {categories.map((category: any) => (
+          <SelectItem key={category.id} value={category.id + ""}>
             {category.categoryName}
           </SelectItem>
         ))}
@@ -59,6 +61,3 @@ function DropDown({ value,onChangeHandler }: DropDownProps) {
 }
 
 export default DropDown;
-
-
-

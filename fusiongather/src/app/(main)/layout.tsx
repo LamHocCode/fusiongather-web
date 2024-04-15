@@ -11,12 +11,11 @@ import { ourFileRouter } from "../api/uploadthing/core";
 
 
 export default async function Layout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
   const session = await auth();
-
   return (
 
       <SessionProvider session={session}>
@@ -30,7 +29,7 @@ export default async function Layout({
            */
           routerConfig={extractRouterConfig(ourFileRouter)}
         />
-        {session && <LeftSidebar />}
+        {session && <LeftSidebar userId={session?.user?.id}/>}
         <div className="lex w-full flex-col justify-between">
           <Header />
           <Sider>

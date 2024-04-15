@@ -5,7 +5,7 @@ function CreateEvent() {
   return (
     <>
       <section className="bg-gray-100 sm:px-8 px-2 py-4">
-        <EventForm />
+        <EventForm type="Create" />
       </section>
 
     </>

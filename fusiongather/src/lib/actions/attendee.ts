@@ -8,7 +8,6 @@ export const getAttendeeByEventId = async (eventId: number) => {
     try {
         const session = await getSession();
         const accessToken = session?.tokens?.accessToken;
-  
         const res = await fetch(`${process.env.BASE_URL}/ticket/event/${eventId}/${session?.user.id}`, {
             method: "GET",
             headers: {
@@ -20,8 +19,10 @@ export const getAttendeeByEventId = async (eventId: number) => {
         if (!res.ok) {
             console.error(`Request failed with status: ${res.status}`);
             return await res.json();
+        } else{
+            console.log("Attendee fetched successfully");
+            return await res.json();
         }
-        return await res.json();
     } catch (error: any) {
         console.log(error);
         return null;

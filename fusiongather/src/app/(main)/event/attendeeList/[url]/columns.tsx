@@ -19,7 +19,7 @@ export type Ticket = {
 export const columns = [
   {
     key: "name",
-    label: "First Name",
+    label: "Full Name",
   },
   {
     key: "isScanned",

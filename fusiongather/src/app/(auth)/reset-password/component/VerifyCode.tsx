@@ -3,7 +3,7 @@
 import CountDown from "@/components/main/CountDown";
 import Loading from "@/components/shared/Loading";
 import LoadingModal from "@/components/shared/LoadingModal";
-import { handleCheckCodeAction, handleVerifyCodeAction } from "@/lib/actions";
+import { handleCheckCodeAction, handleVerifyCodeAction } from "@/lib/actions/authen";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState, useTransition } from "react";
 import toast from "react-hot-toast";
@@ -119,7 +119,9 @@ const VerifyCode = ({ onSuccess, accountInfo, type, length, handleBack }: Props)
                             <input
                                 key={index}
                                 type="text"
-                                ref={(input) => (inputRefs.current[index] = input!)}
+                                ref={(input) => {
+                                    inputRefs.current[index] = input!;
+                                }}
                                 value={value}
                                 onChange={(e) => handleChange(index, e)}
                                 onClick={() => handleClick(index)}
