@@ -6,21 +6,26 @@ import { LuHeart, LuMapPin } from "react-icons/lu";
 import { FaHeart } from "react-icons/fa6";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { checkIsFollowed, followEvent, unFollowEvent } from "@/lib/actions/event";
+import { checkIsEventOwner, checkIsFollowed, followEvent, unFollowEvent } from "@/lib/actions/event";
 import { getImagesByEventId } from "@/lib/actions/image";
 import { useRouter } from "next/navigation";
 import { formatTime } from "@/lib/Format";
 import EventItemSkeleton from "./EventItemSkeleton";
+import { set } from "zod";
+import toast from "react-hot-toast";
 
 const EventItem = ({ event }: any) => {
     const [isFollowed, setIsFollowed] = useState(false);
     const [eventImage, setEventImage] = useState<string>("");
     const [loading, setLoading] = useState(true);
+    const [isOwner, setIsOwner] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                const owner = await checkIsEventOwner(event?.author?.id);
+                setIsOwner(owner);
                 const isFollowed = await checkIsFollowed(event?.id);
                 if (isFollowed === null) {
                     setIsFollowed(false);
@@ -40,6 +45,9 @@ const EventItem = ({ event }: any) => {
     }, [event?.id]);
 
     const handleFollowEvent = async () => {
+        if (isOwner) {
+            toast.error("You can't follow your own event");
+        } else {
         try {
             if (isFollowed) {
                 await unFollowEvent(event.id);
@@ -55,6 +63,7 @@ const EventItem = ({ event }: any) => {
         } catch (error) {
             console.error("Error toggling follow status:", error);
         }
+    }
     }
 
 

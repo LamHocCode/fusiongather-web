@@ -2,7 +2,7 @@ import * as z from "zod";
 
 export const eventFormSchema = z.object({
   title: z.string().min(1, "Title is required!"),
-  description: z.string().min(1, "Description is required!").max(500, "Description is too long!"),
+  description: z.string().min(1, "Description is required!").max(2000, "Description is too long!"),
   location: z.string().min(1, "Location is required!"),
   lng: z.number(),
   lat: z.number(),
@@ -41,7 +41,7 @@ export const eventFormSchema = z.object({
 });
 export const boothFormSchema = z.object({
   name: z.string().min(1, "Name is required!"),
-  description: z.string().min(1, "Description is required!").max(500, "Description is too long!"),
+  description: z.string().min(1, "Description is required!").max(2000, "Description is too long!"),
   imageUrl: z.string().array().optional(),
   latitude: z.number(),
   longitude: z.number(),

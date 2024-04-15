@@ -15,7 +15,7 @@ export interface EventType {
     category: string,
     startDateTime: string,
     endDateTime: string,
-    price: string,
+    price: number,
     lng: number,
     lat: number,
     isFree: boolean,
