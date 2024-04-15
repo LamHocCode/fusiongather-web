@@ -15,7 +15,7 @@ export interface EventType {
     category: string,
     startDateTime: string,
     endDateTime: string,
-    price: string,
+    price: number,
     lng: number,
     lat: number,
     isFree: boolean,
@@ -29,6 +29,14 @@ export interface EventType {
     }
     isPublished: boolean
     url: string
+}
+
+export interface checkoutOrder {
+    eventTitle: string,
+    eventId: number,
+    price: number,
+    isFree: boolean,
+    // buyerId: string 
 }
 
 export type BoothType = {
