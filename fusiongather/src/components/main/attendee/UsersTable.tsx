@@ -29,6 +29,7 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { IoTrashOutline } from "react-icons/io5";
 import { SearchIcon } from "lucide-react";
 import { get } from "http";
+import toast from "react-hot-toast";
 
 interface Props {
   eventId: number;
@@ -38,7 +39,7 @@ export default function UsersTable({eventId }: Props) {
   const [page, setPage] = useState(1);
   const [ticket, setTicket] = useState<Ticket[]>([]);
   const [isDelete, setIsDelete] = useState(0);
-  const [deleteItemId, setDeleteItemId] = useState<number | null>(null);
+  const [deleteItem, setDeleteItem] = useState<Ticket | null>(null);
   const [filterValue, setFilterValue] = useState('')
   const hasSearchFilter = Boolean(filterValue)
   const rowsPerPage = 4;
@@ -57,18 +58,23 @@ export default function UsersTable({eventId }: Props) {
     }   
   }
   // handle delete attendee
-  const handleDeleteAttendee = (id: number) => {
-    setDeleteItemId(id);
+  const handleDeleteAttendee = (item: Ticket) => {
+    setDeleteItem(item);
     setShowModal(true);
   };
 
   // handle confirm delete
   const handleConfirmDelete = async () => {
-    if (deleteItemId !== null) {
-      await deleteAttendee(deleteItemId);
+    if (deleteItem !== null) {
+    if(deleteItem.isScanned === false){
+      await deleteAttendee(deleteItem.id);
+      toast.success("Attendee deleted successfully");
       setIsDelete(isDelete + 1);
+    }else{
+      toast.error("Ticket has been scanned, cannot delete");
     }
-    setDeleteItemId(null);
+  }
+    setDeleteItem(null);
     setShowModal(false);
   };
 
@@ -205,7 +211,7 @@ export default function UsersTable({eventId }: Props) {
                       <Tooltip color="danger" content="Delete Attendee">
                         <span className="text-lg text-danger cursor-pointer active:opacity-50">
                           <IoTrashOutline
-                            onClick={() => handleDeleteAttendee(item.id)}
+                            onClick={() => handleDeleteAttendee(item)}
                           />
                         </span>
                       </Tooltip>
