@@ -31,6 +31,14 @@ export interface EventType {
     url: string
 }
 
+export interface checkoutOrder {
+    eventTitle: string,
+    eventId: number,
+    price: number,
+    isFree: boolean,
+    // buyerId: string 
+}
+
 export type BoothType = {
     id: number,
     name: string,

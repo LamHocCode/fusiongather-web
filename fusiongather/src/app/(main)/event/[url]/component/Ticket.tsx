@@ -32,12 +32,11 @@ const Ticket = ({ isHidden, data }: { isHidden: boolean; data: Props }) => {
         </div>
       )}
       
-      <button
-        type="button"
+      <div
         className="lg:p-4 py-2 px-4 rounded-full bg-primary text-white text-sm  border hover:bg-white hover:border-[#FF8E3C] hover:text-[#FF8E3C] w-full"
       >
         <CheckoutButton event={data?.event} />
-      </button>
+      </div>
     </>
   );
 };
