@@ -1,11 +1,8 @@
-'use client'
+"use client";
 
-import React, { Ref, useEffect, useRef } from 'react';
-import { useState } from 'react';
-import "mapbox-gl/dist/mapbox-gl.css";
-import mapboxgl from 'mapbox-gl';
-import ReactMapGL, { Marker, Map, Popup, NavigationControl, GeolocateControl, MapRef } from "react-map-gl";
-import Geocoder from './geocoder';
+import { Loader } from "@googlemaps/js-api-loader";
+import React, { Ref, useEffect, useRef } from "react";
+import { useState } from "react";
 
 export default function DisplayMap(props: any) {
   const mapRef = React.useRef<HTMLDivElement>(null);
@@ -138,55 +135,23 @@ export default function DisplayMap(props: any) {
     props.setLocation(result.location, result.coords[0], result.coords[1]);
   }
 
-  function onDragMarker(event: any) {
-    setViewport({
-      latitude: event.lngLat.lat,
-      longitude: event.lngLat.lng,
-      zoom: viewport.zoom
-    })
-    console.log(viewport)
-    props.setLocation("", event.lngLat.lng, event.lngLat.lat)
+  function onDragMarker(position: google.maps.LatLng) {
+    props.setLocation("", position.lng(), position.lat());
   }
 
-  const mapRef: Ref<MapRef> = useRef({} as MapRef);
+  function createMarker(map: google.maps.Map, position: google.maps.LatLng) {
+    const marker = new google.maps.Marker({
+      position,
+      map,
+      draggable: true,
+    });
+    return marker;
+  }
 
   return (
-    <div className="flex justify-center items-center h-[50vh]">
-      <Map
-        ref={mapRef}
-        initialViewState={viewport}
-        mapStyle="mapbox://styles/mapbox/standard"
-        mapboxAccessToken={mapboxgl.accessToken}
-      
-      >
-        <Marker longitude={viewport.longitude} 
-                latitude={viewport.latitude}
-                draggable={
-                  props.status == "INFO" ? false : true
-                }
-                onDragEnd={onDragMarker}
-                >         
-        </Marker>
-        <NavigationControl position='bottom-right' />
-        {
-          props.status == "INFO" ? null : <GeolocateControl 
-          position='top-left'
-          trackUserLocation={true}
-          onGeolocate={(event) => {
-            setViewport({
-              longitude: event.coords.longitude,
-              latitude: event.coords.latitude,
-              zoom: viewport.zoom
-            });
-            props.setLocation("geolocate", event.coords.longitude, event.coords.latitude)
-          }}
-          />
-        }
-        {
-          props.status == "INFO" ? null : <Geocoder onSearchLocation={onSearchLocation} />
-        }       
-      </Map>
-    </div>
+    <div
+      className="flex justify-center items-center h-[50vh]"
+      ref={mapRef}
+    ></div>
   );
 }
-
