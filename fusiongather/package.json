@@ -39,7 +39,7 @@
     "framer-motion": "^10.12.16",
     "lucide-react": "^0.309.0",
     "mapbox-gl": "^3.0.1",
-    "next": "^14.2.0",
+    "next": "^14.2.1",
     "next-auth": "^5.0.0-beta.4",
     "react": "^18",
     "react-datepicker": "^4.25.0",
