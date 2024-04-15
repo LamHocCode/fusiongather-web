@@ -41,7 +41,7 @@ const LeftContent = ({ event }: Props) => {
 
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [event.id]);
+    }, [event?.id]);
 
     const handleShowQR = async () => {
         setShowQRModal(true);
