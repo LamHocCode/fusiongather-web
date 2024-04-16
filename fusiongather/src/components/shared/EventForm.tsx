@@ -55,7 +55,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
     imageUrl: [],
     category: "",
     isFree: false,
-    price: "0",
+    price: 0,
     startDateTime: new Date().toISOString(),
     endDateTime: new Date().toISOString(),
     author: {
@@ -99,7 +99,10 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
 
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      ...initialValues,
+      price: initialValues.price.toString(),
+    },
   });
 
   const isFree = form.watch("isFree");
