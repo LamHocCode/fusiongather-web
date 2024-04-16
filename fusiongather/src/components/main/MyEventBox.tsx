@@ -224,6 +224,9 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                       <DropdownMenuItem>Manage Attendee</DropdownMenuItem>
                       </Link>
                       <DropdownMenuSeparator />
+                      <Link href={`/event/eventStatistic/${data.id}`}>
+                      <DropdownMenuItem>Event Statistic</DropdownMenuItem>
+                      </Link>
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
