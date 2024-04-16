@@ -54,7 +54,7 @@ export const renderCell = (item: Ticket, columnKey: React.Key) => {
           </User>
         );
       } else {
-        return null; // Hoặc một phần tử React khác phù hợp
+        return null; 
       }
     case "isScanned":
       return (
