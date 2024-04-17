@@ -82,7 +82,7 @@ const VendorBoothBox = ({ data }: { data: BoothType }) => {
                 <div className="w-[42%] pr-6">
                     <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
                         <Image
-                            src={boothImage}
+                            src={boothImage ? boothImage : "/test-event.png"}
                             alt={`booth-image`}
                             fill
                             className="w-full h-full object-fill z-20"

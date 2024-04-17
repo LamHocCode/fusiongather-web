@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react';
 import Image from 'next/image';
+import toast from 'react-hot-toast';
 
 interface Props {
     event: EventType,
@@ -58,7 +59,10 @@ const LeftContent = ({ event }: Props) => {
       };
 
     const handleFollowEvent = async () => {
-        try {
+        if (isOwner) {
+            toast.error("You can't follow your own event");
+        } else {
+        try {     
             if (isFollowed) {
                 await unFollowEvent(event?.id);
                 setIsFollowed(false);
@@ -71,6 +75,7 @@ const LeftContent = ({ event }: Props) => {
         } catch (error) {
             console.error("Error toggling follow status:", error);
         }
+    }
     };
     return (
         <>
