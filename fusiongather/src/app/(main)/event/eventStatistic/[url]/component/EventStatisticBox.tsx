@@ -9,10 +9,12 @@ interface Props {
 }
 
 const formatCurrency = (amount: number | bigint) => {
-  return new Intl.NumberFormat("vi-VN", {
+  const formatter = new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   }).format(amount);
+  console.log(formatter);
+  return formatter;
 };
 
 const EventStatisticBox = async ({ eventId }: Props) => {
@@ -32,7 +34,7 @@ const EventStatisticBox = async ({ eventId }: Props) => {
           Revenue
         </Typography>
         <Typography variant="h4" color="textPrimary" fontWeight="bold">
-          {/* {formatCurrency(eventStatistic?.eventRevenue)} */}
+          {formatCurrency(eventStatistic?.eventRevenue)}
         </Typography>
       </CardContent>
     </Card>
