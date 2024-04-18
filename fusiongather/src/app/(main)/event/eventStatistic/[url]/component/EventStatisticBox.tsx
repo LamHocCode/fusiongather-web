@@ -32,7 +32,7 @@ const EventStatisticBox = async ({ eventId }: Props) => {
           Revenue
         </Typography>
         <Typography variant="h4" color="textPrimary" fontWeight="bold">
-          {formatCurrency(eventStatistic?.eventRevenue)}
+          {/* {formatCurrency(eventStatistic?.eventRevenue)} */}
         </Typography>
       </CardContent>
     </Card>
