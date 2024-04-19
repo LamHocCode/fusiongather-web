@@ -29,7 +29,10 @@ export const {
     signOut
 } = NextAuth({
     callbacks: {
-        async jwt({ token, user }: any) {
+        async jwt({ token,trigger, user,session }: any) {
+            if (trigger === "update" && session){ 
+                return session
+            }
             if (user) return { ...token, ...user }
             if (new Date().getTime() < token?.tokens?.expriesIn) return token
             return await refreshToken(token)

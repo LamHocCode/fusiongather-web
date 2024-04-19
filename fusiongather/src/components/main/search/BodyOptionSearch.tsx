@@ -2,6 +2,7 @@
 "use client"
 
 import Empty from "@/components/shared/Empty";
+import { formatTime } from "@/lib/Format";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -40,20 +41,20 @@ const BodyOptionsSearch = ({ data, searchString, onClose, setSearchString, onClo
                     {data.map((item: any) => (
                         <div
                             onClick={() => handleClick(item)}
-                            key={item._id}
-                            className="flex items-center gap-6 px-2 py-4 cursor-pointer hover:bg-primary hover:text-white rounded-md"
+                            key={item?._id}
+                            className="flex flex-col gap-1 px-2 py-1 cursor-pointer hover:bg-primary hover:text-white rounded-md group"
                         >
-                            <div >
-                                <Image
-                                    src={'/test-event.png'}
-                                    alt={item.title}
-                                    width={80}
-                                    height={80}
-                                    className="object-contain rounded-md"
-                                />
-                            </div>
                             <div className="flex-1 truncate">
                                 {item.title}
+                            </div>
+                            <div className="italic flex text-xs text-gray-400 group-hover:text-white">
+                                <div>
+                                                From {formatTime(item?.startDateTime)}
+                                            </div>
+                                            <span className="px-1">-</span>
+                                            <div>
+                                                To {formatTime(item?.endDateTime)}
+                                            </div>
                             </div>
                         </div>
                     ))

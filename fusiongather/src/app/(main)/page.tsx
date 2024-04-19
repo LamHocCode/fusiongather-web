@@ -10,7 +10,7 @@ export default async function Home() {
   const latestEvents:EventType[] = await getLatestEvent();
   const pageNumber:GetAllEventType = 1 as GetAllEventType;
   const publisedEvent:EventType[] = await getAllEvent(pageNumber);
-  const imgSrc: ImageType[] = await Promise.all(latestEvents.map(event => getImagesByEventId(event.id)));
+  const imgSrc: ImageType[] = await Promise.all(latestEvents?.map(event => getImagesByEventId(event.id)));
   return (
     <main className="flex-1 mt-24">
       <Banner events={latestEvents} imageSrc={imgSrc} />
