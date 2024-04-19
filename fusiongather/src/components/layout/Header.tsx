@@ -8,7 +8,6 @@ import UserInfo from "../main/UserInfo";
 
 const Header = () => {
     const { status } = useSession();
-
     return (
         <div className={`flex items-center ${status === "authenticated" ? "sm:pl-[100px] sm:pr-[40px]  justify-center sm:justify-between" : "lg:pl-[67px] md:pl-[40px] lg:pr-[67px] md:pr-[40px] justify-between"} px-4 py-2.5 fixed z-30 top-0 left-0 right-0 w-full bg-white  shadow-md`}>
             <div className="flex items-center gap-6">

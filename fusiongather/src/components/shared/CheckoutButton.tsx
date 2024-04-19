@@ -10,7 +10,7 @@ function CheckoutButton({ event }: { event: EventType }) {
   return (
     <div className="flex items-center">
       {hasEventFinished ? (
-        <p className="p-2 text-red-400">
+        <p className="p-2 cursor-pointer">
           {" "}
           Sorry, tickets are no longer available.
         </p>
