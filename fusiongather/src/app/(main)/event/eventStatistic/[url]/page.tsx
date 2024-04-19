@@ -9,7 +9,6 @@ interface Props{
 
 export default function EventStatistic({params: {url}}: Props) {
     const eventId = Number(url);
-    console.log(eventId);
     return (
         <>
             <section className="flex items-center justify-between">

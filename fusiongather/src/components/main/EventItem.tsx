@@ -76,7 +76,7 @@ const EventItem = ({ event }: any) => {
                     <div className="w-full">
                         <div className="overflow-hidden rounded-xl relative aspect-[2/1]">
                             <Image
-                                src={eventImage}
+                                src={eventImage ? eventImage : '/test-event.png'}
                                 alt={`event-image`}
                                 fill
                                 loading="lazy"
@@ -116,9 +116,9 @@ const EventItem = ({ event }: any) => {
                                 {
                                     event.isFree ? <span>Free</span> : <span>{event.price} vnd</span>
                                 }
-                                <div className="border border-gray-300 rounded-full hover:scale-125 transition-all duration-200" onClick={handleFollowEvent}>
+                                <div className=" hover:scale-125 transition-all duration-200" onClick={handleFollowEvent}>
                                     <div className="p-1">
-                                        {isFollowed ? <FaHeart size="20" /> : <LuHeart size="20" />}
+                                        {isFollowed ? <FaHeart color="#FF3030" size="20" /> : <LuHeart size="20" />}
                                     </div>
                                 </div>
                             </div>

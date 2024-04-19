@@ -17,7 +17,7 @@ const UserInfo = () => {
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div className="font-semibold text-sm w-fit inline-block text-gray-700 hover:text-[#FF8E3C] transition-all duration-400 uppercase">
-                    {`${session?.user.firstName} ${session?.user.lastName}`}
+                    {`${session?.user?.firstName} ${session?.user?.lastName}`}
                 </div>
             </div>
         )

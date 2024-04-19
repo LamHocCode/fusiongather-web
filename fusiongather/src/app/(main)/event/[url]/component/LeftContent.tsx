@@ -114,13 +114,13 @@ const LeftContent = ({ event }: Props) => {
             <div className="w-full border rounded-full flex my-8 h-[64px] cursor-pointer">
                 <div className="flex items-center justify-center w-1/2 h-full ">
                     <div className="flex rounded-full h-full hover:bg-gray-100 items-center gap-2 w-full justify-center transition-all duration-400" onClick={handleFollowEvent}>
-                        {isFollowed ? <FaHeart /> : <FaRegHeart />}
+                        {isFollowed ? <FaHeart color="#FF3030"/> : <FaRegHeart />}
                         <span className="text-secondary text-sm">{followerCount}</span>
                     </div>
                     <div className="w-[1px] h-10 bg-secondary" />
                 </div>
                 {isOwner ?
-                    <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={() => router.push(`/event/request/${event.id}`)} >
+                    <div className="flex items-center justify-center gap-2 w-1/2 rounded-full hover:bg-gray-100 transition-all duration-400" onClick={() => router.push(`/event/request/${event?.id}`)} >
                         <IoShareSocialOutline />
                         <span className="text-secondary text-sm">View request</span>
                     </div> :
@@ -131,7 +131,7 @@ const LeftContent = ({ event }: Props) => {
                 }
             </div>
             <div>
-                <span dangerouslySetInnerHTML={{ __html: event.description }} suppressHydrationWarning></span>
+                <span dangerouslySetInnerHTML={{ __html: event?.description }} suppressHydrationWarning></span>
             </div>
             <BoxTicket />
         </>

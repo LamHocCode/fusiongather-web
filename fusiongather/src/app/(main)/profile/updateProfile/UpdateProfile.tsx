@@ -35,6 +35,8 @@ interface Props {
 const UpdateProfile = ({user, isOpen, onClose, isUpdateUser, setIsOpen}: Props) => {
   const router = useRouter();
   const {data: session, update} = useSession();
+  console.log(session,'-----');
+  
   const initialValues = {
     firstName: user?.firstName || "",
     lastName: user?.lastName || "",
@@ -51,6 +53,15 @@ const UpdateProfile = ({user, isOpen, onClose, isUpdateUser, setIsOpen}: Props) 
   ) => {
     try{
         await updateProfile(data, user?.id);       
+
+      await update({...session,user:{
+        id:user?.id,
+        firstName: data?.firstName,
+    lastName: data?.lastName,
+    email: data?.email,
+    phoneNumber: data?.phoneNumber,
+    dob: data?.dob,
+      }})
         if (isUpdateUser) {
           isUpdateUser(user?.id);
         }
@@ -68,9 +79,9 @@ const UpdateProfile = ({user, isOpen, onClose, isUpdateUser, setIsOpen}: Props) 
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="bg-white rounded-md">
         <div className="gap-8 grid grid-cols-1">
-          <div className="flex flex-col gap-5 p-8 bg-white rounded-2xl">
+          <div className="flex flex-col gap-5 p-8">
             <div className="flex gap-2 items-center text-secondary">
               <TfiPencilAlt />
               <span>Basic Information</span>
@@ -173,7 +184,7 @@ const UpdateProfile = ({user, isOpen, onClose, isUpdateUser, setIsOpen}: Props) 
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-end gap-5 mt-5">
+        <div className="flex items-center justify-end gap-5 mt-5 pb-8 px-8">
           <Button
             type="button"
             size="sm"
