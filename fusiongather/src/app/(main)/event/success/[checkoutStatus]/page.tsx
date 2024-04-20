@@ -1,5 +1,7 @@
 import { createTicketAfterSuccessfulPayment } from "@/lib/actions/payment";
 import * as CryptoJS from 'crypto-js';
+import Link from 'next/link';
+import { FaCheckCircle } from "react-icons/fa";
 
 interface Props {
     params: {
@@ -26,8 +28,14 @@ const SuccessPage = async ({params: {checkoutStatus}}: Props) => {
     console.log('createTicketDto',typeof createTicketDto.eventId);
     await createTicketAfterSuccessfulPayment(createTicketDto);
     return (
-        <div>
-        <h1>Success</h1>
+        <div className="flex flex-col items-center justify-center h-screen">
+            <FaCheckCircle className="h-12 w-12 text-green-500 mb-4" /> {/* Add the CheckCircleIcon */}
+            <h1 className="text-3xl font-bold text-center mb-4">Success</h1>
+            <Link href="/">
+                <a className="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                    Quay về trang chủ
+                </a>
+            </Link>
         </div>
     );
 }
