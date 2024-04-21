@@ -134,8 +134,8 @@ const EventStatisticBox = async ({ eventId }: Props) => {
       </div>
       <div className="grid grid-cols-1 gap-4 xl:gap-10 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
         {/* Thêm vào đây */}
-        {boothMonitor.length > 0 ? (
-          boothMonitor.map((item: any) => (
+        {boothMonitor?.length > 0 ? (
+          boothMonitor?.map((item: any) => (
             <Card
               key={item.id}
               className="border   rounded-lg p-6 flex flex-col justify-center items-center"
