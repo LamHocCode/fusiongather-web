@@ -57,7 +57,7 @@
     "tailwind-merge": "^2.2.0",
     "tailwindcss-animate": "^1.0.7",
     "tw-elements-react": "^1.0.0-alpha2",
-    "uploadthing": "^6.6.1-canary.d04cec4",
+    "uploadthing": "^6.9.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
