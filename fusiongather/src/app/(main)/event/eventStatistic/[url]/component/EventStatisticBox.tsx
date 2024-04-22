@@ -1,5 +1,7 @@
 "use server";
 
+import NotFoundPage from "@/components/shared/NotFoundPage";
+import UnauthorizedPage from "@/components/shared/UnauthorizedPage";
 import { getBoothMonitor, getEventStatistic } from "@/lib/actions/event";
 import getSession from "@/lib/actions/getSession";
 import {
@@ -25,13 +27,27 @@ const formatCurrency = (amount: number | bigint) => {
 const EventStatisticBox = async ({ eventId }: Props) => {
 
     const eventStatistic = await getEventStatistic(eventId);
+    console.log(eventStatistic.statusCode);
+    if (eventStatistic?.statusCode === 404 || eventStatistic?.statusCode === 500 || eventStatistic?.statusCode === 400) {
+      return (
+        <div className="flex-1 mt-10 ml-5 flex items-center justify-center">
+          <NotFoundPage />
+        </div>
+      );
+    }
+    if (eventStatistic?.statusCode === 401) {
+      return (
+        <div className="flex-1 mt-10 ml-5 flex items-center justify-center">
+          <UnauthorizedPage />
+        </div>
+      );
+    }
+
     const visitorRate = ((eventStatistic?.totalVisitors / eventStatistic?.totalTickets) * 100).toFixed(2);
     const boothMonitor = await getBoothMonitor(eventId);
 
   return (
     <div className="flex-1 mt-10 ml-5">
-      {!eventStatistic?.message ? (
-        <>
           <div className="uppercase text-xl mb-8 font-semibold">
           Event Statistic
         </div>
@@ -165,12 +181,6 @@ const EventStatisticBox = async ({ eventId }: Props) => {
             </Typography>
           )}
         </div>
-        </>
-      ): (
-        <div className="flex justify-center items-center">
-          <h1 className="text-2xl font-semibold">{eventStatistic?.message}</h1>
-        </div>
-      )}
     </div>
   );
 };
