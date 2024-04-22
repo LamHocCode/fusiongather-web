@@ -399,7 +399,7 @@ export const getBoothMonitor = async (eventId: number) => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
-      },
+      }
     });
     if (!res.ok) {
       console.error(`Request failed with status: ${res.status}`);
