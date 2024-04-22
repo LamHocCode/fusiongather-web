@@ -30,17 +30,21 @@ import { IoTrashOutline } from "react-icons/io5";
 import { SearchIcon } from "lucide-react";
 import { get } from "http";
 import toast from "react-hot-toast";
+import NotFoundPage from "@/components/shared/NotFoundPage";
+import UnauthorizedPage from "@/components/shared/UnauthorizedPage";
 
 interface Props {
   eventId: number;
 }
 export default function UsersTable({eventId }: Props) {
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [ticket, setTicket] = useState<Ticket[]>([]);
   const [isDelete, setIsDelete] = useState(0);
   const [deleteItem, setDeleteItem] = useState<Ticket | null>(null);
   const [filterValue, setFilterValue] = useState('')
+  const [statusCode, setStatusCode] = useState(0);
   const hasSearchFilter = Boolean(filterValue)
   const rowsPerPage = 4;
 
@@ -51,11 +55,9 @@ export default function UsersTable({eventId }: Props) {
 
   async function getAttendee() {
     const res = await getAttendeeByEventId(eventId);
-    if(res && res.message){
-      setTicket([]);
-    } else{
+      setStatusCode(res?.statusCode);
       setTicket(res);
-    }   
+ 
   }
   // handle delete attendee
   const handleDeleteAttendee = (item: Ticket) => {
@@ -164,87 +166,100 @@ export default function UsersTable({eventId }: Props) {
   }, [filterValue, onSearchChange, onClear]);
   return (
     <>
-      <Table
-        aria-label="Example table with dynamic content"
-        topContent={topContent}
-        topContentPlacement="outside"
-        bottomContent={
-          <div className="flex w-full justify-center">
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="secondary"
-              page={page}
-              total={pages}
-              onChange={(page) => setPage(page)}
-            />
+      {statusCode && statusCode === 401 ? (
+          <div className="flex-1 mt-10 ml-5 flex items-center justify-center">
+                <UnauthorizedPage />
           </div>
-        }
-        bottomContentPlacement="outside"
-        sortDescriptor={sortDescriptor}
-        onSortChange={setSortDescriptor}
-        classNames={{
-          wrapper: "min-h-[222px]",
-        }}
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key}
-            {...(column.key === "name" ? {allowsSorting: true} : {})}
-            >{column.label}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={sortedItems} emptyContent="No attendees to display">
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>
-                  {renderCell(item, columnKey)}
-                  {columnKey === "actions" && (
-                    <div className="relative flex items-center gap-2">
-                      <Tooltip content="Details">
-                        <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
-                          <MdOutlineRemoveRedEye />
-                        </span>
-                      </Tooltip>
-                      <Tooltip color="danger" content="Delete Attendee">
-                        <span className="text-lg text-danger cursor-pointer active:opacity-50">
-                          <IoTrashOutline
-                            onClick={() => handleDeleteAttendee(item)}
-                          />
-                        </span>
-                      </Tooltip>
-                    </div>
+      ) : (
+        <>
+          {statusCode && (statusCode === 404 || statusCode === 500 || statusCode === 400) ? (
+            <div className="flex-1 mt-10 ml-5 flex items-center justify-center">
+                <NotFoundPage />
+            </div>
+          ) : (
+            <>
+              <Table
+                aria-label="Example table with dynamic content"
+                topContent={topContent}
+                topContentPlacement="outside"
+                bottomContent={
+                  <div className="flex w-full justify-center">
+                    <Pagination
+                      isCompact
+                      showControls
+                      showShadow
+                      color="secondary"
+                      page={page}
+                      total={pages}
+                      onChange={(page) => setPage(page)}
+                    />
+                  </div>
+                }
+                bottomContentPlacement="outside"
+                sortDescriptor={sortDescriptor}
+                onSortChange={setSortDescriptor}
+                classNames={{
+                  wrapper: "min-h-[222px]",
+                }}
+              >
+                <TableHeader columns={columns}>
+                  {(column) => (
+                    <TableColumn
+                      key={column.key}
+                      {...(column.key === "name" ? { allowsSorting: true } : {})}
+                    >
+                      {column.label}
+                    </TableColumn>
                   )}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+                </TableHeader>
+                <TableBody items={sortedItems} emptyContent="No attendees to display">
+                  {(item?) => (
+                    <TableRow key={item?.id}>
+                      {(columnKey) => (
+                        <TableCell>
+                          {item && renderCell(item, columnKey)}
+                          {columnKey === "actions" && (
+                            <div className="relative flex items-center gap-2">
+                              <Tooltip content="Details">
+                                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                                  <MdOutlineRemoveRedEye />
+                                </span>
+                              </Tooltip>
+                              <Tooltip color="danger" content="Delete Attendee">
+                                <span className="text-lg text-danger cursor-pointer active:opacity-50">
+                                  <IoTrashOutline onClick={() => item && handleDeleteAttendee(item)} />
+                                </span>
+                              </Tooltip>
+                            </div>
+                          )}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
 
-      <Modal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        title="Confirm Delete"
-      >
-        <ModalContent>
-          <ModalBody>Are you sure you want to delete this attendee?</ModalBody>
-          <ModalFooter>
-            <Button onClick={() => setShowModal(false)} color="primary">
-              Cancel
-            </Button>
-            <Button
-              onClick={handleConfirmDelete}
-              color="danger"
-              variant="light"
-            >
-              Delete
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+              <Modal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                title="Confirm Delete"
+              >
+                <ModalContent>
+                  <ModalBody>Are you sure you want to delete this attendee?</ModalBody>
+                  <ModalFooter>
+                    <Button onClick={() => setShowModal(false)} color="primary">
+                      Cancel
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="danger" variant="light">
+                      Delete
+                    </Button>
+                  </ModalFooter>
+                </ModalContent>
+              </Modal>
+            </>
+          )}
+        </>
+      )}
     </>
   );
 }

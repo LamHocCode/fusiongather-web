@@ -20,7 +20,7 @@ export const getAttendeeByEventId = async (eventId: number) => {
             console.error(`Request failed with status: ${res.status}`);
             return await res.json();
         } else{
-            console.log("Attendee fetched successfully");
+            console.log(`Attendee fetched successfully: ${res.status}`);
             return await res.json();
         }
     } catch (error: any) {
