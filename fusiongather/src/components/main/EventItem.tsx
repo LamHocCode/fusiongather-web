@@ -76,7 +76,7 @@ const EventItem = ({ event }: any) => {
                     <div className="w-full">
                         <div className="overflow-hidden rounded-xl relative aspect-[2/1]">
                             <Image
-                                src={eventImage ? eventImage : '/test-event.png'}
+                                src={eventImage ? eventImage : '/no-image.png'}
                                 alt={`event-image`}
                                 fill
                                 loading="lazy"

@@ -78,7 +78,7 @@ const PendingEventBox = ({ data }: { data: EventType }) => {
                         <div className="w-[42%] pr-6">
                             <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4">
                                 <Image
-                                    src={eventImage}
+                                    src={eventImage ? eventImage : '/no-image.png'}
                                     alt={`event-image`}
                                     fill
                                     className="w-full h-full object-fill z-20"

@@ -230,7 +230,6 @@ const MyEventBox = ({ data }: { data: EventType }) => {
                     </DropdownMenuGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                <DeleteConfirmation data={data} />
               </div>
             </div>
           </div>

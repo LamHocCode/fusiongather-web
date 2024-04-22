@@ -252,7 +252,7 @@ const BoothBox = ({ data, isOwner }: { data: BoothType, isOwner: boolean }) => {
                 <div className="w-[42%] pr-6">
                     <div className="overflow-hidden  rounded-xl relative aspect-[2/1] mb-4 cursor-pointer">
                         <Image
-                            src={boothImage ? boothImage : '/test-event.png'}
+                            src={boothImage ? boothImage : '/no-image.png'}
                             alt={`booth-image`}
                             fill
                             className="w-full h-full object-fill z-20"
