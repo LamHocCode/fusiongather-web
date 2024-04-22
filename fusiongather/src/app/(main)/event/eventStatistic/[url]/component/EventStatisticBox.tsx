@@ -126,7 +126,7 @@ const EventStatisticBox = async ({ eventId }: Props) => {
                 color="textPrimary"
                 fontWeight="bold"
               >
-                {visitorRate && visitorRate === ""? visitorRate : 0}%
+                {visitorRate && (visitorRate !== "NaN" && visitorRate !== "" )? visitorRate : 0}%
               </Typography>
             </CardContent>
           </Card>
@@ -137,7 +137,6 @@ const EventStatisticBox = async ({ eventId }: Props) => {
           Booth Monitoring
         </div>
         <div className="grid grid-cols-1 gap-4 xl:gap-10 md:gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4">
-          {/* Thêm vào đây */}
           {boothMonitor?.length > 0 ? (
             boothMonitor?.map((item: any) => (
               <Card
