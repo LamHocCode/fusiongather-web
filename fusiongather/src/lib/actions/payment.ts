@@ -24,12 +24,11 @@ export const checkoutOrder = async (eventId: number) => {
 
     const paymentResponse = await response.json();
     console.log(paymentResponse);
-    const paymentIntent = paymentResponse.paymentLink;
+    const paymentIntent = paymentResponse?.paymentLink;
     console.log("abc",paymentIntent);
     if (!paymentIntent) {
-      throw new Error("Payment link not found");
+      return paymentResponse;
     }
-
     return paymentIntent
   } catch (error) {
     console.error("Error creating payment URL:", error);
