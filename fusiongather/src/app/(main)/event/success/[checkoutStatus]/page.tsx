@@ -10,9 +10,7 @@ interface Props {
 }
 
 const SuccessPage = async ({params: {checkoutStatus}}: Props) => {
-    console.log('cai dau buoi',checkoutStatus);
     const decodedString = decodeURIComponent(checkoutStatus);
-    console.log(decodedString)
     const decryptedData = CryptoJS.AES.decrypt(decodedString, process.env.STRIPE_ENCRYPT_KEY || '').toString(CryptoJS.enc.Utf8);
     console.log("decryptedData",decryptedData)
     const [eventIdStr, userIdStr] = decryptedData.split(':');
