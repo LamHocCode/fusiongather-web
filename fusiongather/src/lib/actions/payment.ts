@@ -57,3 +57,34 @@ export const createTicketAfterSuccessfulPayment = async (createTicketDto: any) =
     throw error;
   }
 }
+
+export const createFreeTicket = async (eventId: number) : Promise <any> => {
+  try {
+    const session = await getSession();
+    const accessToken = session?.tokens?.accessToken;
+    const createTicketDto = {
+      eventId: eventId,
+      userId: session?.user.id,
+      isScanned: false
+  };
+    const response = await fetch(
+      `${process.env.BASE_URL}/ticket/createFree`,
+      {
+        method: "POST",
+        body: JSON.stringify(createTicketDto),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },   
+      }
+    );
+    if (!response.ok) {
+      console.log("Error creating ticket");
+      return response.json();
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error creating ticket:", error);
+    throw error;
+  }
+};
