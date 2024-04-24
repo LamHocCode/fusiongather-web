@@ -341,7 +341,7 @@ export const getQRCodebyEventId = async (eventId: number) => {
   }
 };
 
-export const publishEvent = async (id: number) => {
+export const publishEvent = async (id: number): Promise<any> => {
   try {
     const session = await getSession();
     const accessToken = session?.tokens?.accessToken;

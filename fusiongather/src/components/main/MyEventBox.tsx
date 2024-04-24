@@ -72,15 +72,21 @@ const MyEventBox = ({ data }: { data: EventType }) => {
   // handle publish event confirmation
   async function handleConfirmPublishEvent() {
     if (eventId) {
-      await publishEvent(eventId);
+      // Publish event
+      const response = await publishEvent(eventId);
+      setShowModal(false);
+      setEventId(0);
+      // Check if event start date is in the past
+      if (response?.statusCode === 406) {
+        toast.error("Event start date is in the past. Please update the event start date to publish the event.");
+      } else {
+        toast.success("Event is published successfully!");
+      // Reload page after 2 seconds
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+      }
     }
-    setShowModal(false);
-    setEventId(0);
-    toast.success("Event is published successfully!");
-    // Reload page after 2 seconds
-    setTimeout(() => {
-      location.reload();
-    }, 2000);
   }
 
   // handle open publish event modal
