@@ -244,7 +244,7 @@ export function EventForm({ type, event, eventId }: EventFormProps) {
               <div className="  flex flex-col gap-5 p-8 bg-white rounded-2xl">
                 <div className="flex gap-2 items-center text-secondary">
                   <CiImageOn size={22} />
-                  <span>Media</span>
+                  <span>Media(Your first image will be a banner of event)</span>
                 </div>
                 <FormField
                   control={form.control}
