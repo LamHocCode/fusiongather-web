@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import { EventType } from "@/lib/type";
 import { Button } from "../ui/button";
-import { checkoutOrder } from "@/lib/actions/payment";
-
+import { checkoutOrder, createFreeTicket } from "@/lib/actions/payment";
 import { loadStripe } from "@stripe/stripe-js";
+import toast from "react-hot-toast";
 
 interface CheckoutProps {
   event: EventType;
@@ -24,9 +24,27 @@ function Checkout({ event }: CheckoutProps) {
 
   const handleCheckoutClick = async () => {
     try {
+      if (!event.isFree) {
       const paymentLink = await checkoutOrder(event.id);
+      if (paymentLink?.statusCode === 403) {
+        console.log("checkout", paymentLink?.error)
+        toast.error(paymentLink?.error);
+        return;
+      }
       setPaymentLink(paymentLink);
       console.log("checkout", paymentLink);
+      } else
+      {
+        const freeTicket = await createFreeTicket(event.id);
+        console.log("freeTicket", freeTicket);
+        if (freeTicket?.status === 403) {
+          toast.error(freeTicket?.message);
+          return;
+        } else {
+          toast.success("Get ticket successfully, check your email for more information!");
+        } 
+              
+      }
     } catch (error) {
       console.error("Error during checkout:", error);
     }
