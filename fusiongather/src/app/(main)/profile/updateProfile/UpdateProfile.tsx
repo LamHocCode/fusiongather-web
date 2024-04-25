@@ -52,15 +52,21 @@ const UpdateProfile = ({user, isOpen, onClose, isUpdateUser, setIsOpen}: Props) 
     data
   ) => {
     try{
-        await updateProfile(data, user?.id);       
+      const updateUser = await updateProfile(data, user?.id);       
+      console.log('updateUser',updateUser)
+
+      if(updateUser?.statusCode === 406){
+        toast.error(updateUser?.message)
+        return
+      }
 
       await update({...session,user:{
         id:user?.id,
         firstName: data?.firstName,
-    lastName: data?.lastName,
-    email: data?.email,
-    phoneNumber: data?.phoneNumber,
-    dob: data?.dob,
+        lastName: data?.lastName,
+        email: data?.email,
+        phoneNumber: data?.phoneNumber,
+        dob: data?.dob,
       }})
         if (isUpdateUser) {
           isUpdateUser(user?.id);
