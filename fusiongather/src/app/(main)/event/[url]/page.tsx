@@ -6,6 +6,7 @@ import { EventType } from "@/lib/type";
 import Link from "next/link";
 import BoothPage from "../booth/page";
 import { getImagesByEventId } from "@/lib/actions/image";
+import NotFoundPage from "@/components/shared/NotFoundPage";
 
 
 interface Props {
@@ -40,6 +41,11 @@ export async function generateMetadata({ params: { url } }: Props): Promise<Meta
 export default async function EventDetail({ params: { url } }: Props) {
     const id = Number(url)
     const event = await getEventById(id);
+    if (event?.message) {
+        return (
+            <NotFoundPage />
+        )
+    }
     const image = await getImagesByEventId(id);
     const isOwner = await checkIsEventOwner(event?.author?.id)
 

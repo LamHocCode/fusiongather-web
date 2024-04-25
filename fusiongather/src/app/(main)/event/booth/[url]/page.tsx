@@ -5,6 +5,7 @@ import BoothDetailPage from "@/app/(main)/event/booth/[url]/component/BoothDetai
 import { getImagesByBoothId } from "@/lib/actions/image";
 import boothErrorImage from '../../public/test-booth.jpg'
 import { useRouter } from "next/navigation";
+import NotFoundPage from "@/components/shared/NotFoundPage";
 
 interface Props {
     params: {
@@ -38,6 +39,11 @@ export async function generateMetadata({ params: { url } }: Props): Promise<Meta
 
 export default async function BoothDetail({ params: { url } }: Props) {
     const booth = await getBoothById(url)
+    if (booth?.message) {
+        return (
+            <NotFoundPage />
+        )
+    }
     const boothImage = await getImagesByBoothId(url)
     const isBoothOwner = await isBoothAuthor(booth.vendorId.id)
 
