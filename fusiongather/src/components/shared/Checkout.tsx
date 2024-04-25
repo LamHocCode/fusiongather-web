@@ -27,7 +27,9 @@ function Checkout({ event }: CheckoutProps) {
       if (!event.isFree) {
       const paymentLink = await checkoutOrder(event.id);
       if (paymentLink?.statusCode === 403) {
-        toast.error("You have already bought this ticket!");
+        console.log("checkout", paymentLink?.error)
+        toast.error(paymentLink?.error);
+
         return;
       }
       setPaymentLink(paymentLink);
@@ -36,14 +38,12 @@ function Checkout({ event }: CheckoutProps) {
       {
         const freeTicket = await createFreeTicket(event.id);
         console.log("freeTicket", freeTicket);
-        if (freeTicket?.statusCode === 403) {
-          toast.error("You have already got a ticket for this event!");
+        if (freeTicket?.status === 403) {
+          toast.error(freeTicket?.message);
           return;
         } else {
           toast.success("Get ticket successfully, check your email for more information!");
         } 
-        
-       
       }
     } catch (error) {
       console.error("Error during checkout:", error);

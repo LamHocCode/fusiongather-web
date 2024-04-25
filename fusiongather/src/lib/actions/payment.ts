@@ -51,6 +51,7 @@ export const createTicketAfterSuccessfulPayment = async (createTicketDto: any) =
         },   
       }
     );
+    return response.json();
   } catch (error) {
     console.error("Error creating ticket:", error);
     throw error;
