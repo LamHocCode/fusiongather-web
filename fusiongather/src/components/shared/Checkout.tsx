@@ -29,6 +29,7 @@ function Checkout({ event }: CheckoutProps) {
       if (paymentLink?.statusCode === 403) {
         console.log("checkout", paymentLink?.error)
         toast.error(paymentLink?.error);
+
         return;
       }
       setPaymentLink(paymentLink);
@@ -43,7 +44,6 @@ function Checkout({ event }: CheckoutProps) {
         } else {
           toast.success("Get ticket successfully, check your email for more information!");
         } 
-              
       }
     } catch (error) {
       console.error("Error during checkout:", error);
