@@ -7,9 +7,10 @@ import Checkout from "./Checkout";
 function CheckoutButton({ event }: { event: EventType }) {
 
   const hasEventFinished = new Date(event.endDateTime) < new Date();
+  const hasEventPublish = event.isPublished;
   return (
     <div className="flex items-center">
-      {hasEventFinished ? (
+      {hasEventFinished || !hasEventPublish ? (
         <p className="p-2 cursor-pointer">
           {" "}
           Sorry, tickets are no longer available.
